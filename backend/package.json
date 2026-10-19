@@ -1,0 +1,14 @@
+{
+  "name": "ecoloop-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Small local API and static server for EcoLoop.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "start:backup": "node backup-server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
