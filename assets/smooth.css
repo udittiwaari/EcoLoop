@@ -255,8 +255,7 @@ p {
 .search-panel,
 .step,
 .creator-card,
-.impact-grid article,
-.hero-visual {
+.impact-grid article {
   background: var(--apple-card) !important;
   border-radius: 20px !important;
   border: 1px solid var(--apple-border) !important;
