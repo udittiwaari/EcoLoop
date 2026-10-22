@@ -1,48 +1,1638 @@
-https://github.com/udittiwaari/Ecoloop.githttps://github.com/udittiwaari/Ecoloop.git<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="EcoLoop helps you identify, prevent and value recyclable materials.">
   <title>EcoLoop — Smart waste, clear value</title>
+  <link rel="icon" type="image/svg+xml" href="assets/ecoloop-mark.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="assets/supabase-config.js"></script>
   <script src="assets/video-library.js"></script>
+  <script defer src="assets/video-crafts.js"></script>
   <script type="module" src="app.js"></script>
+  <script type="module" src="assets/local-auth.js"></script>
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
-  <header class="header"><a class="brand brand-logo" href="#top" aria-label="EcoLoop home"><img src="assets/ecoloop-wordmark.svg" alt="EcoLoop"></a><nav><a href="#guide">AI Hub</a><a href="#rates">Sample rates</a><a href="#community">Videos</a><a href="#impact">Impact</a><a href="#about">About</a><a href="#creator">Creator</a></nav><button class="account-button" id="accountButton">Member area <span>→</span></button></header>
+  <header class="header">
+    <a class="brand brand-logo" href="#top" aria-label="EcoLoop home">
+      <svg class="header-logo-svg" viewBox="0 0 460 110" width="155" height="38" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <defs>
+          <linearGradient id="navLoopG1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#064E3B" />
+            <stop offset="100%" stop-color="#059669" />
+          </linearGradient>
+          <linearGradient id="navLoopG2" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#059669" />
+            <stop offset="100%" stop-color="#34D399" />
+          </linearGradient>
+        </defs>
+        <g transform="translate(10, 8)">
+          <path d="M 55 50 C 35 20, 5 20, 5 50 C 5 80, 35 80, 55 50 C 75 20, 105 20, 105 50" fill="none" stroke="url(#navLoopG1)" stroke-width="14" stroke-linecap="round" />
+          <path d="M 105 50 C 105 80, 75 80, 55 50 L 44 35" fill="none" stroke="url(#navLoopG2)" stroke-width="14" stroke-linecap="round" />
+          <polygon points="33,38 42,18 58,31" fill="#10B981" />
+          <path d="M 98 22 C 112 10, 125 18, 114 34 C 106 28, 102 26, 98 22 Z" fill="#10B981" />
+          <circle cx="30" cy="50" r="4" fill="#D1FAE5" />
+        </g>
+        <g transform="translate(148, 70)">
+          <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="62" font-weight="800" letter-spacing="-1">
+            <tspan fill="#064E3B">Eco</tspan><tspan fill="#059669" font-weight="600">Loop</tspan>
+          </text>
+        </g>
+      </svg>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#guide">AI Hub &amp; Planner</a>
+      <a href="#rates">Sample rates</a>
+      <a href="#dealers">Bhopal Hub</a>
+      <a href="#community">Videos</a>
+      <a href="#impact">Impact</a>
+      <a href="#about">About</a>
+      <a href="#creator">Creator</a>
+    </nav>
+    <div class="header-actions" style="display:flex; align-items:center; gap:8px;">
+      <button class="admin-pill-btn" id="adminHeaderBtn" style="display:none;" onclick="openAdminModal()">⚙️ Admin Section</button>
+      <button class="account-button" id="accountButton">Member area <span>→</span></button>
+    </div>
+  </header>
+
   <main id="top">
+
+    <!-- HERO SECTION -->
     <section class="hero">
-      <div class="hero-copy reveal"><p class="eyebrow">CIRCULAR LIVING, MADE PRACTICAL</p><h1>Know your waste.<br><em>Keep its value.</em></h1><p class="lede">Search an everyday item for a clear next step: prevent it, reuse it, recycle it, and see an example scrap value.</p><div class="hero-actions"><a class="button button-primary" href="#guide">Search an item <span>⌕</span></a><a class="button button-quiet" href="#rates">Explore sample rates</a></div><div class="trust-row"><span><b>20</b> sample materials</span><span><b>3</b> video platforms</span><span><b id="savedPlanCount">0</b> plans saved</span></div></div>
-      <div class="hero-visual reveal delay"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div><div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹12/kg</b></div><div class="material-card card-metal"><i>◈</i><span>Metal</span><b>₹25/kg</b></div><div class="loop-mark">∞</div><p>Small choices<br>move materials forward.</p></div>
+      <div class="hero-copy reveal">
+        <p class="eyebrow">CIRCULAR LIVING, MADE PRACTICAL</p>
+        <h1>Know your waste.<br><em>Keep its value.</em></h1>
+        <p class="lede">Search an everyday item for a clear next step: prevent it, reuse it, recycle it, and see an example scrap value.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#guide">Scan or search an item <span>⌕</span></a>
+          <a class="button button-quiet" href="#rates">Explore sample rates</a>
+        </div>
+        <div class="trust-row">
+          <span id="heroMaterialCount"><b>40+</b> sample materials</span>
+          <span><b>3</b> video platforms</span>
+          <span><b id="savedPlanCount">0</b> plans saved</span>
+        </div>
+      </div>
+      <div class="hero-visual reveal delay">
+        <div class="orbit orbit-a"></div>
+        <div class="orbit orbit-b"></div>
+        <div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div>
+        <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹28/kg</b></div>
+        <div class="material-card card-metal"><i>◈</i><span>Copper</span><b>₹650/kg</b></div>
+        <div class="loop-mark">∞</div>
+        <p>Small choices<br>move materials forward.</p>
+      </div>
     </section>
 
-    <section class="guide-section" id="guide"><div class="section-intro reveal"><p class="eyebrow">01 / SMART MATERIAL GUIDE</p><h2>Not sure what it is?<br>Start here.</h2><p>Even a small spelling mistake is okay. Try “bottel”, “card bord”, or “aluminiam”.</p></div><div class="search-panel reveal delay"><label for="materialSearch">What do you have?</label><div class="search-shell"><span aria-hidden="true">⌕</span><input id="materialSearch" type="search" placeholder="Search bottle, cardboard, paper…" autocomplete="off"><button id="searchButton" type="button">Search</button></div><div class="quick-search"><span>TRY</span><button data-search="plastic bottle">Plastic bottle</button><button data-search="cardboard">Cardboard</button><button data-search="old clothes">Old clothes</button><button data-search="copper">Copper</button></div><div class="search-result" id="searchResult" aria-live="polite"><span class="result-icon">✦</span><div><b>Ready when you are</b><p>Search an item to see prevention, recycling guidance and an example rate.</p></div></div></div></section>
+    <!-- SECTION 01 / SMART MATERIAL GUIDE & AI VISION -->
+    <section class="guide-section" id="guide">
+      <div class="section-intro reveal">
+        <p class="eyebrow">01 / SMART MATERIAL GUIDE &amp; AI VISION</p>
+        <h2>Identify any material.<br>By AI camera or text.</h2>
+        <p>Point your camera or upload a photo to identify e-waste, metals, circuit boards, batteries, and plastics with AI vision—or search by name.</p>
+        
+        <div class="guide-mode-pills" role="tablist" aria-label="Material identification mode">
+          <button type="button" class="mode-pill active" id="modeVisionBtn" data-tab="visionHub" role="tab" aria-selected="true">
+            <span class="mode-icon">📷</span> AI Camera &amp; Vision
+          </button>
+          <button type="button" class="mode-pill" id="modeSearchBtn" data-tab="searchHub" role="tab" aria-selected="false">
+            <span class="mode-icon">⌕</span> Text Search
+          </button>
+          <button type="button" class="mode-pill" id="modeAiAddBtn" data-tab="aiAddHub" role="tab" aria-selected="false">
+            <span class="mode-icon">✨</span> Add with AI
+          </button>
+          <button type="button" class="mode-pill" id="modeCollectionBtn" data-tab="collectionHub" role="tab" aria-selected="false">
+            <span class="mode-icon">📋</span> Collection Planner
+          </button>
+        </div>
 
-    <section class="rates-section" id="rates"><div class="section-head reveal"><div><p class="eyebrow">02 / SAMPLE VALUE GUIDE</p><h2>See what materials can be worth.</h2></div><p>These are illustrative draft rates only—not live market prices or a purchase offer.</p></div><div class="rate-toolbar reveal delay"><div id="rateFilters" class="filters"><button class="active" data-category="All">All</button><button data-category="Paper">Paper</button><button data-category="Plastic">Plastic</button><button data-category="Metal">Metal</button><button data-category="E-waste">E-waste</button><button data-category="Other">Other</button></div><p><span id="rateCount">20</span> materials</p></div><div class="rate-grid" id="rateGrid"></div></section>
+        <div class="ai-hub-stats">
+          <div class="hub-stat-item">
+            <b id="liveMaterialCount">40+</b>
+            <span>Materials in Catalog</span>
+          </div>
+          <div class="hub-stat-item">
+            <b>Zero-Shot</b>
+            <span>Real Browser AI</span>
+          </div>
+        </div>
+      </div>
 
-    <section class="how-section"><div class="section-intro reveal"><p class="eyebrow">03 / SIMPLE BY DESIGN</p><h2>From material to next move.</h2></div><div class="steps"><article class="step reveal"><span>01</span><h3>Search it</h3><p>Find material guidance even if you make a small spelling mistake.</p></article><article class="step reveal delay"><span>02</span><h3>Choose better</h3><p>See practical prevention and reuse ideas before recycling.</p></article><article class="step reveal delay-2"><span>03</span><h3>Learn together</h3><p>Share a trusted public video link after signing in.</p></article></div></section>
+      <div class="search-panel guide-interactive-panel reveal delay">
+        <!-- Clean Slide Navigation Bar for Section 01 -->
+        <div class="card-slide-header">
+          <div class="card-slide-pills">
+            <button type="button" class="card-slide-pill active" id="cardSlideVisionBtn" onclick="selectGuideTab('visionHub')">
+              📷 AI Camera &amp; Vision
+            </button>
+            <button type="button" class="card-slide-pill" id="cardSlideCollectionBtn" onclick="selectGuideTab('collectionHub')">
+              📋 Collection Planner
+            </button>
+          </div>
+          <div class="card-slide-arrows">
+            <button type="button" class="card-nav-arrow" onclick="cycleGuideSlide(-1)" title="Previous view">‹</button>
+            <span class="card-slide-badge" id="cardSlideBadge">1 / 2</span>
+            <button type="button" class="card-nav-arrow" onclick="cycleGuideSlide(1)" title="Next view">›</button>
+          </div>
+        </div>
 
-    <section class="planner-section" id="planner"><div class="section-intro reveal"><p class="eyebrow">04 / COLLECTION PLANNER</p><h2>Turn good intent<br>into a next step.</h2><p>Make a simple collection list, pick a date, and keep it on this device until you are ready.</p><div class="impact-cards"><article><span>PLANS</span><b id="planTotal">0</b><small>saved locally</small></article><article><span>EST. WEIGHT</span><b id="weightTotal">0 kg</b><small>ready to sort</small></article><article><span>EST. VALUE</span><b id="valueTotal">₹0</b><small>sample guide only</small></article></div></div><div class="planner-panel reveal delay"><form id="plannerForm"><label for="planMaterial">Material<select id="planMaterial" required></select></label><div class="planner-fields"><label for="planAmount">Amount (kg / items)<input id="planAmount" type="number" min="0.1" step="0.1" value="1" required></label><label for="planDate">Collection date<input id="planDate" type="date" required></label></div><label for="planNote">A quick note<input id="planNote" maxlength="80" placeholder="e.g. Clean bottles and keep caps separate"></label><button class="button button-primary" type="submit">Add to my plan <span>+</span></button></form><div class="plan-list-wrap"><div class="plan-list-head"><b>Your collection list</b><button id="clearPlans" type="button">Clear all</button></div><div id="planList" class="plan-list" aria-live="polite"></div><a class="map-link" href="https://www.google.com/maps/search/recycling+center+near+me" target="_blank" rel="noopener noreferrer">Find a recycling centre near you ↗</a></div></div></section>
+        <!-- 1. AI VISION & CAMERA HUB (PRIMARY) -->
+        <div id="visionHub" class="hub-pane active" role="tabpanel">
+          <div class="scanner-header">
+            <div>
+              <span class="scanner-tag">AI VISION SCANNER</span>
+              <h3>Camera &amp; Photo Analysis</h3>
+            </div>
+            <input id="scanFileInput" type="file" accept="image/*" hidden>
+          </div>
 
-    <section class="community-section" id="community"><div class="community-copy reveal"><p class="eyebrow">05 / CURATED VIDEO LIBRARY</p><h2>Make waste<br>worth watching.</h2><p>Selected tutorials are saved directly in this website. EcoLoop stores their titles and public links only; each video opens on YouTube.</p><button class="button button-primary" id="shareButton">Share a video <span>↗</span></button><small>No video files, hosting fees, or autoplay clutter.</small></div><div class="community-board reveal delay"><div class="board-top"><div><span class="live-dot"></span> Saved tutorials</div><button id="refreshVideos" aria-label="Refresh video links">↻</button></div><div id="videoList" class="video-list"></div></div></section>
-    <section class="impact-section" id="impact"><div class="section-head reveal"><div><p class="eyebrow">05 / ENVIRONMENTAL IMPACT</p><h2>Measure the difference,<br>not just the waste.</h2></div><p>Every material you keep in the loop saves energy, raw resources and landfill space. These widely cited figures show why sorting matters.</p></div><div class="impact-grid"><article class="reveal"><i>◈</i><b>95%</b><p>Energy saved recycling aluminium vs. making new</p></article><article class="reveal delay"><i>▤</i><b>≈17</b><p>Trees spared per tonne of recycled paper</p></article><article class="reveal delay-2"><i>♻</i><b>20</b><p>Sample materials with guidance on EcoLoop</p></article></div><small class="impact-note">Figures are commonly cited estimates and vary by process and region.</small></section>
+          <!-- Holographic Viewport & Dropzone -->
+          <div class="scanner-viewport" id="scannerDropzone" title="Click to upload or snap photo">
+            <div class="hud-corner top-left" aria-hidden="true"></div>
+            <div class="hud-corner top-right" aria-hidden="true"></div>
+            <div class="hud-corner bottom-left" aria-hidden="true"></div>
+            <div class="hud-corner bottom-right" aria-hidden="true"></div>
+            
+            <div class="scan-laser" id="scanLaser" style="display:none;" aria-hidden="true"></div>
 
-    <section class="about-section" id="about"><div class="about-intro reveal"><p class="eyebrow">06 / ABOUT ECOLOOP</p><h2>Waste is a resource<br>in the wrong place.</h2><p>EcoLoop is a simple, free guide that helps households and students sort waste correctly, reuse what they can, and understand the value of what they recycle.</p></div><div class="about-actions"><article class="reveal"><span>01</span><div><b>Reduce</b><p>Prevention tips for every material, so less waste is created in the first place.</p></div></article><article class="reveal delay"><span>02</span><div><b>Reuse</b><p>Practical DIY ideas and curated tutorials that give old items a second life.</p></div></article><article class="reveal delay-2"><span>03</span><div><b>Recycle</b><p>Clear sorting guidance and sample scrap rates that show what materials are worth.</p></div></article></div></section>
+            <div class="scanner-prompt" id="scannerPrompt">
+              <div class="upload-orb" id="uploadOrb" title="Click to open camera">
+                <span class="orb-icon">📷</span>
+              </div>
+              <strong id="dropzonePromptTitle">Drag &amp; drop an image here, or use live camera</strong>
+              <p>Supports JPG, PNG, WEBP. AI identifies Printed Circuit Boards, Batteries, Copper, Aluminium Cans, Plastics &amp; more.</p>
+              
+              <div class="scanner-direct-btns" style="display:flex; gap:10px; margin-top:14px; justify-content:center; flex-wrap:wrap;">
+                <button type="button" class="button button-primary" id="openCameraBtn" style="font-size:12px; padding:9px 18px;">
+                  📷 Open Live Camera
+                </button>
+                <button type="button" class="button button-quiet" id="openFileBtn" style="font-size:12px; padding:9px 18px;">
+                  📁 Select Photo File
+                </button>
+              </div>
+            </div>
 
-    <section class="creator-section" id="creator"><div class="creator-shell"><div class="creator-heading"><p class="eyebrow">// SYSTEM PROFILE</p><h2>About EcoLoop</h2></div><div class="creator-grid"><article class="creator-card creator-bio"><p class="creator-card-label">ABOUT THE CREATOR</p><p>Hi, I’m Udit Narayan Tiwari, a student creator who enjoys building practical digital projects that make everyday choices clearer.</p><p>EcoLoop brings together smart waste management, web development and sustainability so households and students can keep useful materials in the loop.</p><a class="creator-github" href="https://github.com/udittiwaari" target="_blank" rel="noopener noreferrer">View my GitHub <span aria-hidden="true">↗</span></a></article><article class="creator-card creator-mission"><p class="creator-card-label">THE ECOLOOP MISSION</p><p>EcoLoop is a simple guide for smarter waste management and more mindful resource recovery.</p><p>The goal is to make sorting easier and more useful—helping people reduce, reuse and recycle everyday materials with confidence.</p><div class="creator-principles"><div><b>MISSION</b><span>Make practical circular choices easy to understand.</span></div><div><b>VISION</b><span>Support cleaner, more resource-efficient neighbourhoods.</span></div><div><b>IMPACT</b><span>Turn small daily actions into lasting habits.</span></div></div></article></div></div></section>
+            <video id="cameraVideo" autoplay playsinline muted style="display:none;"></video>
+            <img id="scanPreview" alt="Selected waste item" style="display:none;">
+          </div>
 
-    <section class="member-section" id="member"><div class="member-panel reveal"><div><p class="eyebrow">MEMBER SPACE</p><h2>Built with a local-first mindset.</h2><p>This site runs free and fast with no backend. The guides, rates and curated video links are already stored in this project.</p></div><div class="member-actions"><div><b>Want member accounts later?</b><p>Connect Supabase when the client approves live uploads. Until then, this version remains fast, simple and free to host.</p></div><button class="button button-primary" id="memberStart">Account setup <span>→</span></button></div></div><div class="photo-strip reveal delay"><img src="assets/photos/diy-projects.jpe" loading="lazy" alt="DIY waste reuse materials"><img src="assets/photos/desk-pencil-holder.jpg" loading="lazy" alt="Reused can pencil holder"><img src="assets/photos/no-sew-tote-bag.webp" loading="lazy" alt="No-sew reuse tote bag"></div></section>
+          <!-- Camera Controls Bar -->
+          <div class="camera-controls-bar" id="cameraControlsBar" style="display:none;">
+            <button type="button" class="button button-primary" id="captureCameraBtn">
+              ⚡ Capture Photo
+            </button>
+            <button type="button" class="button button-quiet" id="switchCameraBtn">
+              🔄 Switch Camera
+            </button>
+            <button type="button" class="button button-quiet" id="closeCameraBtn">
+              ✕ Close Camera
+            </button>
+          </div>
 
-    <section class="cta reveal"><div><p class="eyebrow">ECOLOOP, ON PURPOSE</p><h2>Less waste. More value.</h2></div><a class="button button-primary" href="#guide">Start your search <span>→</span></a></section>
+          <!-- Progress Bar -->
+          <div class="scanner-progress-wrap" id="scannerProgressWrap">
+            <div class="scanner-progress-head">
+              <span id="scannerProgressLabel">Ready to analyse.</span>
+              <span id="scannerProgressPct">100%</span>
+            </div>
+            <div class="scanner-progress-track">
+              <div class="scanner-progress-fill" id="scannerProgressFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Action Buttons Row -->
+          <div class="scanner-actions-row">
+            <button type="button" class="button button-primary" id="analyseImageBtn" disabled>
+              ✦ Analyse with AI
+            </button>
+            <button type="button" class="button button-quiet" id="clearScanBtn" style="display:none;">
+              Clear / Start Over
+            </button>
+          </div>
+
+          <!-- AI Result Presentation Box -->
+          <div class="ai-result-card" id="aiResultCard" aria-live="polite">
+            <div class="ai-result-empty">
+              <span class="result-orb-icon">✦</span>
+              <div>
+                <b>AI Vision Engine Ready</b>
+                <p>Upload an image, snap a photo with your camera, or pick a sample above to identify waste items and see actionable recycling steps.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. COLLECTION PLANNER HUB (SIDE BY SIDE / SLIDE TOGETHER WITH SCANNER) -->
+        <div id="collectionHub" class="hub-pane" role="tabpanel" hidden>
+          <div class="scanner-header" style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px;">
+            <div>
+              <span class="scanner-tag">CITIZEN RECOVERY PLANNER</span>
+              <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 4px 0 2px 0;">Collection List &amp; Scrap Slip</h3>
+            </div>
+          </div>
+
+          <div class="impact-cards" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;">
+            <article style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">PLANS</span>
+              <b id="planTotal" style="font-size: 18px; color: #0f172a; display: block;">0</b>
+              <small style="font-size: 11px; color: #64748b;">saved locally</small>
+            </article>
+            <article style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">EST. WEIGHT</span>
+              <b id="weightTotal" style="font-size: 18px; color: #0284c7; display: block;">0 kg</b>
+              <small style="font-size: 11px; color: #64748b;">ready to sort</small>
+            </article>
+            <article style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">EST. VALUE</span>
+              <b id="valueTotal" style="font-size: 18px; color: #059669; display: block;">₹0</b>
+              <small style="font-size: 11px; color: #64748b;">sample guide only</small>
+            </article>
+          </div>
+
+          <form id="plannerForm" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px;">
+            <label for="planMaterial" style="font-size: 12.5px; font-weight: 600; color: #334155;">Material
+              <select id="planMaterial" required style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; margin-top: 4px; font-size: 13.5px; background: #ffffff;"></select>
+            </label>
+            <div class="planner-fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <label for="planAmount" style="font-size: 12.5px; font-weight: 600; color: #334155;">Amount (kg / items)
+                <input id="planAmount" type="number" min="0.1" step="0.1" value="1" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; margin-top: 4px; font-size: 13.5px;">
+              </label>
+              <label for="planDate" style="font-size: 12.5px; font-weight: 600; color: #334155;">Collection date
+                <input id="planDate" type="date" required style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; margin-top: 4px; font-size: 13.5px;">
+              </label>
+            </div>
+            <label for="planNote" style="font-size: 12.5px; font-weight: 600; color: #334155;">A quick note
+              <input id="planNote" maxlength="80" placeholder="e.g. Clean bottles and keep caps separate" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; margin-top: 4px; font-size: 13.5px;">
+            </label>
+            <button class="button button-primary" type="submit" style="width: 100%; justify-content: center; padding: 11px 18px; margin-top: 4px;">Add to my plan <span>+</span></button>
+          </form>
+
+          <div class="plan-list-wrap" style="border-top: 1.5px solid #e2e8f0; padding-top: 14px;">
+            <div class="plan-list-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <b style="font-size: 14px; color: #0f172a;">Your collection list</b>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button id="downloadReceiptBtn" type="button" class="receipt-btn" style="display: none; padding: 6px 12px; font-size: 12px; font-weight: 600; background: #0284c7; color: #ffffff; border: none; border-radius: 6px; cursor: pointer;" onclick="downloadManifestImage()">🧾 Download Slip as PNG</button>
+                <button id="clearPlans" type="button" style="padding: 5px 10px; font-size: 11.5px; background: transparent; border: 1px solid #cbd5e1; border-radius: 6px; color: #64748b; cursor: pointer;">Clear all</button>
+              </div>
+            </div>
+            <div id="planList" class="plan-list" aria-live="polite"></div>
+            <a class="map-link" href="https://www.google.com/maps/search/recycling+center+near+me" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-top: 12px; font-size: 12px; color: #0284c7; text-decoration: none; font-weight: 600;">Find a recycling centre near you ↗</a>
+          </div>
+        </div>
+
+        <!-- 3. TEXT SEARCH HUB -->
+        <div id="searchHub" class="hub-pane" role="tabpanel" hidden>
+          <label for="materialSearch">What do you have?</label>
+          <div class="search-shell">
+            <span aria-hidden="true">⌕</span>
+            <input id="materialSearch" type="search" placeholder="Search bottle, pcb, cardboard, copper, battery…" autocomplete="off">
+            <button id="searchButton" type="button">Search</button>
+          </div>
+          <div class="quick-search">
+            <span>TRY</span>
+            <button data-search="Printed Circuit Boards (PCB)">PCB</button>
+            <button data-search="Copper Wires & Cable">Copper</button>
+            <button data-search="Lithium-Ion Batteries (Li-ion)">Li-ion</button>
+            <button data-search="PET Bottles (Clear & Blue)">Plastic bottle</button>
+            <button data-search="Cardboard Packaging Boxes">Cardboard</button>
+            <button data-search="Aluminium Beverage Cans">Aluminium</button>
+          </div>
+          <div class="search-result" id="searchResult" aria-live="polite">
+            <span class="result-icon">✦</span>
+            <div>
+              <b>Ready when you are</b>
+              <p>Search an item to see prevention, recycling guidance, and example scrap rates.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. AI MATERIAL GENERATOR HUB -->
+        <div id="aiAddHub" class="hub-pane" role="tabpanel" hidden>
+          <div class="ai-generator-intro">
+            <span class="scanner-tag">AI CATALOG EXPANDER</span>
+            <h3>Add New Materials to the Website</h3>
+            <p>Type any component, scrap item, or everyday object. EcoLoop's AI will deduce its category, indicative scrap rate (₹), recycling guidance, and circular tips, then permanently add it to the website's live rates guide and collection planner!</p>
+          </div>
+          <form id="aiAddForm" class="ai-generator-form">
+            <label for="aiItemNameInput">Material or Item Name
+              <div class="generator-input-row">
+                <input id="aiItemNameInput" type="text" placeholder="e.g. Drone LiPo Battery, Brass Water Meter, Solar Silicon Ingot..." required maxlength="70">
+                <button type="submit" class="button button-primary" id="aiGenerateBtn">
+                  ✨ Add to Website List
+                </button>
+              </div>
+            </label>
+          </form>
+          <div id="aiAddStatus" class="ai-add-status" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 02 / SAMPLE VALUE GUIDE -->
+    <section class="rates-section" id="rates">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">02 / SAMPLE VALUE GUIDE</p>
+          <h2>See what materials can be worth.</h2>
+        </div>
+        <p>These are illustrative draft rates only—not live market prices or a purchase offer.</p>
+      </div>
+      <div class="rate-toolbar reveal delay">
+        <div id="rateFilters" class="filters">
+          <button class="active" data-category="All">All</button>
+          <button data-category="Paper">Paper</button>
+          <button data-category="Plastic">Plastic</button>
+          <button data-category="Metal">Metal</button>
+          <button data-category="E-waste">E-waste</button>
+          <button data-category="Other">Other</button>
+        </div>
+        <p><span id="rateCount">40+</span> materials</p>
+      </div>
+      <div class="rate-grid" id="rateGrid"></div>
+    </section>
+
+    <!-- SECTION 03 / SIMPLE BY DESIGN -->
+    <section class="how-section" id="how">
+      <div class="section-intro reveal">
+        <p class="eyebrow">03 / SIMPLE BY DESIGN</p>
+        <h2>From material to next move.</h2>
+      </div>
+      <div class="steps">
+        <article class="step reveal">
+          <span>01</span>
+          <h3>Search it</h3>
+          <p>Find material guidance even if you make a small spelling mistake.</p>
+        </article>
+        <article class="step reveal delay">
+          <span>02</span>
+          <h3>Choose better</h3>
+          <p>See practical prevention and reuse ideas before recycling.</p>
+        </article>
+        <article class="step reveal delay-2">
+          <span>03</span>
+          <h3>Learn together</h3>
+          <p>Share a trusted public video link after signing in.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- HIDDEN OFF-SCREEN COLLECTION MANIFEST SLIP (FOR PNG EXPORT) -->
+    <div style="position: fixed; left: -9999px; top: 0; z-index: -100; pointer-events: none;" aria-hidden="true">
+      <div id="printableSlip" class="slip-container">
+        
+        <!-- Header -->
+        <div class="slip-header">
+          <div>
+            <div class="slip-badges">
+              <span class="badge-dark">01 / COLLECTION PLANNER</span>
+              <span class="badge-green">● VERIFIED SCRAP SLIP</span>
+            </div>
+            <h1 class="slip-title">EcoKart Recycling Manifest</h1>
+            <p class="slip-subtitle">Turn good intent into a next step · Citizen Scrap &amp; E-Waste Recovery</p>
+          </div>
+          <div class="slip-meta">
+            <div class="meta-label">MANIFEST REF ID</div>
+            <div class="meta-id" id="slipRefId">#EK-2026-1022</div>
+            <div class="meta-date" id="slipDate">Generated: 22 Oct 2026</div>
+          </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="slip-summary-box">
+          <div>
+            <div class="box-label">PREPARED FOR</div>
+            <div class="box-title">Verified Eco-Citizen</div>
+            <div class="box-sub">Bhopal, MP - 462001</div>
+          </div>
+          <div>
+            <div class="box-label">COLLECTION SUMMARY</div>
+            <div class="box-title" id="slipPlanCount">0 Material Plan(s)</div>
+            <div class="box-sub mono" id="slipTotalWeightSub">0 kg ready to sort</div>
+          </div>
+          <div class="text-right">
+            <div class="box-label">ESTIMATED PAYOUT</div>
+            <div class="box-payout" id="slipTotalPayout">₹0</div>
+            <div class="box-note">Sample guide only</div>
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <table class="slip-table">
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 35%;">MATERIAL DESCRIPTION</th>
+              <th style="width: 18%;">PICKUP DATE</th>
+              <th style="width: 16%; text-align: right;">GUIDE RATE</th>
+              <th style="width: 14%; text-align: right;">QTY / WEIGHT</th>
+              <th style="width: 12%; text-align: right;">EST. VALUE</th>
+            </tr>
+          </thead>
+          <tbody id="slipTableBody">
+            <tr>
+              <td colspan="6" class="empty-cell">No materials added yet.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Total Recovery Row -->
+        <div class="slip-total-row">
+          <div class="total-text">TOTAL ESTIMATED RECOVERY VALUE:</div>
+          <div class="total-qty" id="slipBottomWeight">0 kg</div>
+          <div class="total-val" id="slipBottomValue">₹0</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="slip-footer">
+          <div class="footer-left">
+            <div class="footer-heading">Important Collection Note:</div>
+            <p class="footer-copy">
+              This document is generated locally from <strong>01 / COLLECTION PLANNER.</strong> Prices shown are sample guide estimates only. Final payout is determined after physical sorting and digital weighing at collection.
+            </p>
+          </div>
+          <div class="footer-barcode">*ECOKART-01-PLAN*</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 04 / BHOPAL SCRAP & RECYCLING HUB -->
+    <section class="dealers-section" id="dealers">
+      <div class="dealers-intro reveal">
+        <p class="eyebrow">04 / BHOPAL SCRAP &amp; RECYCLING HUB</p>
+        <h2>Kabadiwalas, Scrap Calculator &amp; Doorstep Pickup</h2>
+        <p>Verified Bhopal scrap merchants, instant wholesale payout calculator with live weight steppers, and door-to-door scrap pickup booking across the city.</p>
+        
+        <!-- Bhopal Hub Master Sub-tabs -->
+        <div class="bhopal-hub-subtabs" role="tablist" aria-label="Bhopal Scrap Hub Features">
+          <button type="button" class="bhopal-subtab-btn active" data-bhopal-pane="bhopalPaneDealers" role="tab" aria-selected="true">
+            <span class="subtab-icon">📍</span> Verified Dealers &amp; Directory (7)
+          </button>
+          <button type="button" class="bhopal-subtab-btn" data-bhopal-pane="bhopalPaneCalc" role="tab" aria-selected="false">
+            <span class="subtab-icon">🧮</span> Clear Scrap Calculator
+          </button>
+          <button type="button" class="bhopal-subtab-btn" data-bhopal-pane="bhopalPanePickup" role="tab" aria-selected="false">
+            <span class="subtab-icon">🚚</span> Schedule Doorstep Pickup
+          </button>
+        </div>
+      </div>
+
+      <!-- SUBPANE 1: VERIFIED LOCAL DEALERS (DEFAULT) -->
+      <div id="bhopalPaneDealers" class="bhopal-pane active">
+        <div class="dealers-filter-bar" role="tablist" aria-label="Filter scrap dealers by material">
+          <button type="button" class="dealer-filter-btn active" data-dealer-filter="All">All Dealers (7)</button>
+          <button type="button" class="dealer-filter-btn" data-dealer-filter="Doorstep">🚚 Doorstep Pickup</button>
+          <button type="button" class="dealer-filter-btn" data-dealer-filter="Metal">⚙️ Metal &amp; Iron</button>
+          <button type="button" class="dealer-filter-btn" data-dealer-filter="E-waste">⚡ E-Waste Specialist</button>
+          <button type="button" class="dealer-filter-btn" data-dealer-filter="Vehicle">🚗 Vehicle Scrapping (RVSF)</button>
+          <button type="button" class="dealer-filter-btn" data-dealer-filter="General">📦 General Junk &amp; Paper</button>
+        </div>
+      </div>
+
+      <div class="dealers-grid" id="dealersGrid">
+        <!-- Card 1: The Kabadiwala -->
+        <article class="dealer-card dealer-card-featured" data-type="Doorstep">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap doorstep">🚚</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">Doorstep Collection App</p>
+              <h3 class="dealer-name">The Kabadiwala</h3>
+              <div class="dealer-stars" aria-label="Rating 3.7 out of 5">
+                <span class="stars-filled" style="--star-pct: 74%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>3.7</b>
+              </div>
+            </div>
+            <span class="dealer-status open">● Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕖</span> Closes 7:00 PM</div>
+          <p class="dealer-location"><span>📍</span> Narmadapuram Road, near Vidya Nagar, Bhopal</p>
+          <p class="dealer-desc">Well-known organized doorstep scrap collection and recycling service operating across Bhopal via mobile app and website booking.</p>
+          <ul class="dealer-accepts">
+            <li>Paper &amp; Books</li><li>Cardboard</li><li>Plastics</li><li>Metals</li><li>E-Waste</li><li>Old Appliances</li>
+          </ul>
+          <div class="dealer-features-row">
+            <span class="dealer-feat">📱 App Booking</span>
+            <span class="dealer-feat">⚖️ Digital Weighing Scales</span>
+            <span class="dealer-feat">📋 Fixed Rate Chart</span>
+          </div>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/The+Kabadiwala+Vidya+Nagar+Narmadapuram+Road+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Narmadapuram+Road+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+
+        <!-- Card 2: BHOPAL SCRAP TRADERS -->
+        <article class="dealer-card" data-type="Metal">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap metal">⚙️</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">Wholesale Metal Hub</p>
+              <h3 class="dealer-name">BHOPAL SCRAP TRADERS</h3>
+              <div class="dealer-stars" aria-label="Rating 5.0 out of 5">
+                <span class="stars-filled" style="--star-pct: 100%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>5.0</b>
+              </div>
+            </div>
+            <span class="dealer-status open">● Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕘</span> Closes 9:00 PM</div>
+          <p class="dealer-location"><span>📍</span> New Kabadkhana Road, Ibrahimganj, Bhopal</p>
+          <p class="dealer-desc">Commercial and domestic scrap hub located centrally in Old Bhopal's primary wholesale scrap trade belt. Deals in bulk metals, iron, and steel.</p>
+          <ul class="dealer-accepts">
+            <li>Bulk Metal Scrap</li><li>Iron &amp; Steel</li><li>Machinery Parts</li><li>General Recyclable Junk</li>
+          </ul>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/BHOPAL+SCRAP+TRADERS+New+Kabadkhana+Road+Ibrahimganj+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//New+Kabadkhana+Road+Ibrahimganj+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+
+        <!-- Card 3: Kabadiwala Bhopal -->
+        <article class="dealer-card" data-type="General">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap general">📦</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">Residential &amp; Industrial</p>
+              <h3 class="dealer-name">Kabadiwala Bhopal</h3>
+              <div class="dealer-stars" aria-label="Rating 4.4 out of 5">
+                <span class="stars-filled" style="--star-pct: 88%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>4.4</b>
+              </div>
+            </div>
+            <span class="dealer-status open">● Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕗</span> 8:00 AM – 8:00 PM Daily</div>
+          <p class="dealer-location"><span>📍</span> Anna Nagar, Govindpura, Bhopal</p>
+          <p class="dealer-desc">Local scrap dealership catering to both residential households and nearby industrial units. Convenient for Govindpura and MP Nagar residents.</p>
+          <ul class="dealer-accepts">
+            <li>Newspapers &amp; Books</li><li>Household Plastics</li><li>Tin &amp; Steel Cans</li><li>General Junk</li>
+          </ul>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/Kabadiwala+Bhopal+Anna+Nagar+Govindpura+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Anna+Nagar+Govindpura+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+
+        <!-- Card 4: kabadawala MP Nagar -->
+        <article class="dealer-card" data-type="General">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap general">🏢</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">Commercial &amp; Office Cleanouts</p>
+              <h3 class="dealer-name">kabadawala</h3>
+              <div class="dealer-stars" aria-label="Rating 5.0 out of 5">
+                <span class="stars-filled" style="--star-pct: 100%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>5.0</b>
+              </div>
+            </div>
+            <span class="dealer-status open">● Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕗</span> Closes 8:00 PM</div>
+          <p class="dealer-location"><span>📍</span> Zone-I, Maharana Pratap Nagar (near Chetak Bridge), Bhopal</p>
+          <p class="dealer-desc">Centrally positioned near Chetak Bridge. Specializes in commercial office paper waste, decommissioned furniture, and rapid disposal cleanouts.</p>
+          <ul class="dealer-accepts">
+            <li>Office Paper Waste</li><li>Broken Furniture</li><li>Electronics</li><li>Commercial Scrap</li>
+          </ul>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/kabadawala+Zone+I+Maharana+Pratap+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Zone-I+Maharana+Pratap+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+
+        <!-- Card 5: A. K. Enterprises -->
+        <article class="dealer-card" data-type="Metal">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap metal">🔩</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">High-Value Metals Specialist</p>
+              <h3 class="dealer-name">A. K. Enterprises</h3>
+              <div class="dealer-stars" aria-label="Rating 4.8 out of 5">
+                <span class="stars-filled" style="--star-pct: 96%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>4.8</b>
+              </div>
+            </div>
+            <span class="dealer-status roundclock">● 24 Hours Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕒</span> Operates around the clock for drop-offs &amp; trade</div>
+          <p class="dealer-location"><span>📍</span> Kotra Road near Shastri Nagar, Bhopal</p>
+          <p class="dealer-desc">Specializes in high-value recyclable non-ferrous metals and industrial materials. Suitable for construction remnants, wiring, and heavy hardware.</p>
+          <ul class="dealer-accepts">
+            <li>Copper Wiring</li><li>Brass &amp; Bronze</li><li>Aluminium</li><li>Iron Scrap</li><li>Construction Remnants</li>
+          </ul>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/A+K+Enterprises+Kotra+Road+Shastri+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Kotra+Road+Shastri+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+
+        <!-- Card 6: E waste scrape collection services -->
+        <article class="dealer-card" data-type="E-waste">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap ewaste">⚡</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">Certified E-Waste Specialist</p>
+              <h3 class="dealer-name">E waste scrape collection services</h3>
+              <div class="dealer-stars" aria-label="Rating 5.0 out of 5">
+                <span class="stars-filled" style="--star-pct: 100%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>5.0</b>
+              </div>
+            </div>
+            <span class="dealer-status open">● Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕘</span> Call for schedule</div>
+          <p class="dealer-location"><span>📍</span> Sajida Nagar, Kohefiza, Bhopal</p>
+          <p class="dealer-desc">Catering specifically to electronic waste and decommissioned appliances. Promotes responsible handling to keep hazardous e-waste out of landfills.</p>
+          <ul class="dealer-accepts">
+            <li>Discarded Electronics</li><li>Motherboards &amp; PCBs</li><li>Batteries</li><li>Cables &amp; Chargers</li><li>Old IT Hardware</li>
+          </ul>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/E+waste+collection+Kohefiza+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Kohefiza+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+
+        <!-- Card 7: Kakda's RVSF -->
+        <article class="dealer-card dealer-card-featured" data-type="Vehicle">
+          <div class="dealer-card-header">
+            <div class="dealer-icon-wrap vehicle">🚗</div>
+            <div class="dealer-meta">
+              <p class="dealer-type-badge">Certified Vehicle Scrapping</p>
+              <h3 class="dealer-name">Kakda's RVSF</h3>
+              <div class="dealer-stars" aria-label="Rating 4.9 out of 5">
+                <span class="stars-filled" style="--star-pct: 98%">★★★★★</span>
+                <span class="stars-empty">★★★★★</span>
+                <b>4.9</b>
+              </div>
+            </div>
+            <span class="dealer-status open">● Open</span>
+          </div>
+          <div class="dealer-hours"><span>🕖</span> Closes 7:00 PM</div>
+          <p class="dealer-location"><span>📍</span> Ayodhya Bypass Road, Bhopal</p>
+          <p class="dealer-desc">Authorised Registered Vehicle Scrapping Facility (RVSF) issuing official scrapping certificates for deregistration and government scrap incentives.</p>
+          <ul class="dealer-accepts">
+            <li>Cars &amp; SUVs</li><li>Two-Wheelers</li><li>Commercial Vehicles</li><li>Automotive Metals</li><li>Auto Plastics</li>
+          </ul>
+          <div class="dealer-certificate-badge">
+            <span>🏅</span> Govt. Authorised RVSF · Issues Scrapping Certificates
+          </div>
+          <div class="dealer-actions">
+            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/Kakda+RVSF+Ayodhya+Bypass+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Ayodhya+Bypass+Road+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="dealers-footer-row reveal">
+        <p class="dealers-disclaimer">Listing details sourced from local business information. Verify hours before visiting. <a href="https://www.google.com/maps/search/kabadiwala+scrap+dealer+bhopal" target="_blank" rel="noopener noreferrer">Search more on Google Maps ↗</a></p>
+        <a class="button button-quiet" href="https://www.google.com/maps/search/recycling+center+scrap+dealer+Bhopal+Madhya+Pradesh" target="_blank" rel="noopener noreferrer">🗺 Find more dealers near you</a>
+      </div>
+    </div> <!-- End #bhopalPaneDealers -->
+
+    <!-- SUBPANE 2: CLEAR SCRAP CALCULATOR -->
+    <div id="bhopalPaneCalc" class="bhopal-pane" style="display:none;">
+      <div class="bhopal-pane-card">
+        <div class="bhopal-calc-header">
+          <div>
+            <h3>Wholesale Scrap Valuation Calculator</h3>
+            <p>Select scrap categories, adjust weights with (+/-) steppers, and instantly calculate estimated payout at Bhopal benchmark rates.</p>
+          </div>
+          <button type="button" class="calc-reset-btn" id="bhopalCalcResetBtn">
+            🔄 Reset All Quantities
+          </button>
+        </div>
+
+        <div class="bhopal-calc-layout">
+          <!-- Materials Grid -->
+          <div class="bhopal-calc-grid" id="bhopalCalcGrid">
+            <!-- Dynamically rendered via JS -->
+          </div>
+
+          <!-- Sticky Payout Sidebar Summary -->
+          <div class="bhopal-calc-summary">
+            <div class="summary-top">
+              <div class="summary-title-row">
+                <span class="summary-title">Selected Scrap Basket</span>
+                <span class="summary-count-badge" id="bhopalCalcCountBadge">0 categories</span>
+              </div>
+              <div class="summary-item-list" id="bhopalCalcItemList">
+                <p class="summary-empty-msg">No scrap items selected yet. Use the (+/-) buttons to adjust weights.</p>
+              </div>
+            </div>
+
+            <div class="summary-payout-box">
+              <div class="payout-amount-group">
+                <span class="payout-label">ESTIMATED TOTAL RETURN</span>
+                <div class="payout-val" id="bhopalCalcTotalVal">₹ 0.00</div>
+              </div>
+              <div class="payout-metrics-row">
+                <div class="payout-metric">
+                  <span>Total Weight:</span>
+                  <strong id="bhopalCalcTotalWeight">0.0 kg</strong>
+                </div>
+                <div class="payout-metric">
+                  <span>Doorstep Pickup:</span>
+                  <strong class="highlight-free">FREE Service</strong>
+                </div>
+              </div>
+              <button type="button" class="button button-primary calc-proceed-btn" id="bhopalProceedPickupBtn">
+                Proceed to Doorstep Schedule ➔
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBPANE 3: SCHEDULE DOORSTEP PICKUP -->
+    <div id="bhopalPanePickup" class="bhopal-pane" style="display:none;">
+      <div class="bhopal-pane-card">
+        <div class="bhopal-pickup-header">
+          <h3>Schedule Bhopal Doorstep Scrap Pickup</h3>
+          <p>Book verified scrap collection across Bhopal. Dedicated partners arrive with certified digital scales and execute on-the-spot payouts via UPI or cash.</p>
+        </div>
+
+        <div class="bhopal-pickup-layout">
+          <!-- Form -->
+          <form class="bhopal-pickup-form" id="bhopalDoorstepForm">
+            <div class="form-section-title">
+              <span>1. Contact &amp; Collection Details</span>
+            </div>
+
+            <div class="form-row-2">
+              <label>Full Name *
+                <input type="text" id="pickupName" required placeholder="e.g. Rahul Sharma" autocomplete="name">
+              </label>
+              <label>WhatsApp / Mobile Number *
+                <input type="tel" id="pickupPhone" required placeholder="+91 98XXX XXXXX" autocomplete="tel">
+              </label>
+            </div>
+
+            <div class="form-row-2">
+              <label>Bhopal Ward / Locality *
+                <select id="pickupArea" required>
+                  <option value="">Select Bhopal Neighborhood...</option>
+                  <option value="MP Nagar (Zone I &amp; II)">MP Nagar (Zone I &amp; II)</option>
+                  <option value="Govindpura Industrial Belt">Govindpura Industrial Belt</option>
+                  <option value="Narmadapuram Road / Vidya Nagar">Narmadapuram Road / Vidya Nagar</option>
+                  <option value="Old Bhopal / Kabadkhana Market">Old Bhopal / Kabadkhana Market</option>
+                  <option value="Kohefiza / VIP Road">Kohefiza / VIP Road</option>
+                  <option value="Ayodhya Bypass / Shahpura">Ayodhya Bypass / Shahpura</option>
+                  <option value="Kotra Sultanabad / TT Nagar">Kotra Sultanabad / TT Nagar</option>
+                  <option value="Kolar Road / Chuna Bhatti">Kolar Road / Chuna Bhatti</option>
+                </select>
+              </label>
+              <label>Preferred Pickup Date *
+                <input type="date" id="pickupDate" required>
+              </label>
+            </div>
+
+            <label>Complete Street Address &amp; Landmarks *
+              <textarea id="pickupAddress" rows="2" required placeholder="House/Flat No., Apartment name, Landmark..."></textarea>
+            </label>
+
+            <div class="payment-method-group">
+              <span class="payment-group-label">Preferred Payout Mode:</span>
+              <div class="payment-radios">
+                <label class="radio-label">
+                  <input type="radio" name="bhopalPaymentMode" value="upi" checked>
+                  <span>Instant UPI (PhonePe / GPay / Paytm)</span>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="bhopalPaymentMode" value="cash">
+                  <span>Cash on Spot</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="button button-primary pickup-submit-btn" id="pickupSubmitBtn">
+              🚚 Confirm Bhopal Doorstep Pickup Request
+            </button>
+          </form>
+
+          <!-- Basket Sidebar -->
+          <div class="bhopal-pickup-basket">
+            <div class="basket-head">
+              <h4>Pickup Request Basket</h4>
+              <span class="basket-badge">Live Synced</span>
+            </div>
+            <div class="basket-items" id="bhopalPickupBasketList">
+              <!-- Synced from calculator -->
+            </div>
+            <div class="basket-totals-card">
+              <div class="basket-row">
+                <span>Estimated Total Payout:</span>
+                <strong id="bhopalBasketPayout">₹ 0.00</strong>
+              </div>
+              <div class="basket-row">
+                <span>Estimated Weight:</span>
+                <strong id="bhopalBasketWeight">0.0 kg</strong>
+              </div>
+              <div class="basket-guarantee">
+                <span>⚖️ Certified Digital Weighing Scale Guarantee</span>
+                <p>Weight is verified in front of you. Payout calculated instantly on-site.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECTION 05: CURATED VIDEO LIBRARY (DIY PAPER CRAFTS)                  -->
+    <!-- ===================================================================== -->
+    <section id="community" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div id="videos"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+        <!-- LEFT COLUMN: Section Header, Material Category Selector & CTA -->
+        <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+          <div class="space-y-3">
+            <!-- Section Badge -->
+            <div class="inline-flex items-center gap-2">
+              <span class="text-xs font-extrabold uppercase tracking-widest text-[#2563eb]">
+                05 / CURATED VIDEO LIBRARY
+              </span>
+              <span class="text-[11px] font-semibold bg-blue-50 text-[#2563eb] border border-blue-200 px-2.5 py-0.5 rounded-full">
+                DIY Paper Crafts
+              </span>
+            </div>
+
+            <!-- Section Title -->
+            <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 leading-[1.12] tracking-tight">
+              Make waste worth watching.
+            </h2>
+
+            <!-- Section Description -->
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+              A categorized list of DIY paper craft ideas based on the materials and adhesives needed, complete with step-by-step video tutorials. EcoLoop stores their titles and public links only; each tutorial opens on YouTube or previews inline.
+            </p>
+          </div>
+
+          <!-- Interactive Material / Adhesive Category Filter Cards -->
+          <div class="space-y-2.5" role="region" aria-label="Filter crafts by materials needed">
+            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
+              <span>Filter by Materials Needed</span>
+              <button type="button" id="reset-filter-btn" onclick="window.craftsSelectCategory('all')" class="text-[#2563eb] hover:underline font-semibold normal-case hidden">
+                Reset filter
+              </button>
+            </div>
+
+            <!-- Category Button: All -->
+            <button type="button" id="cat-btn-all" onclick="window.craftsSelectCategory('all')" class="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 bg-[#1e293b] text-white border-[#1e293b] shadow-sm">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center text-base shrink-0">📄</span>
+                <div class="min-w-0">
+                  <div class="font-bold text-sm truncate">All DIY Paper Craft Ideas</div>
+                  <div class="text-xs text-slate-300 truncate">4 material categories • Pure origami, glue &amp; tape</div>
+                </div>
+              </div>
+              <span id="count-badge-all" class="text-xs font-mono-code font-semibold px-2.5 py-1 rounded-full bg-[#f59e0b] text-slate-900 shrink-0">
+                9 videos
+              </span>
+            </button>
+
+            <!-- Category 1: Without Glue & Without Tape -->
+            <button type="button" id="cat-btn-no-glue-no-tape" onclick="window.craftsSelectCategory('no-glue-no-tape')" class="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 bg-white hover:bg-slate-50 text-slate-800 border-slate-200/90 shadow-sm">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-sm shrink-0">🚫✂️</span>
+                <div class="min-w-0">
+                  <div class="font-bold text-sm truncate">Without Glue &amp; Without Tape (Pure Origami)</div>
+                  <div class="text-xs text-slate-500 truncate">Purely paper folding techniques to hold shape</div>
+                </div>
+              </div>
+              <span class="text-xs font-mono-code font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 shrink-0">
+                4
+              </span>
+            </button>
+
+            <!-- Category 2: With Glue (No Tape) -->
+            <button type="button" id="cat-btn-with-glue" onclick="window.craftsSelectCategory('with-glue')" class="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 bg-white hover:bg-slate-50 text-slate-800 border-slate-200/90 shadow-sm">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sm shrink-0">💧</span>
+                <div class="min-w-0">
+                  <div class="font-bold text-sm truncate">With Glue (No Tape)</div>
+                  <div class="text-xs text-slate-500 truncate">Liquid glue, glue sticks, or craft glue</div>
+                </div>
+              </div>
+              <span class="text-xs font-mono-code font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 shrink-0">
+                2
+              </span>
+            </button>
+
+            <!-- Category 3: With Tape -->
+            <button type="button" id="cat-btn-with-tape" onclick="window.craftsSelectCategory('with-tape')" class="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 bg-white hover:bg-slate-50 text-slate-800 border-slate-200/90 shadow-sm">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-sm shrink-0">📼</span>
+                <div class="min-w-0">
+                  <div class="font-bold text-sm truncate">With Tape (Clear, Washi, or Double-Sided)</div>
+                  <div class="text-xs text-slate-500 truncate">Structural shapes or squishy textures</div>
+                </div>
+              </div>
+              <span class="text-xs font-mono-code font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 shrink-0">
+                2
+              </span>
+            </button>
+
+            <!-- Category 4: With Both Glue & Tape -->
+            <button type="button" id="cat-btn-both-glue-tape" onclick="window.craftsSelectCategory('both-glue-tape')" class="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 bg-white hover:bg-slate-50 text-slate-800 border-slate-200/90 shadow-sm">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="w-9 h-9 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-sm shrink-0">🛠️</span>
+                <div class="min-w-0">
+                  <div class="font-bold text-sm truncate">With Both Glue &amp; Tape</div>
+                  <div class="text-xs text-slate-500 truncate">Fast hold of tape + permanent bond of glue</div>
+                </div>
+              </div>
+              <span class="text-xs font-mono-code font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 shrink-0">
+                1
+              </span>
+            </button>
+          </div>
+
+          <!-- Action Buttons & Source Footnote -->
+          <div class="pt-1 flex flex-wrap items-center gap-3">
+            <button type="button" onclick="window.craftsOpenAddVideoModal()" class="inline-flex items-center gap-3 bg-[#1e293b] hover:bg-slate-800 text-white font-semibold text-sm px-5 py-3 rounded-full transition-all shadow-sm">
+              <span>Share a video</span>
+              <span class="w-6 h-6 rounded-full bg-[#f59e0b] text-slate-900 flex items-center justify-center font-bold text-xs">↗</span>
+            </button>
+          </div>
+          <p class="text-xs text-slate-400">
+            No video files, hosting fees, or autoplay clutter. Curated for EcoLoop.
+          </p>
+        </div>
+
+        <!-- RIGHT COLUMN: Saved Tutorials Container Card -->
+        <div class="lg:col-span-7 bg-[#f0f3fa] rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-sm space-y-5">
+
+          <!-- Container Top Bar: Title, Search & View Controls -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-slate-200/70">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0"></span>
+              <h3 class="text-base font-extrabold text-slate-800">Saved tutorials</h3>
+              <span id="visible-count-pill" class="text-xs font-mono-code text-slate-600 bg-white px-2.5 py-0.5 rounded-full border border-slate-200/90 font-semibold">
+                9 videos
+              </span>
+            </div>
+
+            <!-- Search & Saved Filter Controls -->
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1 sm:w-56">
+                <input
+                  type="text"
+                  id="craft-search-input"
+                  oninput="window.craftsHandleSearchInput(this.value)"
+                  placeholder="Search craft or material..."
+                  aria-label="Search craft or material"
+                  class="w-full text-xs bg-white border border-slate-200/90 rounded-full pl-8 pr-7 py-2 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563eb]/30 focus:border-[#2563eb]"
+                />
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none">🔍</span>
+                <button
+                  type="button"
+                  id="clear-search-btn"
+                  onclick="window.craftsClearSearch()"
+                  title="Clear search"
+                  class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
+                >✕</button>
+              </div>
+
+              <button
+                type="button"
+                id="saved-only-btn"
+                onclick="window.craftsToggleSavedFilter()"
+                class="px-3 py-2 rounded-full text-xs font-semibold border transition-all bg-white text-slate-700 border-slate-200/90 hover:bg-slate-50 inline-flex items-center gap-1 shrink-0"
+                title="Show bookmarked tutorials"
+              >
+                <span id="saved-star-icon">☆</span>
+                <span>Saved</span>
+                <span id="saved-count-num" class="text-[11px] font-mono-code text-slate-400">(0)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Filter Pills -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scroll">
+            <button type="button" data-pill="all" onclick="window.craftsSelectCategory('all')" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-[#2563eb] text-white">
+              All (9)
+            </button>
+            <button type="button" data-pill="featured" onclick="window.craftsSelectCategory('featured')" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80">
+              ★ Your Featured Links (2)
+            </button>
+            <button type="button" data-pill="no-glue-no-tape" onclick="window.craftsSelectCategory('no-glue-no-tape')" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80">
+              🚫✂️ Pure Origami (4)
+            </button>
+            <button type="button" data-pill="with-glue" onclick="window.craftsSelectCategory('with-glue')" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80">
+              💧 With Glue (2)
+            </button>
+            <button type="button" data-pill="with-tape" onclick="window.craftsSelectCategory('with-tape')" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80">
+              📼 With Tape (2)
+            </button>
+            <button type="button" data-pill="both-glue-tape" onclick="window.craftsSelectCategory('both-glue-tape')" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80">
+              🛠️ Glue &amp; Tape (1)
+            </button>
+          </div>
+
+          <!-- Dynamic Categorized Tutorials List -->
+          <div id="tutorials-list-container" class="space-y-6 max-h-[680px] overflow-y-auto pr-1 custom-scroll">
+            <!-- Populated by JavaScript on load & filter -->
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPACT SECTION -->
+    <section class="impact-section" id="impact">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">06 / ENVIRONMENTAL IMPACT</p>
+          <h2>Measure the difference,<br>not just the waste.</h2>
+        </div>
+        <p>Every material you keep in the loop saves energy, raw resources and landfill space. These widely cited figures show why sorting matters.</p>
+      </div>
+      <div class="impact-grid">
+        <article class="reveal"><i>◈</i><b>95%</b><p>Energy saved recycling aluminium vs. making new</p></article>
+        <article class="reveal delay"><i>▤</i><b>≈17</b><p>Trees spared per tonne of recycled paper</p></article>
+        <article class="reveal delay-2"><i>♻</i><b>40+</b><p>Sample materials with guidance on EcoLoop</p></article>
+      </div>
+      <small class="impact-note">Figures are commonly cited estimates and vary by process and region.</small>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section" id="about">
+      <div class="about-intro reveal">
+        <p class="eyebrow">07 / ABOUT ECOLOOP</p>
+        <h2>Waste is a resource<br>in the wrong place.</h2>
+        <p>EcoLoop is a simple, free guide that helps households and students sort waste correctly, reuse what they can, and understand the value of what they recycle.</p>
+      </div>
+      <div class="about-actions">
+        <article class="reveal">
+          <span>01</span>
+          <div><b>Reduce</b><p>Prevention tips for every material, so less waste is created in the first place.</p></div>
+        </article>
+        <article class="reveal delay">
+          <span>02</span>
+          <div><b>Reuse</b><p>Practical DIY ideas and curated tutorials that give old items a second life.</p></div>
+        </article>
+        <article class="reveal delay-2">
+          <span>03</span>
+          <div><b>Recycle</b><p>Clear sorting guidance and sample scrap rates that show what materials are worth.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CREATOR PROFILE -->
+    <section class="creator-section" id="creator">
+      <div class="creator-shell">
+        <div class="creator-heading">
+          <p class="eyebrow">// SYSTEM PROFILE</p>
+          <h2>About EcoLoop</h2>
+        </div>
+        <div class="creator-grid">
+          <article class="creator-card creator-bio">
+            <p class="creator-card-label">ABOUT THE CREATOR</p>
+            <p>Hi, I’m Udit Narayan Tiwari, a student creator who enjoys building practical digital projects that make everyday choices clearer.</p>
+            <p>EcoLoop brings together smart waste management, web development and sustainability so households and students can keep useful materials in the loop.</p>
+            <a class="creator-github" href="https://github.com/udittiwaari" target="_blank" rel="noopener noreferrer">View my GitHub <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="creator-card creator-mission">
+            <p class="creator-card-label">THE ECOLOOP MISSION</p>
+            <p>EcoLoop is a simple guide for smarter waste management and more mindful resource recovery.</p>
+            <p>The goal is to make sorting easier and more useful—helping people reduce, reuse and recycle everyday materials with confidence.</p>
+            <div class="creator-principles">
+              <div><b>MISSION</b><span>Make practical circular choices easy to understand.</span></div>
+              <div><b>VISION</b><span>Support cleaner, more resource-efficient neighbourhoods.</span></div>
+              <div><b>IMPACT</b><span>Turn small daily actions into lasting habits.</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMBER SECTION -->
+    <section class="member-section" id="member">
+      <div class="member-panel reveal">
+        <div>
+          <p class="eyebrow">MEMBER SPACE</p>
+          <h2>Built with a local-first mindset.</h2>
+          <p>This site runs free and fast with no backend. The guides, rates and curated video links are already stored in this project.</p>
+        </div>
+        <div class="member-actions">
+          <div>
+            <b>Want member accounts later?</b>
+            <p>Connect Supabase when the client approves live uploads. Until then, this version remains fast, simple and free to host.</p>
+          </div>
+          <button class="button button-primary" id="memberStart">Account setup <span>→</span></button>
+        </div>
+      </div>
+      <div class="photo-strip reveal delay">
+        <img src="assets/photos/diy-projects.jpe" loading="lazy" alt="DIY waste reuse materials">
+        <img src="assets/photos/desk-pencil-holder.jpg" loading="lazy" alt="Reused can pencil holder">
+        <img src="assets/photos/no-sew-tote-bag.webp" loading="lazy" alt="No-sew reuse tote bag">
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta reveal">
+      <div>
+        <p class="eyebrow">ECOLOOP, ON PURPOSE</p>
+        <h2>Less waste. More value.</h2>
+      </div>
+      <a class="button button-primary" href="#guide">Start your search <span>→</span></a>
+    </section>
   </main>
-  <footer class="site-footer"><div class="footer-grid"><div class="footer-identity"><a class="footer-wordmark" href="#top">ECO<span>LOOP</span></a><p>Smart waste management for clearer choices, useful materials and more circular neighbourhoods.</p></div><div><p class="footer-label">EXPLORE</p><nav class="footer-links" aria-label="Footer navigation"><a href="#guide">Material guide</a><a href="#rates">Sample rates</a><a href="#planner">Collection planner</a></nav></div><div><p class="footer-label">PROJECT</p><nav class="footer-links" aria-label="Project navigation"><a href="#community">Video library</a><a href="#impact">Impact</a><a href="#about">About EcoLoop</a></nav></div><div><p class="footer-label">CREATOR</p><a class="footer-github" href="https://github.com/udittiwaari" target="_blank" rel="noopener noreferrer">View GitHub <span aria-hidden="true">↗</span></a><p class="footer-status"><i aria-hidden="true"></i> SYSTEM STATUS: ONLINE</p></div></div><div class="footer-bottom"><span>© 2026 ECOLOOP · SAMPLE RATES ONLY</span><span>CREATED BY UDIT NARAYAN TIWARI</span><span>KEEP MATERIALS IN THE LOOP</span></div></footer>
 
-  <dialog id="accountDialog" class="dialog"><button class="dialog-close" data-close="accountDialog" aria-label="Close">×</button><div id="authSignedOut"><p class="eyebrow">MEMBER ACCESS</p><h2>Join EcoLoop.</h2><p class="dialog-copy">Create an account to save your identity and share video links responsibly.</p><div class="auth-tabs"><button class="active" data-mode="login">Sign in</button><button data-mode="signup">Create account</button></div><form id="authForm"><label id="nameField" hidden>Display name<input id="displayName" maxlength="60" autocomplete="name"></label><label>Email<input id="email" type="email" required autocomplete="email"></label><label>Password<input id="password" type="password" minlength="8" required autocomplete="current-password"></label><button class="button button-primary" id="authSubmit">Sign in <span>→</span></button></form><p class="form-message" id="authMessage"></p></div><div id="authSignedIn" hidden><p class="eyebrow">SIGNED IN</p><h2>Hello, <span id="memberName">member</span>.</h2><p class="dialog-copy">You can now submit your own video links and remove them later.</p><button class="button button-primary" id="openShareFromAccount">Share a link <span>↗</span></button><button class="text-button" id="signOutButton">Sign out</button></div></dialog>
-  <dialog id="shareDialog" class="dialog"><button class="dialog-close" data-close="shareDialog" aria-label="Close">×</button><p class="eyebrow">COMMUNITY SUBMISSION</p><h2>Share a useful video.</h2><p class="dialog-copy">YouTube, Instagram and Facebook links only. The video remains on its original platform.</p><form id="videoForm"><label>Video title<input id="videoTitle" maxlength="100" required placeholder="e.g. How to recycle cardboard at home"></label><label>Public video link<input id="videoUrl" type="url" maxlength="2048" required placeholder="https://www.youtube.com/watch?v=…"></label><button class="button button-primary">Publish link <span>↗</span></button></form><p class="form-message" id="videoMessage"></p></dialog>
-</body></html>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-identity">
+        <a class="brand brand-logo" href="#top" aria-label="EcoLoop home" style="display:inline-block; margin-bottom:6px;">
+          <img src="assets/ecoloop-wordmark.svg" alt="EcoLoop" style="height:26px; width:auto;">
+        </a>
+        <p>Smart waste management for clearer choices, useful materials and circular neighbourhoods.</p>
+      </div>
+      <div>
+        <p class="footer-label">EXPLORE</p>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="#guide">Material guide</a>
+          <a href="#rates">Sample rates</a>
+          <a href="#dealers">Bhopal Scrap Hub</a>
+          <a href="#planner">Collection planner</a>
+        </nav>
+      </div>
+      <div>
+        <p class="footer-label">PROJECT</p>
+        <nav class="footer-links" aria-label="Project navigation">
+          <a href="#community">Video crafts library</a>
+          <a href="#impact">Environmental impact</a>
+          <a href="#about">About EcoLoop</a>
+        </nav>
+      </div>
+      <div>
+        <p class="footer-label">CREATOR</p>
+        <a class="footer-github" href="https://github.com/udittiwaari" target="_blank" rel="noopener noreferrer">View GitHub <span aria-hidden="true">↗</span></a>
+        <p class="footer-status"><i aria-hidden="true"></i> SYSTEM STATUS: ONLINE</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ECOLOOP · SAMPLE RATES ONLY</span>
+      <span>CREATED BY UDIT NARAYAN TIWARI</span>
+      <span>KEEP MATERIALS IN THE LOOP</span>
+    </div>
+  </footer>
+
+  <!-- AUTH / ACCOUNT DIALOG -->
+  <dialog id="accountDialog" class="dialog">
+    <button class="dialog-close" data-close="accountDialog" aria-label="Close">×</button>
+    <div id="authSignedOut">
+      <p class="eyebrow">MEMBER ACCESS</p>
+      <h2>Join EcoLoop.</h2>
+      <p class="dialog-copy">Create an account or sign in as administrator to manage waste catalog data and members.</p>
+      <div class="auth-tabs">
+        <button class="active" data-mode="login">Sign in</button>
+        <button data-mode="signup">Create account</button>
+      </div>
+      <form id="authForm">
+        <label id="nameField" hidden>Display name
+          <input id="displayName" maxlength="60" autocomplete="name">
+        </label>
+        <label>Email
+          <input id="email" type="email" required autocomplete="email">
+        </label>
+        <label>Password
+          <input id="password" type="password" minlength="8" required autocomplete="current-password">
+        </label>
+        <button class="button button-primary" id="authSubmit">Sign in <span>→</span></button>
+      </form>
+      <p class="form-message" id="authMessage"></p>
+    </div>
+    <div id="authSignedIn" hidden>
+      <p class="eyebrow">SIGNED IN</p>
+      <h2>Hello, <span id="memberName">member</span>.</h2>
+      <p class="dialog-copy">You are authenticated with EcoLoop.</p>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+        <button class="button button-primary" id="openAdminFromAccount" style="display:none; background: linear-gradient(135deg, #0284c7, #0f172a); border:none; box-shadow:0 4px 14px rgba(2, 132, 199, 0.3);">
+          ⚙️ Admin Section (Manage &amp; Delete Data) <span>→</span>
+        </button>
+        <button class="button button-quiet" id="openShareFromAccount">Share a video link <span>↗</span></button>
+        <button class="text-button" id="signOutButton">Sign out</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ADMIN CONTROL CENTER MODAL (ONLY ACCESSIBLE BY UDIT NARAYAN TIWARI) -->
+  <dialog id="adminDialog" class="dialog admin-modal">
+    <div class="admin-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <h2 style="font-size:17px; font-weight:800; margin:0; color:#fff;">EcoLoop Admin Section</h2>
+        <span class="admin-badge">ROOT ADMIN</span>
+      </div>
+      <button class="dialog-close" data-close="adminDialog" aria-label="Close" style="color:#cbd5e1; background:transparent; font-size:26px; border:none; cursor:pointer; line-height:1;">×</button>
+    </div>
+
+    <nav class="admin-nav" id="adminTabsNav">
+      <button type="button" class="admin-tab-btn active" data-tab="adminUsers">👥 User Accounts (<span id="adminUserCount">0</span>)</button>
+      <button type="button" class="admin-tab-btn" data-tab="adminMaterials">📦 Materials (<span id="adminMaterialCount">0</span>)</button>
+      <button type="button" class="admin-tab-btn" data-tab="adminVideos">🎬 Videos (<span id="adminVideoCount">0</span>)</button>
+      <button type="button" class="admin-tab-btn" data-tab="adminDealers">📍 Bhopal Dealers (<span id="adminDealerCount">0</span>)</button>
+      <button type="button" class="admin-tab-btn" data-tab="adminDanger" style="color:#ef4444;">⚠️ Danger Zone</button>
+    </nav>
+
+    <div class="admin-body">
+      <!-- 1. USER ACCOUNTS & DELETE USER DATA -->
+      <div id="adminUsers" class="admin-pane active">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700; margin:0;">Registered Member Accounts</h3>
+            <p style="font-size:12px; color:#64748b; margin:2px 0 0;">View all registered users or delete individual accounts.</p>
+          </div>
+          <button type="button" class="btn-danger" id="adminDeleteAllUsersBtn">🗑️ Erase All Non-Admin Users</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table" id="adminUsersTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. MATERIALS CATALOG & DELETE MATERIALS DATA -->
+      <div id="adminMaterials" class="admin-pane" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700; margin:0;">Manage Materials Catalog</h3>
+            <p style="font-size:12px; color:#64748b; margin:2px 0 0;">Delete custom scrap entries or add new material items.</p>
+          </div>
+          <button type="button" class="btn-danger" id="adminDeleteAllMaterialsBtn">🗑️ Erase All Custom Materials</button>
+        </div>
+
+        <!-- Add Material Form -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:20px;">
+          <h4 style="margin:0 0 10px; font-size:14px; font-weight:700; color:#0f172a;">➕ Add New Material to Website</h4>
+          <form id="adminAddMaterialForm" class="admin-form-grid">
+            <label>
+              Material Name *
+              <input type="text" id="admMatName" required placeholder="e.g. Copper Motor Winding, Brass Valves">
+            </label>
+            <label>
+              Category *
+              <select id="admMatCategory" required>
+                <option value="E-waste">E-waste</option>
+                <option value="Metal">Metal</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Paper">Paper</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              Sample Rate (₹) *
+              <input type="number" id="admMatRate" required min="0" step="0.5" placeholder="e.g. 420">
+            </label>
+            <label>
+              Unit *
+              <input type="text" id="admMatUnit" required value="kg">
+            </label>
+            <div class="admin-form-actions" style="grid-column: span 2;">
+              <button type="submit" class="btn-primary-admin" id="admMatSubmitBtn">Add Material to Database</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Materials Table -->
+        <h4 style="margin:16px 0 8px; font-size:14px; font-weight:700;">Active Catalog Items</h4>
+        <div style="overflow-x:auto; max-height:280px; overflow-y:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Rate (₹)</th>
+                <th>Unit</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminMaterialsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. VIDEOS MANAGEMENT (ADD & DELETE VIDEOS) -->
+      <div id="adminVideos" class="admin-pane" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700; margin:0;">Manage Video Crafts &amp; Tutorials</h3>
+            <p style="font-size:12px; color:#64748b; margin:2px 0 0;">Add new YouTube crafting/recycling tutorials or delete existing video links.</p>
+          </div>
+        </div>
+
+        <!-- Add Video Form -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:20px;">
+          <h4 style="margin:0 0 10px; font-size:14px; font-weight:700; color:#0f172a;">➕ Add New Video to Library</h4>
+          <form id="adminAddVideoForm" class="admin-form-grid">
+            <label>
+              Video Title *
+              <input type="text" id="admVidTitle" required placeholder="e.g. Plastic Bottle Planter Tutorial">
+            </label>
+            <label>
+              Category *
+              <select id="admVidCategory" required>
+                <option value="Plastic bottle">Plastic bottle</option>
+                <option value="Cardboard">Cardboard</option>
+                <option value="Paper">Paper / Origami</option>
+                <option value="Newspaper">Newspaper</option>
+                <option value="Fabric scraps">Fabric scraps</option>
+                <option value="Egg carton">Egg carton</option>
+                <option value="E-waste">E-waste</option>
+                <option value="Metal">Metal</option>
+                <option value="Mixed materials">Mixed materials</option>
+              </select>
+            </label>
+            <label style="grid-column:span 2;">
+              YouTube URL *
+              <input type="url" id="admVidUrl" required placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/...">
+            </label>
+            <label>
+              Creator / Channel Name
+              <input type="text" id="admVidChannel" placeholder="e.g. Eco Crafts Studio">
+            </label>
+            <label>
+              Short Description
+              <input type="text" id="admVidDesc" placeholder="e.g. Easy beginner upcycling project">
+            </label>
+            <div class="admin-form-actions" style="grid-column: span 2;">
+              <button type="submit" class="btn-primary-admin" id="admVidSubmitBtn">Add Video to Library</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Videos Table -->
+        <h4 style="margin:16px 0 8px; font-size:14px; font-weight:700;">Active Videos (<span id="adminVidTableCount">0</span>)</h4>
+        <div style="overflow-x:auto; max-height:280px; overflow-y:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Channel</th>
+                <th>Link</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminVideosTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. DEALERS MANAGEMENT (ADD & DELETE DEALERS) -->
+      <div id="adminDealers" class="admin-pane" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700; margin:0;">Manage Bhopal Scrap Hub Dealers</h3>
+            <p style="font-size:12px; color:#64748b; margin:2px 0 0;">Add new authorized scrap dealers to the live Bhopal directory or remove existing entries.</p>
+          </div>
+        </div>
+
+        <!-- Add Dealer Form -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:20px;">
+          <h4 style="margin:0 0 10px; font-size:14px; font-weight:700; color:#0f172a;">➕ Add New Dealer to Bhopal Directory</h4>
+          <form id="adminAddDealerForm" class="admin-form-grid">
+            <label>
+              Dealer / Business Name *
+              <input type="text" id="admDlrName" required placeholder="e.g. Bhopal Green Recycling Centre">
+            </label>
+            <label>
+              Category / Type *
+              <select id="admDlrType" required>
+                <option value="Doorstep">Doorstep Collection</option>
+                <option value="Metal">Metal &amp; Heavy Salvage</option>
+                <option value="General">General / Neighbourhood Scrap</option>
+                <option value="E-waste">E-waste Specialist</option>
+                <option value="Vehicle">Vehicle Scrapping (RVSF)</option>
+              </select>
+            </label>
+            <label>
+              Zone / Location in Bhopal *
+              <input type="text" id="admDlrZone" required placeholder="e.g. Zone-II, MP Nagar, Bhopal">
+            </label>
+            <label>
+              Rating
+              <input type="text" id="admDlrRating" value="5.0 ★" placeholder="e.g. 4.8 ★">
+            </label>
+            <label style="grid-column:span 2;">
+              Services &amp; Accepted Materials *
+              <input type="text" id="admDlrServices" required placeholder="e.g. Paper, Plastics, Iron, Copper, Batteries">
+            </label>
+            <label>
+              Operating Hours
+              <input type="text" id="admDlrHours" value="9:00 AM - 8:00 PM" placeholder="e.g. Closes 7:00 PM">
+            </label>
+            <label>
+              Contact Phone
+              <input type="text" id="admDlrPhone" placeholder="e.g. +91 755 123 4567">
+            </label>
+            <div class="admin-form-actions" style="grid-column: span 2;">
+              <button type="submit" class="btn-primary-admin" id="admDlrSubmitBtn">Add Dealer to Directory</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Dealers Table -->
+        <h4 style="margin:16px 0 8px; font-size:14px; font-weight:700;">Active Dealers in Directory (<span id="adminDlrTableCount">0</span>)</h4>
+        <div style="overflow-x:auto; max-height:280px; overflow-y:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Dealer Name</th>
+                <th>Type</th>
+                <th>Rating</th>
+                <th>Zone / Location</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminDealersTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. DANGER ZONE: DATA WIPE & RESET -->
+      <div id="adminDanger" class="admin-pane" style="display:none;">
+        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:20px; color:#991b1b;">
+          <h3 style="margin:0 0 8px; font-size:16px; font-weight:800; color:#dc2626;">⚠️ Master Data Erase &amp; Reset</h3>
+          <p style="font-size:13px; line-height:1.6; margin-bottom:16px; color:#7f1d1d;">
+            Only the authenticated administrator (<strong>Udit narayan tiwari</strong>) can execute this action. This will permanently wipe all non-admin user accounts, erase custom added scrap materials, and purge saved collection plans.
+          </p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button type="button" class="btn-danger" id="adminWipePlansBtn" style="padding:10px 18px; font-size:13px; background:#dc2626;">
+              🗑️ Erase Collection Plans &amp; Cache
+            </button>
+            <button type="button" class="btn-danger" id="adminMasterResetBtn" style="padding:10px 20px; font-size:14px; background:#991b1b; font-weight:800;">
+              💥 ERASE ALL DATA (MASTER RESET)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- SHARE VIDEO DIALOG -->
+  <dialog id="shareDialog" class="dialog">
+    <button class="dialog-close" data-close="shareDialog" aria-label="Close">×</button>
+    <p class="eyebrow">COMMUNITY SUBMISSION</p>
+    <h2>Share a useful video.</h2>
+    <p class="dialog-copy">YouTube, Instagram and Facebook links only. The video remains on its original platform.</p>
+    <form id="videoForm">
+      <label>Video title
+        <input id="videoTitle" maxlength="100" required placeholder="e.g. How to recycle cardboard at home">
+      </label>
+      <label>Public video link
+        <input id="videoUrl" type="url" maxlength="2048" required placeholder="https://www.youtube.com/watch?v=…">
+      </label>
+      <button class="button button-primary">Publish link <span>↗</span></button>
+    </form>
+    <p class="form-message" id="videoMessage"></p>
+  </dialog>
+
+  <!-- VIDEO PREVIEW & TUTORIAL DETAILS MODAL -->
+  <div id="video-modal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-slate-50">
+        <div class="flex items-center gap-2 min-w-0">
+          <span id="modal-cat-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-[#2563eb] truncate">Category</span>
+          <span id="modal-featured-badge" class="hidden text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">★ Your Link!</span>
+        </div>
+        <button type="button" onclick="window.craftsCloseVideoModal()" class="w-8 h-8 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm" aria-label="Close modal">
+          ✕
+        </button>
+      </div>
+
+      <!-- Embedded YouTube Iframe Container -->
+      <div class="relative w-full pt-[56.25%] bg-slate-950">
+        <iframe
+          id="modal-youtube-iframe"
+          class="absolute inset-0 w-full h-full"
+          src="about:blank"
+          title="YouTube video tutorial player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div class="p-5 sm:p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+          <div>
+            <h3 id="modal-craft-title" class="text-xl font-extrabold text-slate-900">Craft Title</h3>
+            <p id="modal-craft-channel" class="text-xs font-semibold text-slate-500 mt-0.5">Channel Name</p>
+          </div>
+          <a
+            id="modal-youtube-direct-link"
+            href="https://www.youtube.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-sm transition-all shrink-0"
+          >
+            <span>Watch on YouTube</span>
+            <span>↗</span>
+          </a>
+        </div>
+
+        <p id="modal-craft-desc" class="text-sm text-slate-600 leading-relaxed"></p>
+
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div>
+            <span class="font-bold text-slate-700">Materials Needed: </span>
+            <span id="modal-craft-materials" class="text-slate-600"></span>
+          </div>
+          <span id="modal-video-type" class="font-mono-code text-[11px] text-slate-500 bg-white px-2.5 py-1 rounded-full border border-slate-200"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE / ADD A VIDEO TUTORIAL MODAL -->
+  <div id="add-video-modal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-widest text-[#2563eb]">05 / CURATED VIDEO LIBRARY</span>
+          <h3 class="text-lg font-extrabold text-slate-900">Share a DIY Paper Craft Video</h3>
+        </div>
+        <button type="button" onclick="window.craftsCloseAddVideoModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-sm">
+          ✕
+        </button>
+      </div>
+
+      <form id="add-video-form" onsubmit="window.craftsSubmitNewTutorial(event)" class="space-y-3.5">
+        <div>
+          <label for="new-craft-title" class="block text-xs font-bold text-slate-700 mb-1">Craft Title *</label>
+          <input type="text" id="new-craft-title" required placeholder="e.g., Origami Lotus Flower" class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]" />
+        </div>
+
+        <div>
+          <label for="new-craft-category" class="block text-xs font-bold text-slate-700 mb-1">Material / Adhesive Category *</label>
+          <select id="new-craft-category" class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 bg-white focus:outline-none focus:border-[#2563eb]">
+            <option value="no-glue-no-tape">🚫✂️ Without Glue &amp; Without Tape (Pure Origami)</option>
+            <option value="with-glue">💧 With Glue (No Tape)</option>
+            <option value="with-tape">📼 With Tape (Clear, Washi, or Double-Sided)</option>
+            <option value="both-glue-tape">🛠️ With Both Glue &amp; Tape</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="new-craft-url" class="block text-xs font-bold text-slate-700 mb-1">YouTube Tutorial URL *</label>
+          <input type="url" id="new-craft-url" required placeholder="https://www.youtube.com/watch?v=..." class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]" />
+        </div>
+
+        <div>
+          <label for="new-craft-desc" class="block text-xs font-bold text-slate-700 mb-1">Short Description *</label>
+          <textarea id="new-craft-desc" rows="2" required placeholder="Describe how this paper craft is folded or assembled..." class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="window.craftsCloseAddVideoModal()" class="px-4 py-2 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-100">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-full text-xs font-bold bg-[#1e293b] hover:bg-slate-800 text-white shadow-sm">
+            Add to Library
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast-banner" class="fixed bottom-5 right-5 z-50 hidden bg-[#1e293b] text-white px-4 py-3 rounded-2xl shadow-lg border border-slate-700 flex items-center gap-2.5 text-xs font-semibold">
+    <span class="w-5 h-5 rounded-full bg-[#f59e0b] text-slate-900 flex items-center justify-center font-bold">✓</span>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+
+  <div id="ecoloopToast" class="ecoloop-toast" role="status" aria-live="polite"></div>
+</body>
+</html>
