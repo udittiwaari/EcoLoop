@@ -13,7 +13,7 @@ const {
 const scrypt = promisify(scryptCallback);
 const port = Number(process.env.PORT || 4173);
 const siteRoot = path.resolve(__dirname, "..");
-const dataDir = process.env.DATA_DIR || path.join(__dirname, "data");
+const dataDir = path.join(__dirname, "data");
 const storePath = path.join(dataDir, "accounts.json");
 const materialsPath = path.join(dataDir, "materials.json");
 const dealersPath = path.join(dataDir, "dealers.json");
@@ -21,9 +21,6 @@ const videosPath = path.join(dataDir, "videos.json");
 const sessionDurationMs = 30 * 24 * 60 * 60 * 1000;
 const maxAccounts = 50;
 const cookieName = "ecoloop_session";
-const allowedOrigins = new Set(
-  (process.env.CORS_ORIGINS || "").split(",").map(origin => origin.trim()).filter(Boolean)
-);
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -39,7 +36,7 @@ const mimeTypes = {
 
 const ADMIN_NAME = "Udit narayan tiwari";
 const ADMIN_EMAIL = "udit3539@gmail.com";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || (process.env.NODE_ENV === "production" ? "" : "12345678");
+const ADMIN_PASSWORD = "12345678";
 
 let accountStore = { users: [], sessions: [] };
 let materialsStore = [];
@@ -56,29 +53,6 @@ function sendJson(response, status, body, headers = {}) {
   response.end(JSON.stringify(body));
 }
 
-function configureCors(request, response) {
-  const origin = request.headers.origin;
-  if (!origin) return true;
-
-  if (allowedOrigins.size && !allowedOrigins.has(origin)) {
-    sendJson(response, 403, { error: "This origin is not allowed to access the account service." });
-    return false;
-  }
-  if (!allowedOrigins.has(origin)) return true;
-
-  response.setHeader("Access-Control-Allow-Origin", origin);
-  response.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-  response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  response.setHeader("Vary", "Origin");
-
-  if (request.method === "OPTIONS") {
-    response.writeHead(204);
-    response.end();
-    return false;
-  }
-  return true;
-}
-
 function getCookie(request, name) {
   const cookies = request.headers.cookie || "";
   for (const cookie of cookies.split(";")) {
@@ -91,29 +65,12 @@ function getCookie(request, name) {
   return null;
 }
 
-function getSessionToken(request) {
-  const authorization = request.headers.authorization || "";
-  const bearer = authorization.match(/^Bearer ([a-f0-9]{64})$/i);
-  return bearer ? bearer[1] : getCookie(request, cookieName);
-}
-
-function isCrossOriginRequest(request) {
-  if (!request.headers.origin) return false;
-  try {
-    return new URL(request.headers.origin).host !== request.headers.host;
-  } catch {
-    return false;
-  }
-}
-
 function sessionCookie(token) {
-  const crossSite = process.env.NODE_ENV === "production";
-  return `${cookieName}=${token}; HttpOnly; SameSite=${crossSite ? "None" : "Lax"};${crossSite ? " Secure;" : ""} Path=/; Max-Age=${sessionDurationMs / 1000}`;
+  return `${cookieName}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${sessionDurationMs / 1000}`;
 }
 
 function clearSessionCookie() {
-  const crossSite = process.env.NODE_ENV === "production";
-  return `${cookieName}=; HttpOnly; SameSite=${crossSite ? "None" : "Lax"};${crossSite ? " Secure;" : ""} Path=/; Max-Age=0`;
+  return `${cookieName}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`;
 }
 
 function hashSessionToken(token) {
@@ -283,7 +240,7 @@ async function ensureAdminAccount() {
 
 async function handleAuth(request, response, pathname) {
   if (pathname === "/api/auth/session" && request.method === "GET") {
-    const current = findSession(getSessionToken(request));
+    const current = findSession(getCookie(request, cookieName));
     return sendJson(response, 200, { user: current ? publicAccount(current.account) : null });
   }
 
@@ -332,9 +289,7 @@ async function handleAuth(request, response, pathname) {
       return account;
     });
 
-    const responseBody = { user: publicAccount(user) };
-    if (isCrossOriginRequest(request)) responseBody.token = token;
-    return sendJson(response, 201, responseBody, { "Set-Cookie": sessionCookie(token) });
+    return sendJson(response, 201, { user: publicAccount(user) }, { "Set-Cookie": sessionCookie(token) });
   }
 
   if (pathname === "/api/auth/login" && request.method === "POST") {
@@ -374,13 +329,11 @@ async function handleAuth(request, response, pathname) {
       return account;
     });
 
-    const responseBody = { user: publicAccount(user) };
-    if (isCrossOriginRequest(request)) responseBody.token = token;
-    return sendJson(response, 200, responseBody, { "Set-Cookie": sessionCookie(token) });
+    return sendJson(response, 200, { user: publicAccount(user) }, { "Set-Cookie": sessionCookie(token) });
   }
 
   if (pathname === "/api/auth/logout" && request.method === "POST") {
-    const token = getSessionToken(request);
+    const token = getCookie(request, cookieName);
     if (token) {
       const tokenHash = hashSessionToken(token);
       await withStoreLock(async () => {
@@ -629,9 +582,6 @@ function serveStatic(request, response, pathname) {
 }
 
 async function start() {
-  if (process.env.NODE_ENV === "production" && ADMIN_PASSWORD.length < 12) {
-    throw new Error("Set ADMIN_PASSWORD to a secret of at least 12 characters before starting in production.");
-  }
   await fs.promises.mkdir(dataDir, { recursive: true });
 
   // Load accounts
@@ -684,8 +634,6 @@ async function start() {
       return response.end("Invalid request path");
     }
 
-    if (!configureCors(request, response)) return;
-
     try {
       if (pathname.startsWith("/api/")) {
         const handledAuth = await handleAuth(request, response, pathname);
@@ -715,7 +663,7 @@ async function start() {
     }
   });
 
-  server.listen(port, () => {
+  server.listen(port, "127.0.0.1", () => {
     console.log(`EcoLoop is running at http://localhost:${port}`);
   });
 }

@@ -153,18 +153,15 @@ Check the repository for the current source files, static assets, configuration 
  3.  Go to Settings → Pages in your GitHub repository and set the source to GitHub Actions.
  4.  Every push to main automatically publishes the static site files.
 
-### Enable account sign-in on GitHub Pages
+### Run the account backend on your PC
 
-GitHub Pages serves static files and cannot run the account API. To enable sign-in:
+GitHub Pages cannot run the account API or connect to a backend on your PC. To use sign-in, run EcoLoop locally:
 
-1. Create a Render account and create a new Blueprint from this repository using `render.yaml`.
-2. Set the required `ADMIN_PASSWORD` environment variable in Render to a unique secret with at least 12 characters. The service uses a persistent disk for account data.
-3. After the service deploys, copy its HTTPS URL (for example, `https://ecoloop-api.onrender.com`) into `apiBaseUrl` in `assets/supabase-config.js`.
-4. Push that change to GitHub. The Pages deployment workflow publishes the site files from the repository root.
+1. Install Node.js 18 or later.
+2. Open PowerShell in the project folder and run `npm start`.
+3. Keep that terminal open and visit `http://localhost:4173`.
 
-The Blueprint uses a paid Render Starter web service and a 1 GB persistent disk; check Render's current pricing before creating it.
-
-The Render service allows the EcoLoop GitHub Pages origin by default. If you use a custom Pages domain, update `CORS_ORIGINS` in Render to that exact origin (scheme and hostname, without a trailing slash). Cross-origin sign-in uses a session token held for the current browser tab, so it does not depend on third-party cookies. `NODE_ENV=production` is required for secure deployment settings. Do not use the default local admin password on a public deployment.
+The Node server hosts both the website and API on your PC. Account data is stored locally under `backend/data/`; it is not shared with the GitHub Pages site or other devices. The server listens only on your PC (`127.0.0.1`).
 
 
 ## 🗺️ Future Roadmap
