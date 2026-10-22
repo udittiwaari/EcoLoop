@@ -17,7 +17,7 @@ EcoLoop is a single-page guide for smart waste management, reuse ideas, sample s
 <br><br>
 
 <div align="center">
-  <img src="assets/photos/Screenshot 2026-10-22 184224.png" alt="screen short" width="1000">
+  <img src="assets/photos/Screenshot 2026-10-22 212249.png" alt="screen short" width="1000">
   
 </div>
 
