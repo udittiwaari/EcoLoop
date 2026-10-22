@@ -1782,22 +1782,20 @@ function startMemberBrand() {
    ========================================================================== */
 function initDealersDirectory() {
   const filterBtns = document.querySelectorAll('.dealer-filter-btn');
-  const cards = document.querySelectorAll('.dealer-card');
   if (!filterBtns.length) return;
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      const filterType = btn.dataset.dealerFilter || btn.dataset.type || 'All';
-      cards.forEach(card => {
-        const cardType = card.dataset.type;
-        const show = filterType === 'All' || cardType === filterType;
-        card.classList.toggle('hidden-by-filter', !show);
-        card.style.display = show ? '' : 'none';
-      });
+      applyDealerFilter(btn.dataset.dealerFilter || 'All');
     });
+  });
+}
+
+function applyDealerFilter(filterType = 'All') {
+  document.querySelectorAll('.dealer-card').forEach(card => {
+    card.classList.toggle('hidden-by-filter', filterType !== 'All' && card.dataset.type !== filterType);
   });
 }
 
@@ -2302,14 +2300,8 @@ function renderLiveDealersGrid() {
     `;
   }).join('');
 
-  // Re-bind filter buttons if active filter exists
   const activeBtn = document.querySelector('.dealer-filter-btn.active');
-  if (activeBtn) {
-    const filter = activeBtn.dataset.filter;
-    grid.querySelectorAll('.dealer-card').forEach(card => {
-      card.style.display = (filter === 'all' || card.dataset.type === filter) ? 'flex' : 'none';
-    });
-  }
+  applyDealerFilter(activeBtn?.dataset.dealerFilter || 'All');
 }
 
 async function loadDealers() {
