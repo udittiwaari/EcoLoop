@@ -1556,7 +1556,7 @@ function renderVideoCards(data, allowDelete = false) {
 
 async function loadVideos() {
   try {
-    const res = await fetch('/api/videos');
+    const res = await window.ecoloopApiFetch('/api/videos');
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data?.videos) && data.videos.length) {
@@ -1632,7 +1632,7 @@ function initDialogsAndAuth() {
 
       try {
         const endpoint = signup ? '/api/auth/register' : '/api/auth/login';
-        const res = await fetch(endpoint, {
+        const res = await window.ecoloopApiFetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(signup ? { email, password, name } : { email, password })
@@ -1680,7 +1680,7 @@ function initDialogsAndAuth() {
   if ($('signOutButton')) {
     $('signOutButton').onclick = async () => {
       try {
-        await fetch('/api/auth/logout', { method: 'POST' });
+        await window.ecoloopApiFetch('/api/auth/logout', { method: 'POST' });
       } catch (_) {}
       await supabase?.auth.signOut();
       setUser(null);
@@ -2027,7 +2027,7 @@ function renderBhopalCalculator() {
    ========================================================================== */
 async function loadAdminData() {
   try {
-    const statsRes = await fetch('/api/admin/stats');
+    const statsRes = await window.ecoloopApiFetch('/api/admin/stats');
     if (statsRes.ok) {
       const stats = await statsRes.json();
       if ($('statTotalUsers')) $('statTotalUsers').textContent = stats.totalUsers || '0';
@@ -2044,7 +2044,7 @@ async function loadAdminData() {
   if ($('adminVidTableCount')) $('adminVidTableCount').textContent = videosList.length;
 
   try {
-    const usersRes = await fetch('/api/admin/accounts');
+    const usersRes = await window.ecoloopApiFetch('/api/admin/accounts');
     if (usersRes.ok) {
       const { accounts } = await usersRes.json();
       renderAdminUsers(accounts || []);
@@ -2096,7 +2096,7 @@ function renderAdminUsers(accounts) {
       const userId = btn.dataset.adminDelUser;
       if (!confirm('Are you sure you want to delete this user?')) return;
       try {
-        const res = await fetch(`/api/admin/accounts/${userId}`, { method: 'DELETE' });
+        const res = await window.ecoloopApiFetch(`/api/admin/accounts/${userId}`, { method: 'DELETE' });
         if (res.ok) {
           showToast('User deleted successfully', true);
           loadAdminData();
@@ -2135,7 +2135,7 @@ function renderAdminMaterials() {
       const matId = btn.dataset.adminDelMat;
       if (!confirm('Delete this custom material from the website catalog?')) return;
       try {
-        await fetch(`/api/admin/materials/${matId}`, { method: 'DELETE' });
+        await window.ecoloopApiFetch(`/api/admin/materials/${matId}`, { method: 'DELETE' });
       } catch (_) {}
       
       const custom = getCustomMaterials().filter(m => m.id !== matId);
@@ -2314,7 +2314,7 @@ function renderLiveDealersGrid() {
 
 async function loadDealers() {
   try {
-    const res = await fetch('/api/dealers');
+    const res = await window.ecoloopApiFetch('/api/dealers');
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data?.dealers) && data.dealers.length) {
@@ -2362,7 +2362,7 @@ function renderAdminDealers() {
 window.adminDeleteDealer = async function(dealerId) {
   if (!confirm('Are you sure you want to delete this dealer from the Bhopal Hub directory?')) return;
   try {
-    await fetch(`/api/admin/dealers/${dealerId}`, { method: 'DELETE' });
+    await window.ecoloopApiFetch(`/api/admin/dealers/${dealerId}`, { method: 'DELETE' });
   } catch (_) {}
   dealersList = dealersList.filter(d => d.id !== dealerId);
   renderLiveDealersGrid();
@@ -2399,7 +2399,7 @@ function renderAdminVideos() {
 window.adminDeleteVideo = async function(videoId) {
   if (!confirm('Are you sure you want to delete this video tutorial?')) return;
   try {
-    await fetch(`/api/admin/videos/${videoId}`, { method: 'DELETE' });
+    await window.ecoloopApiFetch(`/api/admin/videos/${videoId}`, { method: 'DELETE' });
   } catch (_) {}
   videosList = videosList.filter(v => v.id !== videoId);
   renderVideoCards(videosList, true);
@@ -2426,7 +2426,7 @@ function initAdminPanel() {
     delAllUsersBtn.onclick = async () => {
       if (!confirm('Are you sure you want to delete ALL non-admin registered users?')) return;
       try {
-        const res = await fetch('/api/admin/accounts', { method: 'DELETE' });
+        const res = await window.ecoloopApiFetch('/api/admin/accounts', { method: 'DELETE' });
         if (res.ok) {
           showToast('All non-admin users erased', true);
           loadAdminData();
@@ -2444,7 +2444,7 @@ function initAdminPanel() {
     delAllMatBtn.onclick = async () => {
       if (!confirm('Erase all custom materials from the website?')) return;
       try {
-        await fetch('/api/admin/materials', { method: 'DELETE' });
+        await window.ecoloopApiFetch('/api/admin/materials', { method: 'DELETE' });
       } catch (_) {}
       saveCustomMaterials([]);
       materials = [...defaultMaterials];
@@ -2478,7 +2478,7 @@ function initAdminPanel() {
       };
 
       try {
-        await fetch('/api/admin/materials', {
+        await window.ecoloopApiFetch('/api/admin/materials', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newMat)
@@ -2514,7 +2514,7 @@ function initAdminPanel() {
       };
 
       try {
-        await fetch('/api/admin/videos', {
+        await window.ecoloopApiFetch('/api/admin/videos', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newVid)
@@ -2561,7 +2561,7 @@ function initAdminPanel() {
       };
 
       try {
-        await fetch('/api/admin/dealers', {
+        await window.ecoloopApiFetch('/api/admin/dealers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newDlr)
@@ -2598,7 +2598,7 @@ function initAdminPanel() {
         return;
       }
       try {
-        await fetch('/api/admin/reset-all', { method: 'POST' });
+        await window.ecoloopApiFetch('/api/admin/reset-all', { method: 'POST' });
       } catch (_) {}
 
       localStorage.removeItem(CUSTOM_MATERIALS_KEY);
@@ -2612,7 +2612,7 @@ function initAdminPanel() {
 
 async function checkAuthSession() {
   try {
-    const res = await fetch('/api/auth/session');
+    const res = await window.ecoloopApiFetch('/api/auth/session');
     if (res.ok) {
       const data = await res.json();
       if (data?.user) {

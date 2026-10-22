@@ -151,8 +151,20 @@ Check the repository for the current source files, static assets, configuration 
  1.  Create a new repository on GitHub named ecoloop.
  2.  Push your code to the main branch.
  3.  Go to Settings → Pages in your GitHub repository and set the source to GitHub Actions.
- 4.  Every push to main automatically deploys the frontend/ folder live!
+ 4.  Every push to main automatically publishes the static site files.
 
+### Enable account sign-in on GitHub Pages
+
+GitHub Pages serves static files and cannot run the account API. To enable sign-in:
+
+1. Create a Render account and create a new Blueprint from this repository using `render.yaml`.
+2. Set the required `ADMIN_PASSWORD` environment variable in Render to a unique secret with at least 12 characters. The service uses a persistent disk for account data.
+3. After the service deploys, copy its HTTPS URL (for example, `https://ecoloop-api.onrender.com`) into `apiBaseUrl` in `assets/supabase-config.js`.
+4. Push that change to GitHub. The Pages deployment workflow publishes the site files from the repository root.
+
+The Blueprint uses a paid Render Starter web service and a 1 GB persistent disk; check Render's current pricing before creating it.
+
+The Render service allows the EcoLoop GitHub Pages origin by default. If you use a custom Pages domain, update `CORS_ORIGINS` in Render to that exact origin (scheme and hostname, without a trailing slash). Cross-origin sign-in uses a session token held for the current browser tab, so it does not depend on third-party cookies. `NODE_ENV=production` is required for secure deployment settings. Do not use the default local admin password on a public deployment.
 
 
 ## 🗺️ Future Roadmap
