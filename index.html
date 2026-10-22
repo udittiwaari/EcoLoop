@@ -84,8 +84,8 @@
         <div class="orbit orbit-a"></div>
         <div class="orbit orbit-b"></div>
         <div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div>
-        <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹28/kg</b></div>
-        <div class="material-card card-metal"><i>◈</i><span>Copper</span><b>₹650/kg</b></div>
+        <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹12/kg</b></div>
+        <div class="material-card card-metal"><i>◈</i><span>Metal</span><b>₹25/kg</b></div>
         <div class="loop-mark">∞</div>
         <p>Small choices<br>move materials forward.</p>
       </div>
@@ -95,9 +95,9 @@
     <section class="guide-section" id="guide">
       <div class="section-intro reveal">
         <p class="eyebrow">01 / SMART MATERIAL GUIDE &amp; AI VISION</p>
-        <h2>Identify any material.<br>By AI camera or text.</h2>
-        <p>Point your camera or upload a photo to identify e-waste, metals, circuit boards, batteries, and plastics with AI vision—or search by name.</p>
-        
+        <h2>Scan an item.<br>Get a clear match.</h2>
+        <p>Use the camera or upload a photo to check an item against supported materials in the EcoLoop catalog. If it is not a confident match, we’ll say so instead of guessing.</p>
+
         <div class="guide-mode-pills" role="tablist" aria-label="Material identification mode">
           <button type="button" class="mode-pill active" id="modeVisionBtn" data-tab="visionHub" role="tab" aria-selected="true">
             <span class="mode-icon">📷</span> AI Camera &amp; Vision
@@ -167,7 +167,7 @@
                 <span class="orb-icon">📷</span>
               </div>
               <strong id="dropzonePromptTitle">Drag &amp; drop an image here, or use live camera</strong>
-              <p>Supports JPG, PNG, WEBP. AI identifies Printed Circuit Boards, Batteries, Copper, Aluminium Cans, Plastics &amp; more.</p>
+              <p>Supports JPG, PNG, WEBP. The AI checks for supported e-waste, metal, plastic, and paper matches—and flags uncertain or unrelated items.</p>
               
               <div class="scanner-direct-btns" style="display:flex; gap:10px; margin-top:14px; justify-content:center; flex-wrap:wrap;">
                 <button type="button" class="button button-primary" id="openCameraBtn" style="font-size:12px; padding:9px 18px;">
@@ -207,20 +207,10 @@
             </div>
           </div>
 
-                 <div class="hero-visual reveal delay">
-         <div class="orbit orbit-a"></div>
-         <div class="orbit orbit-b"></div>
-         <div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div>
-         <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹12/kg</b></div>
-         <div class="material-card card-metal"><i>◈</i><span>Metal</span><b>₹25/kg</b></div>
-         <div class="loop-mark">∞</div>
-         <p>Small choices<br>move materials forward.</p>
-       </div>
-      
           <!-- Action Buttons Row -->
           <div class="scanner-actions-row">
             <button type="button" class="button button-primary" id="analyseImageBtn" disabled>
-              ✦ Analyse with AI
+              ✦ Check Catalog Match
             </button>
             <button type="button" class="button button-quiet" id="clearScanBtn" style="display:none;">
               Clear / Start Over
@@ -232,8 +222,8 @@
             <div class="ai-result-empty">
               <span class="result-orb-icon">✦</span>
               <div>
-                <b>AI Vision Engine Ready</b>
-                <p>Upload an image, snap a photo with your camera, or pick a sample above to identify waste items and see actionable recycling steps.</p>
+                <b>Catalog matcher ready</b>
+                <p>Upload or capture an item to check for a supported match in the EcoLoop catalog. Uncertain or unrelated images won’t be assigned a material.</p>
               </div>
             </div>
           </div>

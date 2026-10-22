@@ -351,7 +351,7 @@ function svgToDataUrl(svgString) {
 let cameraStream = null;
 let currentFacingMode = 'environment';
 let selectedScanUrl = '';
-let selectedScanName = '';
+let selectedDemoKey = '';
 let currentAiResult = null;
 let isAnalysing = false;
 
@@ -441,7 +441,7 @@ function captureCameraFrame() {
   const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
 
   stopCamera();
-  setScanImage(dataUrl, `camera-frame-${Date.now()}.jpg`);
+  setScanImage(dataUrl);
   analyseImage();
 }
 
@@ -453,9 +453,9 @@ function switchCamera() {
 /* ==========================================================================
    Image Preview & Selection
    ========================================================================== */
-function setScanImage(url, name = 'scan-item.jpg') {
+function setScanImage(url, demoKey = '') {
   selectedScanUrl = url;
-  selectedScanName = name;
+  selectedDemoKey = demoKey;
   const preview = $('scanPreview');
   const prompt = $('scannerPrompt');
   const clearBtn = $('clearScanBtn');
@@ -475,7 +475,7 @@ function setScanImage(url, name = 'scan-item.jpg') {
 function clearScan() {
   stopCamera();
   selectedScanUrl = '';
-  selectedScanName = '';
+  selectedDemoKey = '';
   currentAiResult = null;
   const preview = $('scanPreview');
   const prompt = $('scannerPrompt');
@@ -500,8 +500,8 @@ function clearScan() {
       <div class="ai-result-empty">
         <span class="result-orb-icon">✦</span>
         <div>
-          <b>AI Vision Engine Ready</b>
-          <p>Upload an image, snap a photo with your camera, or pick a sample above to identify waste items and see actionable recycling steps.</p>
+          <b>Catalog matcher ready</b>
+          <p>Upload or capture an item to check for a supported match in the EcoLoop catalog. Uncertain or unrelated images won’t be assigned a material.</p>
         </div>
       </div>
     `;
@@ -562,75 +562,6 @@ async function getTransformersModel() {
   return transformersLoadingPromise;
 }
 
-// Rapid canvas pixel color & edge analysis for sub-50ms instant classification
-function analyzeCanvasPixels(imgElement, fileName = '') {
-  const canvas = document.createElement('canvas');
-  canvas.width = 128;
-  canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-  try {
-    ctx.drawImage(imgElement, 0, 0, 128, 128);
-    const imgData = ctx.getImageData(0, 0, 128, 128).data;
-    let greenCount = 0, yellowGoldCount = 0, copperRedCount = 0;
-    let darkCount = 0, whitePaperCount = 0, clearCyanCount = 0, silverGreyCount = 0;
-    const totalPixels = 128 * 128;
-
-    for (let i = 0; i < imgData.length; i += 4) {
-      const r = imgData[i], g = imgData[i + 1], b = imgData[i + 2];
-      // PCB Green
-      if (g > 60 && g > r * 1.25 && g > b * 1.15) greenCount++;
-      // Copper Reddish-orange
-      else if (r > 150 && g > 65 && g < 135 && b < 80) copperRedCount++;
-      // Gold / Brass Yellow
-      else if (r > 180 && g > 150 && b < 100) yellowGoldCount++;
-      // Battery / Tyre / Dark E-waste
-      else if (r < 55 && g < 55 && b < 65) darkCount++;
-      // White paper
-      else if (r > 225 && g > 225 && b > 225) whitePaperCount++;
-      // Aluminium silver
-      else if (Math.abs(r - g) < 15 && Math.abs(g - b) < 15 && r > 140 && r < 215) silverGreyCount++;
-      // PET Plastic Bottle / Blue
-      else if (b > 140 && b > r * 1.2) clearCyanCount++;
-    }
-
-    const n = normalized(fileName);
-    if (n.includes('pcb') || n.includes('circuit') || n.includes('board') || (greenCount / totalPixels) > 0.18) {
-      return { key: 'pcb', confidence: 98.4 };
-    }
-    if (n.includes('copper') || n.includes('wire') || n.includes('cable') || (copperRedCount / totalPixels) > 0.12) {
-      return { key: 'copper', confidence: 99.1 };
-    }
-    if (n.includes('battery') || n.includes('cell') || n.includes('inverter') || (darkCount / totalPixels) > 0.45) {
-      return { key: 'battery', confidence: 97.9 };
-    }
-    if (n.includes('can') || n.includes('alu') || n.includes('soda') || (silverGreyCount / totalPixels) > 0.22) {
-      return { key: 'alucan', confidence: 96.8 };
-    }
-    if (n.includes('bottle') || n.includes('plastic') || n.includes('pet') || (clearCyanCount / totalPixels) > 0.15) {
-      return { key: 'bottle', confidence: 97.2 };
-    }
-    if (n.includes('cardboard') || n.includes('box')) {
-      return { key: 'cardboard', confidence: 96.0 };
-    }
-    if (n.includes('paper') || (whitePaperCount / totalPixels) > 0.35) {
-      return { key: 'paper', confidence: 95.8 };
-    }
-    if (n.includes('phone') || n.includes('laptop') || n.includes('screen')) {
-      return { key: 'smartphone', confidence: 96.5 };
-    }
-  } catch (_) {}
-
-  // Fallback heuristic based on filename or closest category
-  const n = normalized(fileName);
-  if (n.includes('pcb')) return { key: 'pcb', confidence: 98.4 };
-  if (n.includes('copper')) return { key: 'copper', confidence: 99.1 };
-  if (n.includes('battery')) return { key: 'battery', confidence: 97.9 };
-  if (n.includes('can')) return { key: 'alucan', confidence: 96.8 };
-  if (n.includes('bottle')) return { key: 'bottle', confidence: 97.2 };
-
-  return { key: 'pcb', confidence: 95.2 };
-}
-
 async function analyseImage() {
   if (isAnalysing) return;
   if (!selectedScanUrl) {
@@ -643,7 +574,7 @@ async function analyseImage() {
   const laser = $('scanLaser');
   if (analyseBtn) {
     analyseBtn.disabled = true;
-    analyseBtn.textContent = 'Scanning with AI…';
+    analyseBtn.textContent = 'Checking catalog…';
   }
   if (laser) laser.style.display = 'block';
 
@@ -654,31 +585,24 @@ async function analyseImage() {
     try { await preview.decode(); } catch (_) {}
   }
 
-  // Check demo sample exact match first
-  for (const [key, demo] of Object.entries(DEMO_SAMPLES)) {
-    if (selectedScanName.toLowerCase().includes(key)) {
-      renderAiResult({
-        name: demo.name,
-        category: demo.category,
-        rate: demo.rate,
-        unit: demo.unit,
-        stream: demo.stream,
-        confidence: demo.confidence,
-        prevent: demo.prevent,
-        recycle: demo.recycle,
-        hazard: demo.hazard
-      });
-      finalizeAnalysis();
-      return;
-    }
+  // Only built-in sample buttons can bypass model inference; uploaded filenames are not evidence.
+  const demo = DEMO_SAMPLES[selectedDemoKey];
+  if (demo) {
+    renderAiResult({
+      name: demo.name,
+      category: demo.category,
+      rate: demo.rate,
+      unit: demo.unit,
+      stream: demo.stream,
+      confidence: demo.confidence,
+      prevent: demo.prevent,
+      recycle: demo.recycle,
+      hazard: demo.hazard
+    });
+    finalizeAnalysis();
+    return;
   }
 
-  // 1. Run immediate high-accuracy canvas heuristics
-  const heuristicCandidate = analyzeCanvasPixels(preview, selectedScanName);
-  let resolvedKey = heuristicCandidate.key;
-  let resolvedConfidence = heuristicCandidate.confidence;
-
-  // 2. Race or complement with Transformers.js zero-shot pipeline
   const zeroShotPrompts = [
     'a photo of a green printed circuit board with electronic chips, connectors and microchips',
     'a photo of stripped bare copper electrical wire, cables or copper scrap',
@@ -687,7 +611,11 @@ async function analyseImage() {
     'a photo of a clear plastic beverage bottle or PET plastic bottle',
     'a photo of corrugated brown cardboard packaging boxes',
     'a photo of an electronic laptop, smartphone or computer e-waste',
-    'a photo of clean white office paper or printed documents'
+    'a photo of clean white office paper or printed documents',
+    'a photo of food, a meal, fruit or vegetables',
+    'a photo of a person, animal or plant',
+    'a photo of furniture, clothing or a household scene',
+    'a photo of scenery, a building or a landscape'
   ];
 
   const promptKeyMap = {
@@ -698,28 +626,55 @@ async function analyseImage() {
     [zeroShotPrompts[4]]: 'bottle',
     [zeroShotPrompts[5]]: 'cardboard',
     [zeroShotPrompts[6]]: 'smartphone',
-    [zeroShotPrompts[7]]: 'paper'
+    [zeroShotPrompts[7]]: 'paper',
+    [zeroShotPrompts[8]]: '',
+    [zeroShotPrompts[9]]: '',
+    [zeroShotPrompts[10]]: '',
+    [zeroShotPrompts[11]]: ''
   };
 
+  let predictions;
   try {
-    // Attempt zero-shot with 3.5s timeout so user never waits forever
+    updateProgress('Checking the image against catalog materials…', 25);
     const modelPromise = getTransformersModel().then(async pipe => {
       updateProgress('Evaluating categories against zero-shot embeddings…', 75);
-      const res = await pipe(selectedScanUrl, zeroShotPrompts);
-      if (Array.isArray(res) && res.length && res[0].label) {
-        const top = res[0];
-        const key = promptKeyMap[top.label];
-        if (key) {
-          resolvedKey = key;
-          resolvedConfidence = Math.max(88, Math.min(99.6, Math.round(Number(top.score) * 1000) / 10));
-        }
-      }
+      return pipe(selectedScanUrl, zeroShotPrompts);
     });
 
-    const timeoutPromise = new Promise(resolve => setTimeout(resolve, 3200));
-    await Promise.race([modelPromise, timeoutPromise]);
+    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), 60000));
+    predictions = await Promise.race([modelPromise, timeoutPromise]);
+    if (!predictions) {
+      renderAiNoMatch(
+        'Could not verify this image',
+        'The catalog check took too long. Please try again when the AI model has finished loading.'
+      );
+      finalizeAnalysis('Catalog check timed out.');
+      return;
+    }
   } catch (err) {
-    console.info('Using high-performance local vision parser (Transformers.js offline or delayed).');
+    console.error('AI catalog check failed:', err);
+    renderAiNoMatch(
+      'Could not check this image right now',
+      'The AI catalog check is unavailable. Check your connection and try again.'
+    );
+    finalizeAnalysis('Catalog check unavailable.');
+    return;
+  }
+
+  const rankedPredictions = Array.isArray(predictions)
+    ? [...predictions].sort((a, b) => Number(b.score) - Number(a.score))
+    : [];
+  const topPrediction = rankedPredictions[0];
+  const resolvedKey = topPrediction ? promptKeyMap[topPrediction.label] : '';
+  const resolvedConfidence = topPrediction ? Number(topPrediction.score) : 0;
+
+  if (!resolvedKey || !Number.isFinite(resolvedConfidence) || resolvedConfidence < 0.3) {
+    renderAiNoMatch(
+      'No supported catalog match found',
+      'This image may be unrelated to EcoLoop’s supported materials, or the item is not clear enough to identify. Try a closer, well-lit photo of one item at a time.'
+    );
+    finalizeAnalysis('No supported catalog match found.');
+    return;
   }
 
   // Map resolved key to material data
@@ -806,22 +761,65 @@ async function analyseImage() {
     }
   };
 
-  const chosen = materialMap[resolvedKey] || materialMap.pcb;
-  chosen.confidence = resolvedConfidence;
+  const chosen = materialMap[resolvedKey];
+  const catalogItem = materials.find(item => {
+    const itemName = Array.isArray(item) ? item[0] : item.name;
+    return normalized(itemName) === normalized(chosen?.name);
+  });
+  if (!chosen || !catalogItem) {
+    renderAiNoMatch(
+      'No supported catalog match found',
+      'The image did not match a material currently available in the EcoLoop catalog.'
+    );
+    finalizeAnalysis('No supported catalog match found.');
+    return;
+  }
+  if (Array.isArray(catalogItem)) {
+    chosen.name = catalogItem[0];
+    chosen.category = catalogItem[1];
+    chosen.rate = catalogItem[2];
+    chosen.unit = catalogItem[3];
+    chosen.recycle = catalogItem[4];
+    chosen.prevent = catalogItem[5];
+    chosen.stream = catalogItem[6];
+    chosen.hazard = catalogItem[7];
+  } else {
+    Object.assign(chosen, catalogItem);
+  }
+  chosen.confidence = Math.round(resolvedConfidence * 1000) / 10;
   renderAiResult(chosen);
   finalizeAnalysis();
 }
 
-function finalizeAnalysis() {
+function finalizeAnalysis(status = 'AI catalog check complete.') {
   isAnalysing = false;
   const analyseBtn = $('analyseImageBtn');
   const laser = $('scanLaser');
   if (analyseBtn) {
     analyseBtn.disabled = false;
-    analyseBtn.textContent = '✦ Re-Analyse Image';
+    analyseBtn.textContent = '✦ Check Again';
   }
   if (laser) laser.style.display = 'none';
-  updateProgress('AI Classification complete.', 100);
+  updateProgress(status, 100);
+}
+
+function renderAiNoMatch(title, message) {
+  currentAiResult = null;
+  const card = $('aiResultCard');
+  if (!card) return;
+
+  card.innerHTML = `
+    <div class="ai-result-unmatched" role="status">
+      <span class="unmatched-icon" aria-hidden="true">?</span>
+      <div>
+        <b>${escapeHtml(title)}</b>
+        <p>${escapeHtml(message)}</p>
+        <button type="button" class="button button-quiet" id="aiScanNewBtn">Scan Another Item</button>
+      </div>
+    </div>
+  `;
+  const scanNewBtn = $('aiScanNewBtn');
+  if (scanNewBtn) scanNewBtn.onclick = clearScan;
 }
 
 function renderAiResult(result) {
@@ -1091,7 +1089,7 @@ function initAiScannerEvents() {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = e => {
-        setScanImage(e.target.result, file.name);
+        setScanImage(e.target.result);
         analyseImage();
       };
       reader.readAsDataURL(file);
@@ -1164,7 +1162,7 @@ function initAiScannerEvents() {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = evt => {
-        setScanImage(evt.target.result, file.name);
+        setScanImage(evt.target.result);
         analyseImage();
       };
       reader.readAsDataURL(file);
@@ -1179,7 +1177,7 @@ function initAiScannerEvents() {
       const demo = DEMO_SAMPLES[demoKey];
       if (!demo) return;
       const dataUrl = svgToDataUrl(demo.svg);
-      setScanImage(dataUrl, `demo-${demoKey}.svg`);
+      setScanImage(dataUrl, demoKey);
       analyseImage();
     });
   });
