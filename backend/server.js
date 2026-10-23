@@ -203,7 +203,7 @@ function findSession(token) {
 }
 
 function getAuthenticatedAdmin(request) {
-  const token = getSessionToken(request);
+  const token = getCookie(request, cookieName);
   const current = findSession(token);
   if (!current) return null;
   const isAdmin = current.account.email === ADMIN_EMAIL || current.account.role === "admin";
@@ -372,6 +372,13 @@ async function handleAdminAndData(request, response, pathname) {
     const admin = getAuthenticatedAdmin(request);
     if (!admin) {
       return sendJson(response, 403, { error: "Admin authorization required. Please sign in with the admin account." });
+    }
+
+    const requiresDeleteConfirmation = request.method === "DELETE" ||
+      (pathname === "/api/admin/reset-all" && request.method === "POST");
+    if (requiresDeleteConfirmation &&
+      String(request.headers["x-admin-confirmation-email"] || "").trim().toLowerCase() !== ADMIN_EMAIL) {
+      return sendJson(response, 400, { error: `Type ${ADMIN_EMAIL} to confirm this deletion.` });
     }
 
     // Stats
@@ -549,7 +556,9 @@ async function handleAdminAndData(request, response, pathname) {
       });
       materialsStore = [];
       await saveMaterials(materialsStore);
-      return sendJson(response, 200, { ok: true, message: "All user data and materials successfully erased." });
+      await saveDealers([]);
+      await saveVideos([]);
+      return sendJson(response, 200, { ok: true, message: "All non-admin accounts, custom materials, dealers, and videos successfully erased." });
     }
   }
 

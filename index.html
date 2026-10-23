@@ -10,14 +10,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/mobile.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="assets/supabase-config.js"></script>
   <script src="assets/api-client.js"></script>
+  <script defer src="assets/demo-mode.js"></script>
   <script src="assets/video-library.js"></script>
   <script defer src="assets/video-crafts.js"></script>
   <script type="module" src="app.js"></script>
-  <script type="module" src="assets/local-auth.js"></script>
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -1204,6 +1205,7 @@
         <button class="active" data-mode="login">Sign in</button>
         <button data-mode="signup">Create account</button>
       </div>
+      <p class="local-admin-hint" id="localAdminHint" hidden>Local admin login: <strong>udit3539@gmail.com</strong> · Password: <strong>12345678</strong></p>
       <form id="authForm">
         <label id="nameField" hidden>Display name
           <input id="displayName" maxlength="60" autocomplete="name">
