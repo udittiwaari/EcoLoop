@@ -19,19 +19,38 @@
   <script defer src="assets/video-crafts.js"></script>
   <script type="module" src="app.js"></script>
   <style id="hero-graphic-styles">
-    /* Hero Visual Card & Infinity Mark Showcase */
+    /* Hero Visual Card & Neon Mint Infinity Mark Showcase (Matching Screenshot Exactly) */
+    .eyebrow {
+      color: #059669 !important;
+    }
+    .hero h1 em {
+      font-style: normal !important;
+      color: #059669 !important;
+    }
     .hero-visual {
       min-height: 480px !important;
-      border-radius: 36px !important;
-      background: radial-gradient(circle at 24% 20%, #8fd6e4, transparent 28%),
-                  radial-gradient(circle at 83% 74%, #f6a979, transparent 34%),
-                  linear-gradient(135deg, #202a59, #354f92 55%, #375f8c) !important;
+      border-radius: 40px !important;
+      background:
+        radial-gradient(ellipse at 17% 28%, rgba(45, 213, 142, 0.34), transparent 38%),
+        radial-gradient(ellipse at 85% 79%, rgba(18, 157, 143, 0.32), transparent 42%),
+        linear-gradient(135deg, #063b2b, #031f18 68%, #062b25) !important;
+      border: 1px solid rgba(134, 246, 184, 0.22) !important;
+      box-shadow: 0 22px 55px rgba(8, 74, 48, 0.24), 0 0 42px rgba(45, 213, 142, 0.16) !important;
       position: relative !important;
       overflow: hidden !important;
-      box-shadow: 0 24px 50px rgba(22, 29, 78, 0.35) !important;
       opacity: 1 !important;
       transform: none !important;
       display: block !important;
+    }
+    .hero-visual::after {
+      position: absolute !important;
+      right: 5% !important;
+      bottom: 6% !important;
+      left: 5% !important;
+      height: 1px !important;
+      background: linear-gradient(90deg, transparent, rgba(177, 255, 213, 0.42), transparent) !important;
+      content: "" !important;
+      z-index: 1 !important;
     }
     .hero-visual .loop-mark {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif !important;
@@ -40,16 +59,16 @@
       text-align: center !important;
       font-size: 240px !important;
       line-height: 0.7 !important;
-      color: #ffcf70 !important;
-      opacity: 0.9 !important;
+      color: #86efbd !important;
+      opacity: 0.95 !important;
       transform: rotate(-12deg) !important;
       user-select: none !important;
       pointer-events: none !important;
-      text-shadow: 0 10px 30px rgba(255, 207, 112, 0.3) !important;
+      text-shadow: 0 0 22px rgba(72, 255, 173, 0.48), 0 0 48px rgba(72, 255, 173, 0.24) !important;
     }
     .hero-visual .orbit {
       position: absolute !important;
-      border: 1px solid rgba(255, 255, 255, 0.23) !important;
+      border: 1px solid rgba(169, 244, 199, 0.18) !important;
       border-radius: 50% !important;
       pointer-events: none !important;
     }
@@ -73,7 +92,7 @@
       border-radius: 18px !important;
       background: rgba(255, 255, 255, 0.95) !important;
       backdrop-filter: blur(8px) !important;
-      box-shadow: 0 18px 32px rgba(22, 29, 78, 0.35) !important;
+      box-shadow: 0 18px 32px rgba(8, 74, 48, 0.28) !important;
       display: grid !important;
       grid-template-columns: 36px 1fr !important;
       gap: 1px 10px !important;
@@ -88,8 +107,9 @@
       place-items: center !important;
       border-radius: 12px !important;
       font-style: normal !important;
-      background: #e9f2ff !important;
-      color: #355d9a !important;
+      background: linear-gradient(145deg, #a6f4c0, #58d994) !important;
+      color: #075332 !important;
+      box-shadow: 0 4px 12px rgba(22, 182, 103, 0.18) !important;
       font-size: 18px !important;
     }
     .hero-visual .material-card span {
@@ -101,7 +121,7 @@
     .hero-visual .material-card b {
       font-size: 14px !important;
       font-weight: 800 !important;
-      color: #2e6888 !important;
+      color: #176c47 !important;
       line-height: 1.2 !important;
     }
     .hero-visual .card-paper {
@@ -123,13 +143,13 @@
       position: absolute !important;
       left: 42px !important;
       bottom: 30px !important;
-      color: #e5f4dd !important;
+      color: #d7f8e2 !important;
       font-size: 17px !important;
       font-weight: 700 !important;
       line-height: 1.35 !important;
       margin: 0 !important;
       z-index: 2 !important;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
     }
     @keyframes heroCardFloat {
       0%, 100% { transform: translateY(0); }
@@ -154,24 +174,24 @@
       <svg class="header-logo-svg" viewBox="0 0 460 110" width="155" height="38" xmlns="http://www.w3.org/2000/svg" style="display:block;">
         <defs>
           <linearGradient id="navLoopG1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#0F2C59" />
-            <stop offset="100%" stop-color="#1E40AF" />
+            <stop offset="0%" stop-color="#064E3B" />
+            <stop offset="100%" stop-color="#059669" />
           </linearGradient>
           <linearGradient id="navLoopG2" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#0284C7" />
-            <stop offset="100%" stop-color="#38BDF8" />
+            <stop offset="0%" stop-color="#059669" />
+            <stop offset="100%" stop-color="#34D399" />
           </linearGradient>
         </defs>
         <g transform="translate(10, 8)">
           <path d="M 55 50 C 35 20, 5 20, 5 50 C 5 80, 35 80, 55 50 C 75 20, 105 20, 105 50" fill="none" stroke="url(#navLoopG1)" stroke-width="14" stroke-linecap="round" />
           <path d="M 105 50 C 105 80, 75 80, 55 50 L 44 35" fill="none" stroke="url(#navLoopG2)" stroke-width="14" stroke-linecap="round" />
-          <polygon points="33,38 42,18 58,31" fill="#0EA5E9" />
-          <path d="M 98 22 C 112 10, 125 18, 114 34 C 106 28, 102 26, 98 22 Z" fill="#38BDF8" />
-          <circle cx="30" cy="50" r="4" fill="#E0F2FE" />
+          <polygon points="33,38 42,18 58,31" fill="#10B981" />
+          <path d="M 98 22 C 112 10, 125 18, 114 34 C 106 28, 102 26, 98 22 Z" fill="#10B981" />
+          <circle cx="30" cy="50" r="4" fill="#D1FAE5" />
         </g>
         <g transform="translate(148, 70)">
           <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="62" font-weight="800" letter-spacing="-1">
-            <tspan fill="#0F2C59">Eco</tspan><tspan fill="#0284C7" font-weight="600">Loop</tspan>
+            <tspan fill="#064E3B">Eco</tspan><tspan fill="#059669" font-weight="600">Loop</tspan>
           </text>
         </g>
       </svg>
