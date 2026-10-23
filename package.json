@@ -1,0 +1,13 @@
+{
+  "name": "ecoloop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EcoLoop local website and account backend.",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "start:backup": "npm --prefix backend run start:backup"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

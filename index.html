@@ -10,13 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/mobile.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="assets/supabase-config.js"></script>
+  <script src="assets/api-client.js"></script>
   <script src="assets/video-library.js"></script>
   <script defer src="assets/video-crafts.js"></script>
   <script type="module" src="app.js"></script>
-  <script type="module" src="assets/local-auth.js"></script>
   <style id="hero-graphic-styles">
     /* Hero Visual Card & Infinity Mark Showcase */
     .hero-visual {
@@ -223,9 +224,9 @@
     <section class="guide-section" id="guide">
       <div class="section-intro reveal">
         <p class="eyebrow">01 / SMART MATERIAL GUIDE &amp; AI VISION</p>
-        <h2>Identify any material.<br>By AI camera or text.</h2>
-        <p>Point your camera or upload a photo to identify e-waste, metals, circuit boards, batteries, and plastics with AI vision—or search by name.</p>
-        
+        <h2>Scan an item.<br>Get a clear match.</h2>
+        <p>Use the camera or upload a photo to check an item against supported materials in the EcoLoop catalog. If it is not a confident match, we’ll say so instead of guessing.</p>
+
         <div class="guide-mode-pills" role="tablist" aria-label="Material identification mode">
           <button type="button" class="mode-pill active" id="modeVisionBtn" data-tab="visionHub" role="tab" aria-selected="true">
             <span class="mode-icon">📷</span> AI Camera &amp; Vision
@@ -295,7 +296,7 @@
                 <span class="orb-icon">📷</span>
               </div>
               <strong id="dropzonePromptTitle">Drag &amp; drop an image here, or use live camera</strong>
-              <p>Supports JPG, PNG, WEBP. AI identifies Printed Circuit Boards, Batteries, Copper, Aluminium Cans, Plastics &amp; more.</p>
+              <p>Supports JPG, PNG, WEBP. The AI checks for supported e-waste, metal, plastic, and paper matches—and flags uncertain or unrelated items.</p>
               
               <div class="scanner-direct-btns" style="display:flex; gap:10px; margin-top:14px; justify-content:center; flex-wrap:wrap;">
                 <button type="button" class="button button-primary" id="openCameraBtn" style="font-size:12px; padding:9px 18px;">
@@ -338,7 +339,7 @@
           <!-- Action Buttons Row -->
           <div class="scanner-actions-row">
             <button type="button" class="button button-primary" id="analyseImageBtn" disabled>
-              ✦ Analyse with AI
+              ✦ Check Catalog Match
             </button>
             <button type="button" class="button button-quiet" id="clearScanBtn" style="display:none;">
               Clear / Start Over
@@ -350,8 +351,8 @@
             <div class="ai-result-empty">
               <span class="result-orb-icon">✦</span>
               <div>
-                <b>AI Vision Engine Ready</b>
-                <p>Upload an image, snap a photo with your camera, or pick a sample above to identify waste items and see actionable recycling steps.</p>
+                <b>Catalog matcher ready</b>
+                <p>Upload or capture an item to check for a supported match in the EcoLoop catalog. Uncertain or unrelated images won’t be assigned a material.</p>
               </div>
             </div>
           </div>
@@ -834,7 +835,6 @@
       <div class="bhopal-pane-card">
         <div class="bhopal-calc-header">
           <div>
-            <h3>Wholesale Scrap Valuation Calculator</h3>
             <p>Select scrap categories, adjust weights with (+/-) steppers, and instantly calculate estimated payout at Bhopal benchmark rates.</p>
           </div>
           <button type="button" class="calc-reset-btn" id="bhopalCalcResetBtn">
@@ -1332,6 +1332,7 @@
         <button class="active" data-mode="login">Sign in</button>
         <button data-mode="signup">Create account</button>
       </div>
+      <p class="local-admin-hint" id="localAdminHint" hidden>Local admin login: <strong>udit3539@gmail.com</strong> · Password: <strong>12345678</strong></p>
       <form id="authForm">
         <label id="nameField" hidden>Display name
           <input id="displayName" maxlength="60" autocomplete="name">
@@ -1734,8 +1735,8 @@
         </div>
 
         <div>
-          <label for="new-craft-url" class="block text-xs font-bold text-slate-700 mb-1">YouTube Tutorial URL *</label>
-          <input type="url" id="new-craft-url" required placeholder="https://www.youtube.com/watch?v=..." class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]" />
+          <label for="new-craft-url" class="block text-xs font-bold text-slate-700 mb-1">Video Tutorial URL *</label>
+          <input type="url" id="new-craft-url" required placeholder="https://www.youtube.com/watch?v=... or a shared video link" class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]" />
         </div>
 
         <div>
