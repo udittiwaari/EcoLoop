@@ -146,6 +146,20 @@
       videoId: 'XoVx6aIphIY',
       url: 'https://www.youtube.com/shorts/XoVx6aIphIY',
       format: 'YouTube Short'
+    },
+    {
+      id: 'gemini-recycled-demo',
+      categoryId: 'with-glue',
+      title: 'EcoLoop Shared Craft Demo',
+      featuredLink: true,
+      description: 'A community-shared paper and recycle craft reference added directly from the EcoLoop video link library.',
+      materialsTag: 'Paper + Glue • Community Shared',
+      channel: 'EcoLoop Community',
+      videoId: null,
+      thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
+      embedUrl: 'https://share.gemini.google/IBYe0i2WMyXY',
+      url: 'https://share.gemini.google/IBYe0i2WMyXY',
+      format: 'External Link'
     }
   ];
 
@@ -255,7 +269,7 @@
 
       itemsInCat.forEach(item => {
         const isSaved = savedIds.has(item.id);
-        const thumbUrl = `https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`;
+        const thumbUrl = item.thumbnailUrl || (item.videoId ? `https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg` : getFallbackThumbnailSvg(item.title, cat.emoji));
         const fallbackSvg = getFallbackThumbnailSvg(item.title, cat.emoji);
 
         html += `
@@ -457,7 +471,15 @@
     if (directLink) directLink.href = item.url;
 
     const iframe = document.getElementById('modal-youtube-iframe');
-    if (iframe) iframe.src = `https://www.youtube.com/embed/${item.videoId}?rel=0`;
+    if (iframe) {
+      if (item.embedUrl) {
+        iframe.src = item.embedUrl;
+      } else if (item.videoId) {
+        iframe.src = `https://www.youtube.com/embed/${item.videoId}?rel=0`;
+      } else {
+        iframe.src = item.url || 'about:blank';
+      }
+    }
 
     const modal = document.getElementById('video-modal');
     if (modal) modal.classList.remove('hidden');
@@ -494,18 +516,21 @@
     const description = document.getElementById('new-craft-desc')?.value.trim();
     if (!title || !url) return;
 
-    const videoId = extractYouTubeId(url);
+    const youTubeMatch = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{11})/.test(url);
+    const videoId = youTubeMatch ? extractYouTubeId(url) : null;
     const newItem = {
       id: 'custom-' + Date.now(),
       categoryId,
       title,
       featuredLink: false,
-      description,
+      description: description || 'Community-shared paper craft idea from EcoLoop.',
       materialsTag: 'Community Shared Paper Craft',
       channel: 'EcoLoop Community',
       videoId,
+      thumbnailUrl: youTubeMatch ? undefined : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
+      embedUrl: youTubeMatch ? undefined : url,
       url,
-      format: url.includes('/shorts/') ? 'YouTube Short' : 'Full Tutorial'
+      format: youTubeMatch ? (url.includes('/shorts/') ? 'YouTube Short' : 'Full Tutorial') : 'External Link'
     };
 
     tutorials.unshift(newItem);
