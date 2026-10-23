@@ -13,11 +13,11 @@ Turning everyday waste into clear value for a cleaner, greener future.</P>
 
 EcoLoop is a single-page guide for smart waste management, reuse ideas, sample scrap rates, and personal collection planning.
 <br><br>
-🌐 **Live Website:** [Open EcoLoop](https://udittiwaari.github.io/EcoLoop/)
+🌐 **Live Website:** [Open EcoLoop](https://udittiwaari.github.io/Ecoloop/)
 <br><br>
 
 <div align="center">
-  <img src="assets/photos/Screenshot  2026-10-22 212249.png.png" alt="screen short" width="1000">
+  <img src="assets/photos/Screenshot 2026-10-22 212249.png" alt="screen short" width="1000">
   
 </div>
 
@@ -151,20 +151,8 @@ Check the repository for the current source files, static assets, configuration 
  1.  Create a new repository on GitHub named ecoloop.
  2.  Push your code to the main branch.
  3.  Go to Settings → Pages in your GitHub repository and set the source to GitHub Actions.
- 4.  Every push to main automatically publishes the static site files. The published page displays an EcoLoop demo notice because GitHub Pages cannot reach the account backend running on your PC.
+ 4.  Every push to main automatically deploys the frontend/ folder live!
 
-### Run the account backend on your PC
-
-GitHub Pages cannot run the account API or connect to a backend on your PC. To use sign-in, run EcoLoop locally:
-
-1. Install Node.js 18 or later.
-2. Open PowerShell in the project folder and run `npm start`.
-3. Keep that terminal open and visit `http://localhost:4173`.
-4. To open the local admin controls, sign in with `udit3539@gmail.com` and password `12345678`, then choose **Admin Section** in the header.
-
-The Node server hosts both the website and API on your PC. Account data is stored locally under `backend/data/`; it is not shared with the GitHub Pages site or other devices. The server listens only on your PC (`127.0.0.1`).
-
-The site includes a mobile-friendly layout. For sign-in and admin features, use the locally served site at `http://localhost:4173`; the GitHub Pages version is a browsing demo.
 
 
 ## 🗺️ Future Roadmap

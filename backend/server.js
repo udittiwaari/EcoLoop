@@ -374,13 +374,6 @@ async function handleAdminAndData(request, response, pathname) {
       return sendJson(response, 403, { error: "Admin authorization required. Please sign in with the admin account." });
     }
 
-    const requiresDeleteConfirmation = request.method === "DELETE" ||
-      (pathname === "/api/admin/reset-all" && request.method === "POST");
-    if (requiresDeleteConfirmation &&
-      String(request.headers["x-admin-confirmation-email"] || "").trim().toLowerCase() !== ADMIN_EMAIL) {
-      return sendJson(response, 400, { error: `Type ${ADMIN_EMAIL} to confirm this deletion.` });
-    }
-
     // Stats
     if (pathname === "/api/admin/stats" && request.method === "GET") {
       return sendJson(response, 200, {
@@ -556,9 +549,7 @@ async function handleAdminAndData(request, response, pathname) {
       });
       materialsStore = [];
       await saveMaterials(materialsStore);
-      await saveDealers([]);
-      await saveVideos([]);
-      return sendJson(response, 200, { ok: true, message: "All non-admin accounts, custom materials, dealers, and videos successfully erased." });
+      return sendJson(response, 200, { ok: true, message: "All user data and materials successfully erased." });
     }
   }
 
@@ -672,7 +663,7 @@ async function start() {
     }
   });
 
-  server.listen(port, "127.0.0.1", () => {
+  server.listen(port, () => {
     console.log(`EcoLoop is running at http://localhost:${port}`);
   });
 }
