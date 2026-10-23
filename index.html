@@ -9,17 +9,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=compact-dealers-admin-login-2">
+  <link rel="stylesheet" href="styles.css?v=hero-qr-toggle-1">
   <link rel="stylesheet" href="assets/mobile.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="assets/supabase-config.js"></script>
   <script src="assets/api-client.js"></script>
   <script src="assets/video-library.js"></script>
   <script defer src="assets/video-crafts.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="app.js?v=hero-qr-toggle-1"></script>
   <style id="hero-graphic-styles">
     /* Hero Visual Card & Neon Mint Infinity Mark Showcase (Matching Screenshot Exactly) */
     .eyebrow {
@@ -153,6 +154,77 @@
       z-index: 2 !important;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
     }
+    .hero-visual {
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .hero-qr-panel {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      border-radius: inherit;
+      background:
+        radial-gradient(ellipse at 17% 28%, rgba(45, 213, 142, 0.34), transparent 38%),
+        radial-gradient(ellipse at 85% 79%, rgba(18, 157, 143, 0.32), transparent 42%),
+        linear-gradient(135deg, #063b2b, #031f18 68%, #062b25);
+    }
+    .hero-visual.show-qr > :not(.hero-qr-panel) {
+      visibility: hidden;
+    }
+    .hero-visual.show-qr .hero-qr-panel {
+      display: grid;
+    }
+    .hero-qr-card {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 22px;
+      background: #fff;
+      color: #064e3b;
+      text-align: center;
+      text-decoration: none;
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.28);
+    }
+    .hero-qr-card strong {
+      font-size: 15px;
+    }
+    .hero-qr-code {
+      position: relative;
+      display: block;
+      width: min(260px, calc(100vw - 160px));
+      height: min(260px, calc(100vw - 160px));
+      padding: 8px;
+      border-radius: 14px;
+      background: #fff;
+    }
+    .hero-qr-code canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .hero-qr-code #heroQrLogo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 56px;
+      height: 56px;
+      padding: 5px;
+      border: 3px solid #fff;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 1px 5px rgba(6, 78, 59, 0.2);
+      transform: translate(-50%, -50%);
+    }
+    .hero-qr-card span {
+      color: #527060;
+      font-size: 11px;
+      font-weight: 700;
+    }
     @keyframes heroCardFloat {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -166,6 +238,13 @@
       .hero-visual .card-paper { left: 18px !important; top: 32px !important; }
       .hero-visual .card-plastic { right: 14px !important; top: 145px !important; }
       .hero-visual .card-metal { left: 24px !important; bottom: 30px !important; }
+      .hero-qr-panel { padding: 12px; }
+      .hero-qr-card { gap: 8px; padding: 12px; }
+      .hero-qr-code {
+        width: min(200px, calc(100vw - 190px));
+        height: min(200px, calc(100vw - 190px));
+      }
+      .hero-qr-code #heroQrLogo { width: 48px; height: 48px; }
     }
   </style>
 </head>
@@ -231,7 +310,7 @@
           <span><b id="savedPlanCount">0</b> plans saved</span>
         </div>
       </div>
-      <div class="hero-visual reveal delay">
+      <div class="hero-visual reveal delay" id="heroVisual" role="button" tabindex="0" aria-label="EcoLoop visual. Double-tap to show its QR code; double-tap again to return." aria-pressed="false">
         <div class="orbit orbit-a"></div>
         <div class="orbit orbit-b"></div>
         <div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div>
@@ -239,6 +318,15 @@
         <div class="material-card card-metal"><i>◈</i><span>Metal</span><b>₹25/kg</b></div>
         <div class="loop-mark">∞</div>
         <p>Small choices<br>move materials forward.</p>
+        <div class="hero-qr-panel" id="heroQrPanel" aria-hidden="true">
+          <div class="hero-qr-card" aria-label="QR code linking to EcoLoop — Smart waste, clear value">
+            <strong>Scan to open EcoLoop</strong>
+            <span class="hero-qr-code" id="heroQrCode">
+              <img id="heroQrLogo" src="assets/ecoloop-mark.svg" alt="" aria-hidden="true">
+            </span>
+            <span>EcoLoop — Smart waste, clear value</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -247,7 +335,7 @@
       <div class="section-intro reveal">
         <p class="eyebrow">01 / SMART MATERIAL GUIDE &amp; AI VISION</p>
         <h2>Scan an item.<br>Get a clear match.</h2>
-        <p>Use the camera or upload a photo to check an item against supported materials in the EcoLoop catalog. If it is not a confident match, we’ll say so instead of guessing.</p>
+        <p>Use the camera or upload a photo to see whether an item is likely recyclable through a supported EcoLoop stream. If the image is unclear or does not match, we’ll say so instead of guessing.</p>
 
         <div class="guide-mode-pills" role="tablist" aria-label="Material identification mode">
           <button type="button" class="mode-pill active" id="modeVisionBtn" data-tab="visionHub" role="tab" aria-selected="true">

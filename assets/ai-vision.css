@@ -437,6 +437,29 @@
   align-items: center;
 }
 
+.result-recycle-verdict {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #def7ee;
+  color: #0d6e53;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.result-recycle-verdict.is-unmatched {
+  margin-bottom: 6px;
+  background: #fff6dd;
+  color: #805b12;
+}
+
+.result-recycling-note {
+  margin: -8px 0 0;
+  color: #637798;
+  font-size: 11px;
+}
+
 .result-category-badge {
   padding: 4px 10px;
   border-radius: 6px;

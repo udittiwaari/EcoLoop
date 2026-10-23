@@ -709,7 +709,8 @@ async function analyseImage() {
   if (!resolvedKey || !Number.isFinite(resolvedConfidence) || resolvedConfidence < 0.3) {
     renderAiNoMatch(
       'No supported catalog match found',
-      'This image may be unrelated to EcoLoop’s supported materials, or the item is not clear enough to identify. Try a closer, well-lit photo of one item at a time.'
+      'No supported recyclable material was identified with enough confidence. This does not confirm local disposal rules; try a closer, well-lit photo of one item at a time.',
+      'No supported recyclable match identified'
     );
     finalizeAnalysis('No supported catalog match found.');
     return;
@@ -807,7 +808,8 @@ async function analyseImage() {
   if (!chosen || !catalogItem) {
     renderAiNoMatch(
       'No supported catalog match found',
-      'The image did not match a material currently available in the EcoLoop catalog.'
+      'The image did not match a material currently available in the EcoLoop catalog.',
+      'No supported recyclable match identified'
     );
     finalizeAnalysis('No supported catalog match found.');
     return;
@@ -841,7 +843,7 @@ function finalizeAnalysis(status = 'AI catalog check complete.') {
   updateProgress(status, 100);
 }
 
-function renderAiNoMatch(title, message) {
+function renderAiNoMatch(title, message, verdict = 'Unable to determine recyclability') {
   currentAiResult = null;
   const card = $('aiResultCard');
   if (!card) return;
@@ -850,6 +852,7 @@ function renderAiNoMatch(title, message) {
     <div class="ai-result-unmatched" role="status">
       <span class="unmatched-icon" aria-hidden="true">?</span>
       <div>
+        <span class="result-recycle-verdict is-unmatched">${escapeHtml(verdict)}</span>
         <b>${escapeHtml(title)}</b>
         <p>${escapeHtml(message)}</p>
         <button type="button" class="button button-quiet" id="aiScanNewBtn">Scan Another Item</button>
@@ -872,6 +875,7 @@ function renderAiResult(result) {
       <div class="result-main-header">
         <div class="result-title-group">
           <div class="result-badge-row">
+            <span class="result-recycle-verdict">♻ Likely recyclable</span>
             <span class="result-category-badge">${escapeHtml(result.category)}</span>
             <span class="result-confidence-badge">${result.confidence}% Match</span>
           </div>
@@ -893,6 +897,7 @@ function renderAiResult(result) {
           <span>AI Vision Confidence Score</span>
           <span>${result.confidence}%</span>
         </div>
+        <p class="result-recycling-note">Check local recycling guidance; accepted materials can vary by location.</p>
         <div class="confidence-track">
           <div class="confidence-fill" style="width: ${result.confidence}%;"></div>
         </div>
@@ -1818,6 +1823,66 @@ function startMemberBrand() {
   const intro = document.querySelector('.member-panel>div:first-child');
   if (!intro || intro.querySelector('.member-brand')) return;
   intro.innerHTML = `<img class="member-brand" src="assets/ecoloop-mark.svg" alt="EcoLoop"> <div class="member-copy">${intro.innerHTML}</div>`;
+}
+
+function initHeroQrToggle() {
+  const hero = $('heroVisual');
+  const qrTarget = $('heroQrCode');
+  if (!hero || !qrTarget) return;
+
+  let qrReady = false;
+  let lastTouchAt = 0;
+
+  const toggleQr = () => {
+    const showQr = !hero.classList.contains('show-qr');
+    if (showQr && !qrReady) {
+      if (typeof window.QRCode !== 'function') {
+        console.error('EcoLoop QR code library did not load.');
+        return;
+      }
+      try {
+        new window.QRCode(qrTarget, {
+          text: 'https://udittiwaari.github.io/EcoLoop/',
+          width: 260,
+          height: 260,
+          colorDark: '#063b2b',
+          colorLight: '#ffffff',
+          correctLevel: window.QRCode.CorrectLevel.H
+        });
+        qrReady = true;
+      } catch (err) {
+        console.error('EcoLoop QR code generation failed:', err);
+        return;
+      }
+    }
+    hero.classList.toggle('show-qr', showQr);
+    $('heroQrPanel')?.setAttribute('aria-hidden', String(!showQr));
+    hero.setAttribute('aria-pressed', String(showQr));
+  };
+
+  hero.addEventListener('dblclick', event => {
+    if (Date.now() - lastTouchAt < 800) return;
+    toggleQr();
+  });
+
+  hero.addEventListener('touchend', event => {
+    const now = Date.now();
+    if (now - lastTouchAt <= 450) {
+      event.preventDefault();
+      lastTouchAt = now;
+      toggleQr();
+    } else {
+      lastTouchAt = now;
+    }
+  }, { passive: false });
+
+  hero.addEventListener('keydown', event => {
+    if (event.target.closest('a')) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleQr();
+    }
+  });
 }
 
 /* ==========================================================================
@@ -2944,6 +3009,7 @@ initDialogsAndAuth();
 initDealersDirectory();
 initBhopalHub();
 initAdminPanel();
+initHeroQrToggle();
 startMotion();
 startImpactCounters();
 startMemberBrand();
