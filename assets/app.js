@@ -1515,8 +1515,8 @@ function setUser(next) {
       $('accountButton').innerHTML = `Member (${escapeHtml(displayName.split(' ')[0])}) <span>→</span>`;
       $('accountButton').title = `Signed in as ${displayName}`;
     } else {
-      $('accountButton').innerHTML = 'Member area <span>→</span>';
-      $('accountButton').title = 'Member sign in';
+      $('accountButton').innerHTML = 'Admin / Member Login <span>→</span>';
+      $('accountButton').title = 'Administrator or member sign in';
     }
   }
 
@@ -1834,11 +1834,208 @@ function initDealersDirectory() {
       applyDealerFilter(btn.dataset.dealerFilter || 'All');
     });
   });
+
+  const grid = $('dealersGrid');
+  grid?.addEventListener('click', event => {
+    if (!(event.target instanceof Element)) return;
+    const locateBtn = event.target.closest('.dealer-btn-locate');
+    if (locateBtn) {
+      event.preventDefault();
+      const card = locateBtn.closest('.dealer-card');
+      if (card?.dataset.dealerId) selectDealerOnMap(card.dataset.dealerId, false, true);
+      return;
+    }
+    if (event.target.closest('a, button')) return;
+    const card = event.target.closest('.dealer-card');
+    if (card?.dataset.dealerId) selectDealerOnMap(card.dataset.dealerId, false, true);
+  });
+
+  renderDealerMap();
 }
 
 function applyDealerFilter(filterType = 'All') {
-  document.querySelectorAll('.dealer-card').forEach(card => {
-    card.classList.toggle('hidden-by-filter', filterType !== 'All' && card.dataset.type !== filterType);
+  const cards = [...document.querySelectorAll('#dealersGrid .dealer-card')];
+  cards.forEach(card => {
+    const hidden = filterType !== 'All' && card.dataset.type !== filterType;
+    card.classList.toggle('hidden-by-filter', hidden);
+    const dealerMarker = dealerMapMarkers.get(card.dataset.dealerId);
+    if (!dealerMarker || !dealerMapInstance) return;
+    const { marker } = dealerMarker;
+    if (hidden) {
+      marker.remove();
+    } else {
+      marker.addTo(dealerMapInstance);
+    }
+  });
+
+  const visibleCards = cards.filter(card => !card.classList.contains('hidden-by-filter'));
+  const count = $('dealerMapCount');
+  if (count) count.textContent = `${visibleCards.length} ${visibleCards.length === 1 ? 'location' : 'locations'}`;
+
+  if (dealerMapInstance && visibleCards.length > 0) {
+    const visiblePoints = visibleCards
+      .map(c => dealerMapMarkers.get(c.dataset.dealerId)?.marker?.getLatLng())
+      .filter(Boolean);
+    if (visiblePoints.length > 1) {
+      dealerMapInstance.fitBounds(window.L.latLngBounds(visiblePoints).pad(0.15), { maxZoom: 13, duration: 0.45 });
+    } else if (visiblePoints.length === 1) {
+      dealerMapInstance.flyTo(visiblePoints[0], 14, { duration: 0.45 });
+    }
+  }
+
+  if (visibleCards.length && !visibleCards.some(card => card.dataset.dealerId === selectedDealerId)) {
+    selectDealerOnMap(visibleCards[0].dataset.dealerId, false, false);
+  }
+}
+
+let dealerMapInstance = null;
+const dealerMapMarkers = new Map();
+let selectedDealerId = '';
+let leafletRetryCount = 0;
+let leafletRetryTimeout = null;
+
+function getDealerMapPoint(dealer) {
+  const location = `${dealer.zone || ''} ${dealer.name || ''}`.toLowerCase();
+  if (/vidya nagar|narmadapuram/.test(location)) return [23.2058, 77.4355];
+  if (/kabadkhana|ibrahimganj/.test(location)) return [23.2674, 77.4075];
+  if (/anna nagar|govindpura/.test(location)) return [23.245, 77.456];
+  if (/mp nagar|chetak bridge|maharana pratap/.test(location)) return [23.2335, 77.4315];
+  if (/kotra|shastri nagar/.test(location)) return [23.2185, 77.3875];
+  if (/kohefiza|sajida nagar/.test(location)) return [23.272, 77.384];
+  if (/ayodhya bypass/.test(location)) return [23.279, 77.458];
+  return [23.2599, 77.4126];
+}
+
+function selectDealerOnMap(dealerId, scrollCardIntoView = false, moveMap = true) {
+  const selected = dealerMapMarkers.get(dealerId);
+  if (!selected) return;
+  selectedDealerId = dealerId;
+
+  document.querySelectorAll('#dealersGrid .dealer-card').forEach(card => {
+    card.classList.toggle('selected-dealer', card.dataset.dealerId === dealerId);
+  });
+
+  dealerMapMarkers.forEach(({ marker }, id) => {
+    const el = marker.getElement?.();
+    if (el) el.classList.toggle('active-marker', id === dealerId);
+  });
+
+  if (dealerMapInstance && moveMap) {
+    const { marker, card } = selected;
+    dealerMapInstance.flyTo(marker.getLatLng(), 14, { duration: 0.45 });
+    marker.openPopup();
+    if (scrollCardIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function renderDealerMap() {
+  const mapElement = $('dealerMap');
+  if (!mapElement) return;
+
+  if (!window.L) {
+    if (leafletRetryCount < 40) {
+      leafletRetryCount++;
+      if (!mapElement.querySelector('.dealer-map-loading')) {
+        mapElement.innerHTML = `
+          <div class="dealer-map-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:360px;color:#047857;gap:12px;">
+            <svg style="animation: spin 1s linear infinite; width: 32px; height: 32px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" stroke-opacity="0.2"></circle>
+              <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
+            </svg>
+            <span style="font-size:13px;font-weight:600;letter-spacing:-0.01em;">Loading interactive Bhopal scrap map...</span>
+            <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+          </div>
+        `;
+      }
+      clearTimeout(leafletRetryTimeout);
+      leafletRetryTimeout = setTimeout(renderDealerMap, 120);
+      return;
+    }
+    mapElement.innerHTML = '<p class="dealer-map-error">The map could not be loaded. Please check your internet connection and refresh.</p>';
+    console.error('Leaflet failed to load; dealer map is unavailable.');
+    return;
+  }
+
+  leafletRetryCount = 0;
+
+  if (!dealerMapInstance) {
+    dealerMapInstance = window.L.map(mapElement, {
+      scrollWheelZoom: false,
+      zoomControl: true
+    }).setView([23.2599, 77.4126], 12);
+
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(dealerMapInstance);
+
+    mapElement.addEventListener('focus', () => dealerMapInstance.scrollWheelZoom.enable());
+    mapElement.addEventListener('blur', () => dealerMapInstance.scrollWheelZoom.disable());
+  }
+
+  dealerMapMarkers.forEach(({ marker }) => marker.remove());
+  dealerMapMarkers.clear();
+
+  const cards = document.querySelectorAll('#dealersGrid .dealer-card');
+  cards.forEach((card, index) => {
+    let dealerId = card.dataset.dealerId;
+    if (!dealerId) {
+      dealerId = `dealer-${index + 1}`;
+      card.dataset.dealerId = dealerId;
+    }
+    const name = card.querySelector('.dealer-name')?.textContent?.trim() || 'Recycling dealer';
+    const zone = card.querySelector('.dealer-location')?.textContent?.replace(/^📍\s*/, '').trim() || 'Bhopal';
+    const type = card.dataset.type || '';
+    const rating = card.querySelector('.dealer-stars b')?.textContent?.trim() || '4.5';
+    const mapUrl = card.querySelector('.dealer-btn-quiet')?.getAttribute('href') ||
+                   card.querySelector('.dealer-btn-primary')?.getAttribute('href') ||
+                   `https://www.google.com/maps/search/${encodeURIComponent(name + ' ' + zone)}`;
+    const [latitude, longitude] = getDealerMapPoint({ name, zone });
+
+    const marker = window.L.marker([latitude, longitude], {
+      title: `${name} — approximate area`,
+      alt: `${name}, ${zone}`,
+      icon: window.L.divIcon({
+        className: 'dealer-map-marker',
+        html: `<span>${index + 1}</span>`,
+        iconSize: [34, 42],
+        iconAnchor: [17, 40],
+        popupAnchor: [0, -38]
+      })
+    });
+
+    marker.bindPopup(`
+      <div style="font-family: inherit; min-width: 190px; padding: 2px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:5px;">
+          <span style="display:inline-block; font-size:10px; font-weight:800; color:#059669; text-transform:uppercase; letter-spacing:0.06em; background:#ecfdf5; padding:2px 8px; border-radius:999px;">#${index + 1} &bull; ${escapeHtml(type || 'Verified Hub')}</span>
+          <span style="font-size:11px; font-weight:700; color:#047857;">★ ${escapeHtml(rating)}</span>
+        </div>
+        <strong style="display:block; font-size:14px; font-weight:800; color:#0f172a; line-height:1.25; margin-bottom:4px;">${escapeHtml(name)}</strong>
+        <p style="margin:0 0 8px; font-size:11px; color:#475569; line-height:1.4;">📍 ${escapeHtml(zone)}</p>
+        <div style="display:flex; gap:6px;">
+          <a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-block; padding:4px 10px; font-size:11px; font-weight:700; color:#ffffff; background:#059669; border-radius:6px; text-decoration:none;">Directions ↗</a>
+        </div>
+      </div>
+    `);
+
+    marker.on('click', () => selectDealerOnMap(dealerId, true, false));
+    dealerMapMarkers.set(dealerId, { marker, card });
+    marker.addTo(dealerMapInstance);
+  });
+
+  if (!selectedDealerId || !dealerMapMarkers.has(selectedDealerId)) {
+    selectedDealerId = dealerMapMarkers.keys().next().value || '';
+  }
+  if (selectedDealerId) selectDealerOnMap(selectedDealerId, false, false);
+
+  const points = [...dealerMapMarkers.values()].map(({ marker }) => marker.getLatLng());
+  if (points.length > 1) {
+    dealerMapInstance.fitBounds(window.L.latLngBounds(points).pad(0.15), { maxZoom: 12 });
+  }
+
+  requestAnimationFrame(() => {
+    dealerMapInstance.invalidateSize();
+    setTimeout(() => dealerMapInstance && dealerMapInstance.invalidateSize(), 200);
   });
 }
 
@@ -1877,6 +2074,10 @@ function switchBhopalPane(paneId) {
     b.classList.toggle('active', isTarget);
     b.setAttribute('aria-selected', isTarget ? 'true' : 'false');
   });
+
+  if (paneId === 'bhopalPaneDealers' && dealerMapInstance) {
+    requestAnimationFrame(() => dealerMapInstance.invalidateSize());
+  }
 }
 
 function initBhopalHub() {
@@ -2333,18 +2534,21 @@ function renderLiveDealersGrid() {
     'Vehicle': { icon: '🚗', cls: 'vehicle' }
   };
 
-  grid.innerHTML = dealersList.map(d => {
+  grid.innerHTML = dealersList.map((d, index) => {
     const iconInfo = iconMap[d.type] || { icon: '♻️', cls: 'general' };
     const ratingNum = parseFloat(d.rating) || 5.0;
     const starPct = Math.min(100, Math.round((ratingNum / 5.0) * 100));
     const acceptsList = Array.isArray(d.accepts) ? d.accepts : (d.services ? d.services.split(',').map(s => s.trim()) : []);
     const acceptsHtml = acceptsList.map(a => `<li>${escapeHtml(a)}</li>`).join('');
     return `
-      <article class="dealer-card ${d.badge ? 'dealer-card-featured' : ''}" data-type="${escapeAttr(d.type)}">
+      <article class="dealer-card ${d.badge ? 'dealer-card-featured' : ''}" data-dealer-id="${escapeAttr(d.id)}" data-type="${escapeAttr(d.type)}">
         <div class="dealer-card-header">
           <div class="dealer-icon-wrap ${iconInfo.cls}">${iconInfo.icon}</div>
           <div class="dealer-meta">
-            <p class="dealer-type-badge">${escapeHtml(d.type)} Hub</p>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+              <span class="dealer-index-tag">#${index + 1}</span>
+              <p class="dealer-type-badge">${escapeHtml(d.type)} Hub</p>
+            </div>
             <h3 class="dealer-name">${escapeHtml(d.name)}</h3>
             <div class="dealer-stars" aria-label="Rating ${ratingNum} out of 5">
               <span class="stars-filled" style="--star-pct: ${starPct}%">★★★★★</span>
@@ -2354,7 +2558,7 @@ function renderLiveDealersGrid() {
           </div>
           <span class="dealer-status open">● Open</span>
         </div>
-        <div class="dealer-hours"><span>🕖</span> ${escapeHtml(d.hours || 'Open Daily')}</div>
+        <div class="dealer-hours"><span>🕒</span> ${escapeHtml(d.hours || 'Open Daily')}</div>
         <p class="dealer-location"><span>📍</span> ${escapeHtml(d.zone)}</p>
         <p class="dealer-desc">${escapeHtml(d.desc || d.services)}</p>
         <ul class="dealer-accepts">
@@ -2362,13 +2566,15 @@ function renderLiveDealersGrid() {
         </ul>
         ${d.badge ? `<div class="dealer-features-row"><span class="dealer-feat">${escapeHtml(d.badge)}</span></div>` : ''}
         <div class="dealer-actions">
-          <a class="dealer-btn dealer-btn-primary" href="${escapeAttr(d.mapUrl || 'https://maps.google.com')}" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
+          <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="${escapeAttr(d.id)}">📍 Show on Map</button>
+          <a class="dealer-btn dealer-btn-quiet" href="${escapeAttr(d.mapUrl || 'https://maps.google.com')}" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           ${isAdmin ? `<button type="button" class="btn-danger" style="padding:7px 12px; font-size:11px;" onclick="window.adminDeleteDealer('${escapeAttr(d.id)}')">🗑️ Delete Dealer</button>` : ''}
         </div>
       </article>
     `;
   }).join('');
 
+  renderDealerMap();
   const activeBtn = document.querySelector('.dealer-filter-btn.active');
   applyDealerFilter(activeBtn?.dataset.dealerFilter || 'All');
 }

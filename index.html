@@ -9,14 +9,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=compact-dealers-admin-login-2">
   <link rel="stylesheet" href="assets/mobile.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="assets/supabase-config.js"></script>
   <script src="assets/api-client.js"></script>
   <script src="assets/video-library.js"></script>
   <script defer src="assets/video-crafts.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script type="module" src="app.js"></script>
   <style id="hero-graphic-styles">
     /* Hero Visual Card & Neon Mint Infinity Mark Showcase (Matching Screenshot Exactly) */
@@ -207,7 +209,7 @@
     </nav>
     <div class="header-actions" style="display:flex; align-items:center; gap:8px;">
       <button class="admin-pill-btn" id="adminHeaderBtn" style="display:none;" onclick="openAdminModal()">⚙️ Admin Section</button>
-      <button class="account-button" id="accountButton">Member area <span>→</span></button>
+      <button class="account-button" id="accountButton" aria-label="Open administrator or member sign in">Admin / Member Login <span>→</span></button>
     </div>
   </header>
 
@@ -643,15 +645,18 @@
           <button type="button" class="dealer-filter-btn" data-dealer-filter="Vehicle">🚗 Vehicle Scrapping (RVSF)</button>
           <button type="button" class="dealer-filter-btn" data-dealer-filter="General">📦 General Junk &amp; Paper</button>
         </div>
-      </div>
 
+      <div class="dealers-directory-layout">
       <div class="dealers-grid" id="dealersGrid">
         <!-- Card 1: The Kabadiwala -->
-        <article class="dealer-card dealer-card-featured" data-type="Doorstep">
+        <article class="dealer-card dealer-card-featured" data-dealer-id="dealer-1" data-type="Doorstep">
           <div class="dealer-card-header">
             <div class="dealer-icon-wrap doorstep">🚚</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">Doorstep Collection App</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#1</span>
+                <p class="dealer-type-badge">Doorstep Collection App</p>
+              </div>
               <h3 class="dealer-name">The Kabadiwala</h3>
               <div class="dealer-stars" aria-label="Rating 3.7 out of 5">
                 <span class="stars-filled" style="--star-pct: 74%">★★★★★</span>
@@ -661,29 +666,28 @@
             </div>
             <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕖</span> Closes 7:00 PM</div>
+          <div class="dealer-hours"><span>🕒</span> Closes 7:00 PM</div>
           <p class="dealer-location"><span>📍</span> Narmadapuram Road, near Vidya Nagar, Bhopal</p>
           <p class="dealer-desc">Well-known organized doorstep scrap collection and recycling service operating across Bhopal via mobile app and website booking.</p>
           <ul class="dealer-accepts">
-            <li>Paper &amp; Books</li><li>Cardboard</li><li>Plastics</li><li>Metals</li><li>E-Waste</li><li>Old Appliances</li>
+            <li>Paper & Books</li><li>Cardboard</li><li>Plastics</li><li>Metals</li><li>E-Waste</li><li>Old Appliances</li>
           </ul>
-          <div class="dealer-features-row">
-            <span class="dealer-feat">📱 App Booking</span>
-            <span class="dealer-feat">⚖️ Digital Weighing Scales</span>
-            <span class="dealer-feat">📋 Fixed Rate Chart</span>
-          </div>
+          <div class="dealer-features-row"><span class="dealer-feat">📱 App Booking</span><span class="dealer-feat">⚖️ Digital Weighing Scales</span><span class="dealer-feat">💵 Fixed Rate Chart</span></div>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/The+Kabadiwala+Vidya+Nagar+Narmadapuram+Road+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Narmadapuram+Road+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-1">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Narmadapuram+Road+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
 
         <!-- Card 2: BHOPAL SCRAP TRADERS -->
-        <article class="dealer-card" data-type="Metal">
+        <article class="dealer-card" data-dealer-id="dealer-2" data-type="Metal">
           <div class="dealer-card-header">
             <div class="dealer-icon-wrap metal">⚙️</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">Wholesale Metal Hub</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#2</span>
+                <p class="dealer-type-badge">Wholesale Metal Hub</p>
+              </div>
               <h3 class="dealer-name">BHOPAL SCRAP TRADERS</h3>
               <div class="dealer-stars" aria-label="Rating 5.0 out of 5">
                 <span class="stars-filled" style="--star-pct: 100%">★★★★★</span>
@@ -693,24 +697,28 @@
             </div>
             <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕘</span> Closes 9:00 PM</div>
+          <div class="dealer-hours"><span>🕒</span> Closes 9:00 PM</div>
           <p class="dealer-location"><span>📍</span> New Kabadkhana Road, Ibrahimganj, Bhopal</p>
-          <p class="dealer-desc">Commercial and domestic scrap hub located centrally in Old Bhopal's primary wholesale scrap trade belt. Deals in bulk metals, iron, and steel.</p>
+          <p class="dealer-desc">Wholesale industrial scrap yard dealing with commercial structural steel, copper windings, brass fittings, and machinery.</p>
           <ul class="dealer-accepts">
-            <li>Bulk Metal Scrap</li><li>Iron &amp; Steel</li><li>Machinery Parts</li><li>General Recyclable Junk</li>
+            <li>Heavy Melting Steel (HMS)</li><li>Copper Cable Scrap</li><li>Cast Iron Pipes</li><li>Brass Lathe Turnings</li><li>Aluminium Sections</li>
           </ul>
+          <div class="dealer-features-row"><span class="dealer-feat">🏗️ Industrial Scale</span><span class="dealer-feat">⚖️ Certified Weighbridge On-Site</span></div>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/BHOPAL+SCRAP+TRADERS+New+Kabadkhana+Road+Ibrahimganj+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//New+Kabadkhana+Road+Ibrahimganj+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-2">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//New+Kabadkhana+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
 
         <!-- Card 3: Kabadiwala Bhopal -->
-        <article class="dealer-card" data-type="General">
+        <article class="dealer-card" data-dealer-id="dealer-3" data-type="General">
           <div class="dealer-card-header">
             <div class="dealer-icon-wrap general">📦</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">Residential &amp; Industrial</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#3</span>
+                <p class="dealer-type-badge">Neighbourhood Scrap Shop</p>
+              </div>
               <h3 class="dealer-name">Kabadiwala Bhopal</h3>
               <div class="dealer-stars" aria-label="Rating 4.4 out of 5">
                 <span class="stars-filled" style="--star-pct: 88%">★★★★★</span>
@@ -720,25 +728,29 @@
             </div>
             <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕗</span> 8:00 AM – 8:00 PM Daily</div>
+          <div class="dealer-hours"><span>🕒</span> 8:00 AM - 8:00 PM</div>
           <p class="dealer-location"><span>📍</span> Anna Nagar, Govindpura, Bhopal</p>
-          <p class="dealer-desc">Local scrap dealership catering to both residential households and nearby industrial units. Convenient for Govindpura and MP Nagar residents.</p>
+          <p class="dealer-desc">Centrally located neighbourhood scrap dealer serving Govindpura and Anna Nagar with fair daily market rates.</p>
           <ul class="dealer-accepts">
-            <li>Newspapers &amp; Books</li><li>Household Plastics</li><li>Tin &amp; Steel Cans</li><li>General Junk</li>
+            <li>Corrugated Cardboard</li><li>Plastic Drums & Buckets</li><li>Tins & Food Cans</li><li>Old Textbooks</li><li>Iron Scrap</li>
           </ul>
+          <div class="dealer-features-row"><span class="dealer-feat">⚡ Quick Counter Weighing</span><span class="dealer-feat">💵 Daily Cash Payouts</span></div>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/Kabadiwala+Bhopal+Anna+Nagar+Govindpura+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Anna+Nagar+Govindpura+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-3">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Anna+Nagar+Govindpura+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
 
-        <!-- Card 4: kabadawala MP Nagar -->
-        <article class="dealer-card" data-type="General">
+        <!-- Card 4: kabadawala (MP Nagar) -->
+        <article class="dealer-card" data-dealer-id="dealer-4" data-type="General">
           <div class="dealer-card-header">
             <div class="dealer-icon-wrap general">🏢</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">Commercial &amp; Office Cleanouts</p>
-              <h3 class="dealer-name">kabadawala</h3>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#4</span>
+                <p class="dealer-type-badge">Commercial & Corporate Pickup</p>
+              </div>
+              <h3 class="dealer-name">kabadawala (MP Nagar)</h3>
               <div class="dealer-stars" aria-label="Rating 5.0 out of 5">
                 <span class="stars-filled" style="--star-pct: 100%">★★★★★</span>
                 <span class="stars-empty">★★★★★</span>
@@ -747,24 +759,28 @@
             </div>
             <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕗</span> Closes 8:00 PM</div>
-          <p class="dealer-location"><span>📍</span> Zone-I, Maharana Pratap Nagar (near Chetak Bridge), Bhopal</p>
-          <p class="dealer-desc">Centrally positioned near Chetak Bridge. Specializes in commercial office paper waste, decommissioned furniture, and rapid disposal cleanouts.</p>
+          <div class="dealer-hours"><span>🕒</span> Closes 8:00 PM</div>
+          <p class="dealer-location"><span>📍</span> Zone-I, MP Nagar (Near Chetak Bridge), Bhopal</p>
+          <p class="dealer-desc">Specialised in corporate and commercial IT office cleanouts, shredding files and dismantling office partitions.</p>
           <ul class="dealer-accepts">
-            <li>Office Paper Waste</li><li>Broken Furniture</li><li>Electronics</li><li>Commercial Scrap</li>
+            <li>Shredded Office Paper</li><li>Old Office Desks</li><li>Printers & UPS Units</li><li>Beverage Cans</li><li>LAN Cables</li>
           </ul>
+          <div class="dealer-features-row"><span class="dealer-feat">🏢 Corporate & Commercial Pickup Specialist</span></div>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/kabadawala+Zone+I+Maharana+Pratap+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Zone-I+Maharana+Pratap+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-4">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Zone+I+MP+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
 
         <!-- Card 5: A. K. Enterprises -->
-        <article class="dealer-card" data-type="Metal">
+        <article class="dealer-card" data-dealer-id="dealer-5" data-type="Metal">
           <div class="dealer-card-header">
             <div class="dealer-icon-wrap metal">🔩</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">High-Value Metals Specialist</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#5</span>
+                <p class="dealer-type-badge">Non-Ferrous Specialist</p>
+              </div>
               <h3 class="dealer-name">A. K. Enterprises</h3>
               <div class="dealer-stars" aria-label="Rating 4.8 out of 5">
                 <span class="stars-filled" style="--star-pct: 96%">★★★★★</span>
@@ -772,26 +788,30 @@
                 <b>4.8</b>
               </div>
             </div>
-            <span class="dealer-status roundclock">● 24 Hours Open</span>
+            <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕒</span> Operates around the clock for drop-offs &amp; trade</div>
-          <p class="dealer-location"><span>📍</span> Kotra Road near Shastri Nagar, Bhopal</p>
-          <p class="dealer-desc">Specializes in high-value recyclable non-ferrous metals and industrial materials. Suitable for construction remnants, wiring, and heavy hardware.</p>
+          <div class="dealer-hours"><span>🕒</span> 24 Hours Open</div>
+          <p class="dealer-location"><span>📍</span> Kotra Road, Shastri Nagar, Bhopal</p>
+          <p class="dealer-desc">High-volume non-ferrous metal dealer paying top dollar for commercial copper wire, brass, radiator fins, and aluminium sheets.</p>
           <ul class="dealer-accepts">
-            <li>Copper Wiring</li><li>Brass &amp; Bronze</li><li>Aluminium</li><li>Iron Scrap</li><li>Construction Remnants</li>
+            <li>Millberry Copper Wire</li><li>Brass Honey / Utensils</li><li>Aluminium Alloy Rims</li><li>Stainless Steel 304</li><li>Lead Battery Plates</li>
           </ul>
+          <div class="dealer-features-row"><span class="dealer-feat">💰 Top Bhopal Payout for Copper & Brass</span></div>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/A+K+Enterprises+Kotra+Road+Shastri+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Kotra+Road+Shastri+Nagar+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-5">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Kotra+Road+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
 
         <!-- Card 6: E waste scrape collection services -->
-        <article class="dealer-card" data-type="E-waste">
+        <article class="dealer-card" data-dealer-id="dealer-6" data-type="E-waste">
           <div class="dealer-card-header">
-            <div class="dealer-icon-wrap ewaste">⚡</div>
+            <div class="dealer-icon-wrap ewaste">🔋</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">Certified E-Waste Specialist</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#6</span>
+                <p class="dealer-type-badge">Certified E-Waste Handler</p>
+              </div>
               <h3 class="dealer-name">E waste scrape collection services</h3>
               <div class="dealer-stars" aria-label="Rating 5.0 out of 5">
                 <span class="stars-filled" style="--star-pct: 100%">★★★★★</span>
@@ -801,24 +821,27 @@
             </div>
             <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕘</span> Call for schedule</div>
+          <div class="dealer-hours"><span>🕒</span> Call for schedule</div>
           <p class="dealer-location"><span>📍</span> Sajida Nagar, Kohefiza, Bhopal</p>
           <p class="dealer-desc">Catering specifically to electronic waste and decommissioned appliances. Promotes responsible handling to keep hazardous e-waste out of landfills.</p>
           <ul class="dealer-accepts">
-            <li>Discarded Electronics</li><li>Motherboards &amp; PCBs</li><li>Batteries</li><li>Cables &amp; Chargers</li><li>Old IT Hardware</li>
+            <li>Discarded Electronics</li><li>Motherboards & PCBs</li><li>Batteries</li><li>Cables & Chargers</li><li>Old IT Hardware</li>
           </ul>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/E+waste+collection+Kohefiza+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Kohefiza+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-6">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Kohefiza+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
 
         <!-- Card 7: Kakda's RVSF -->
-        <article class="dealer-card dealer-card-featured" data-type="Vehicle">
+        <article class="dealer-card dealer-card-featured" data-dealer-id="dealer-7" data-type="Vehicle">
           <div class="dealer-card-header">
             <div class="dealer-icon-wrap vehicle">🚗</div>
             <div class="dealer-meta">
-              <p class="dealer-type-badge">Certified Vehicle Scrapping</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                <span class="dealer-index-tag">#7</span>
+                <p class="dealer-type-badge">Certified Vehicle Scrapping</p>
+              </div>
               <h3 class="dealer-name">Kakda's RVSF</h3>
               <div class="dealer-stars" aria-label="Rating 4.9 out of 5">
                 <span class="stars-filled" style="--star-pct: 98%">★★★★★</span>
@@ -828,20 +851,31 @@
             </div>
             <span class="dealer-status open">● Open</span>
           </div>
-          <div class="dealer-hours"><span>🕖</span> Closes 7:00 PM</div>
+          <div class="dealer-hours"><span>🕒</span> Closes 7:00 PM</div>
           <p class="dealer-location"><span>📍</span> Ayodhya Bypass Road, Bhopal</p>
           <p class="dealer-desc">Authorised Registered Vehicle Scrapping Facility (RVSF) issuing official scrapping certificates for deregistration and government scrap incentives.</p>
           <ul class="dealer-accepts">
-            <li>Cars &amp; SUVs</li><li>Two-Wheelers</li><li>Commercial Vehicles</li><li>Automotive Metals</li><li>Auto Plastics</li>
+            <li>Cars & SUVs</li><li>Two-Wheelers</li><li>Commercial Vehicles</li><li>Automotive Metals</li><li>Auto Plastics</li>
           </ul>
-          <div class="dealer-certificate-badge">
-            <span>🏅</span> Govt. Authorised RVSF · Issues Scrapping Certificates
-          </div>
+          <div class="dealer-certificate-badge"><span>📜</span> Govt. Authorised RVSF — Issues Scrapping Certificates</div>
           <div class="dealer-actions">
-            <a class="dealer-btn dealer-btn-primary" href="https://www.google.com/maps/search/Kakda+RVSF+Ayodhya+Bypass+Bhopal" target="_blank" rel="noopener noreferrer">📍 View on Map</a>
-            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Ayodhya+Bypass+Road+Bhopal" target="_blank" rel="noopener noreferrer">🗺 Directions</a>
+            <button type="button" class="dealer-btn dealer-btn-primary dealer-btn-locate" data-dealer-id="dealer-7">📍 Show on Map</button>
+            <a class="dealer-btn dealer-btn-quiet" href="https://www.google.com/maps/dir//Ayodhya+Bypass+Road+Bhopal" target="_blank" rel="noopener noreferrer">🧭 Directions ↗</a>
           </div>
         </article>
+      </div>
+
+      <aside class="dealer-map-panel" aria-label="Map of Bhopal scrap and recycling dealers">
+        <div class="dealer-map-heading">
+          <div>
+            <p class="dealer-map-kicker">BHOPAL DIRECTORY</p>
+            <h3>Nearby recycling hubs</h3>
+          </div>
+          <span class="dealer-map-count" id="dealerMapCount">7 locations</span>
+        </div>
+        <div id="dealerMap" class="dealer-map" role="region" aria-label="Interactive map with dealer location markers" tabindex="0"></div>
+        <p class="dealer-map-note">Markers show approximate areas from each listing. Confirm the exact address before visiting.</p>
+      </aside>
       </div>
 
       <div class="dealers-footer-row reveal">
@@ -1346,13 +1380,12 @@
     <button class="dialog-close" data-close="accountDialog" aria-label="Close">×</button>
     <div id="authSignedOut">
       <p class="eyebrow">MEMBER ACCESS</p>
-      <h2>Join EcoLoop.</h2>
+      <h2>Sign in or join EcoLoop.</h2>
       <p class="dialog-copy">Create an account or sign in as administrator to manage waste catalog data and members.</p>
       <div class="auth-tabs">
         <button class="active" data-mode="login">Sign in</button>
         <button data-mode="signup">Create account</button>
       </div>
-      <p class="local-admin-hint" id="localAdminHint" hidden>Local admin login: <strong>udit3539@gmail.com</strong> · Password: <strong>12345678</strong></p>
       <form id="authForm">
         <label id="nameField" hidden>Display name
           <input id="displayName" maxlength="60" autocomplete="name">
