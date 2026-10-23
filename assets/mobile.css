@@ -1,0 +1,292 @@
+.local-admin-hint {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid #cce7d7;
+  border-radius: 10px;
+  background: #f0faf4;
+  color: #17563a;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .header {
+    height: auto !important;
+    min-height: 68px;
+    flex-wrap: wrap !important;
+    gap: 8px 12px !important;
+    padding: 10px 16px !important;
+  }
+
+  .header .header-logo-svg,
+  .header .brand-logo img,
+  .header .brand img {
+    width: 138px !important;
+    height: 34px !important;
+  }
+
+  .header .site-nav {
+    order: 3;
+    display: flex !important;
+    flex: 1 0 100%;
+    width: 100%;
+    gap: 6px !important;
+    margin: 0 -4px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .header .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .header .site-nav a {
+    flex: 0 0 auto;
+    padding: 8px 11px !important;
+    font-size: 12px !important;
+  }
+
+  .header .header-actions {
+    gap: 6px !important;
+    margin-left: auto;
+  }
+
+  .header .account-button {
+    min-height: 42px;
+    padding: 9px 14px !important;
+    font-size: 12px !important;
+  }
+
+  .header .admin-pill-btn {
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .hero,
+  .guide-section,
+  .rates-section,
+  .how-section,
+  .dealers-section,
+  #community,
+  .impact-section,
+  .about-section {
+    padding: 56px 22px !important;
+  }
+
+  .guide-section {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .guide-section > * {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hero > .hero-visual {
+    min-height: 340px;
+  }
+
+  .guide-mode-pills {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mode-pill {
+    justify-content: center;
+    min-height: 44px;
+    padding: 9px 10px !important;
+    font-size: 12px !important;
+  }
+
+  .impact-section .impact-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dialog {
+    width: min(94vw, 560px);
+    max-width: 94vw;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .admin-modal {
+    width: calc(100vw - 16px);
+    max-width: none;
+    max-height: calc(100dvh - 16px);
+    border-radius: 14px;
+  }
+
+  .admin-body {
+    padding: 16px;
+  }
+
+  .admin-nav {
+    padding: 0 8px;
+  }
+
+  .admin-nav button {
+    min-height: 46px;
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 9px 12px !important;
+  }
+
+  .header .header-logo-svg,
+  .header .brand-logo img,
+  .header .brand img {
+    width: 120px !important;
+    height: 30px !important;
+  }
+
+  .header .account-button {
+    min-height: 40px;
+    padding: 8px 11px !important;
+  }
+
+  .header .account-button span {
+    display: none;
+  }
+
+  .header .admin-pill-btn {
+    min-height: 40px;
+    padding: 7px 8px;
+  }
+
+  .hero,
+  .guide-section,
+  .rates-section,
+  .how-section,
+  .dealers-section,
+  #community,
+  .impact-section,
+  .about-section {
+    padding: 42px 16px !important;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(36px, 11vw, 52px);
+    line-height: 1.04;
+  }
+
+  .hero-copy .lede {
+    font-size: 15px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero-actions .button {
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    box-sizing: border-box;
+  }
+
+  .trust-row {
+    gap: 8px 14px;
+    font-size: 12px;
+  }
+
+  .hero > .hero-visual {
+    min-height: 280px;
+  }
+
+  .hero-visual .loop-mark {
+    top: 76px !important;
+    font-size: 118px !important;
+  }
+
+  .guide-mode-pills {
+    gap: 6px !important;
+    padding: 5px !important;
+  }
+
+  .mode-pill {
+    flex-direction: column;
+    gap: 3px !important;
+    min-height: 58px;
+    padding: 7px 4px !important;
+    font-size: 11px !important;
+    text-align: center;
+  }
+
+  .ai-hub-stats {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ai-hub-stats > * {
+    flex: 1 1 120px;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-grid label,
+  .admin-form-grid [style*="grid-column"] {
+    grid-column: 1 !important;
+  }
+
+  .admin-body {
+    padding: 12px;
+  }
+
+  .admin-header {
+    padding: 14px 16px;
+  }
+
+  .admin-header h2 {
+    font-size: 15px !important;
+  }
+
+  .admin-badge {
+    font-size: 9px;
+  }
+
+  .auth-tabs button,
+  #authSubmit,
+  #signOutButton {
+    min-height: 44px;
+  }
+
+  .dialog input,
+  .dialog select,
+  .dialog textarea,
+  .admin-modal input,
+  .admin-modal select,
+  .admin-modal textarea {
+    font-size: 16px;
+  }
+
+  .site-footer {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header .header-logo-svg,
+  .header .brand-logo img,
+  .header .brand img {
+    width: 104px !important;
+  }
+
+  .header .admin-pill-btn {
+    max-width: 126px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

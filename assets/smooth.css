@@ -255,8 +255,7 @@ p {
 .search-panel,
 .step,
 .creator-card,
-.impact-grid article,
-.hero-visual {
+.impact-grid article {
   background: var(--apple-card) !important;
   border-radius: 20px !important;
   border: 1px solid var(--apple-border) !important;
@@ -318,6 +317,7 @@ p {
 .rates-section,
 .how-section,
 .dealers-section,
+#community,
 .impact-section,
 .about-section {
   padding: 88px max(24px, calc((100vw - 1180px)/2)) !important;
@@ -325,35 +325,47 @@ p {
   box-sizing: border-box !important;
 }
 
+/* Give each numbered stage a clear hairline boundary and a faint alternating surface. */
+.guide-section,
+.rates-section,
+.how-section,
+.dealers-section,
+#community,
+.impact-section,
+.about-section {
+  border-top: 1px solid rgba(17, 24, 39, 0.48) !important;
+}
+
 /* Section Backgrounds: Crisp alternating subtle palette */
 .guide-section {
   background: #ffffff !important;
-  border-top: 1px solid var(--apple-border) !important;
   border-bottom: 1px solid var(--apple-border) !important;
 }
 
 .rates-section {
-  background: var(--apple-canvas) !important;
+  background: #f6f7f9 !important;
 }
 
 .how-section {
   background: #ffffff !important;
-  border-top: 1px solid var(--apple-border) !important;
   border-bottom: 1px solid var(--apple-border) !important;
 }
 
 .dealers-section {
-  background: var(--apple-canvas) !important;
+  background: #f6f7f9 !important;
+}
+
+#community {
+  background: #ffffff !important;
 }
 
 .impact-section {
-  background: #ffffff !important;
-  border-top: 1px solid var(--apple-border) !important;
+  background: #f6f7f9 !important;
   border-bottom: 1px solid var(--apple-border) !important;
 }
 
 .about-section {
-  background: var(--apple-canvas) !important;
+  background: #ffffff !important;
 }
 
 /* === 8. SMOOTH REVEAL SYSTEM (NO JITTER) === */
@@ -1192,6 +1204,129 @@ dialog::backdrop {
   -webkit-backdrop-filter: blur(10px) !important;
 }
 
+.hero-visual {
+  background:
+    radial-gradient(ellipse at 17% 28%, rgba(45, 213, 142, 0.34), transparent 38%),
+    radial-gradient(ellipse at 85% 79%, rgba(18, 157, 143, 0.32), transparent 42%),
+    linear-gradient(135deg, #063b2b, #031f18 68%, #062b25) !important;
+  border: 1px solid rgba(134, 246, 184, 0.22) !important;
+  border-radius: 40px !important;
+  box-shadow: 0 22px 55px rgba(8, 74, 48, 0.24), 0 0 42px rgba(45, 213, 142, 0.16) !important;
+}
+
+.hero-visual::after {
+  position: absolute;
+  right: 5%;
+  bottom: 6%;
+  left: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(177, 255, 213, 0.42), transparent);
+  content: "";
+}
+
+.hero-visual .orbit {
+  border-color: rgba(169, 244, 199, 0.16);
+}
+
+.hero-visual .loop-mark {
+  color: #86efbd !important;
+  text-shadow: 0 0 22px rgba(72, 255, 173, 0.48), 0 0 48px rgba(72, 255, 173, 0.24);
+}
+
+.hero-visual .material-card i {
+  background: linear-gradient(145deg, #a6f4c0, #58d994) !important;
+  color: #075332 !important;
+  box-shadow: 0 4px 12px rgba(22, 182, 103, 0.18);
+}
+
+.hero-visual .material-card b {
+  color: #176c47 !important;
+}
+
+.hero > .hero-visual {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.hero-visual > p {
+  color: #d7f8e2 !important;
+}
+
+.ai-result-unmatched {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid #bfe8cf;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0fff5, #f8fcf9);
+}
+
+.ai-result-unmatched .unmatched-icon {
+  display: grid;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 12px;
+  background: #d7f7e2;
+  color: #08784b;
+  font-size: 19px;
+}
+
+.ai-result-unmatched b {
+  display: block;
+  color: #17412b;
+  font-size: 14px;
+}
+
+.ai-result-unmatched p {
+  margin: 4px 0 0;
+  color: #527060;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.ai-result-unmatched .button {
+  margin-top: 12px;
+}
+
+.scanner-viewport {
+  border-color: #9ed7b5;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(208, 250, 224, 0.9), transparent 45%),
+    linear-gradient(145deg, #f5fcf7, #eaf6ef) !important;
+  box-shadow: inset 0 1px 5px rgba(22, 101, 61, 0.05), 0 10px 26px rgba(22, 101, 61, 0.08) !important;
+}
+
+.scanner-viewport.dragover {
+  border-color: #24a867;
+  background: linear-gradient(145deg, #e8faef, #dff4e8) !important;
+  box-shadow: 0 0 0 4px rgba(34, 168, 103, 0.14) !important;
+}
+
+.scanner-prompt {
+  color: #284a37;
+}
+
+.scanner-prompt strong {
+  color: #183a28;
+}
+
+.scanner-prompt p {
+  color: #61796b;
+}
+
+.scanner-prompt .upload-orb {
+  background: linear-gradient(145deg, #e0f8e9, #c9f0d8);
+  border-color: #8ad2a6;
+  box-shadow: 0 8px 22px rgba(24, 143, 78, 0.12);
+}
+
+.scanner-viewport .hud-corner {
+  border-color: #36aa68;
+}
+
 /* === SECTION 02: RATE CARDS POLISH === */
 .rate-toolbar {
   display: flex;
@@ -1486,6 +1621,23 @@ dialog::backdrop {
   }
   .hero-copy {
     max-width: 100%;
+  }
+  .hero > .hero-visual {
+    flex: none;
+    width: 100%;
+    min-height: 410px;
+  }
+  .hero-visual .card-metal {
+    bottom: 82px;
+  }
+  .hero-visual > p {
+    left: 22px;
+    bottom: 14px;
+    font-size: 16px;
+  }
+  .hero-visual .loop-mark {
+    top: 105px;
+    font-size: 160px;
   }
   .hero-actions {
     justify-content: center;

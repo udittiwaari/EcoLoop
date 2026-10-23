@@ -25,6 +25,11 @@ const defaultMaterials = [
   ['Computer LCD / LED Monitors', 'E-waste', 110, 'pcs', 'Do not crack LCD panels; route via specialist display e-waste streams.', 'Adjust brightness to preserve backlight life.', 'Display Recovery Bay', null],
   ['Solar PV Panel Scrap', 'E-waste', 45, 'kg', 'Recycle glass, aluminium frame, and recover silicon wafer silver traces.', 'Regularly clean panels to prevent hotspot degradation.', 'Solar Reclaim Depot', null],
   ['Mixed Electronic Waste', 'E-waste', 25, 'kg', 'Separate batteries and mercury switches before shredding mixed lots.', 'Keep devices in service as long as feasible.', 'Manual Review Bay', null],
+  ['Desktop Computer Towers', 'E-waste', 80, 'kg', 'Remove and securely erase storage drives; keep batteries separate.', 'Upgrade memory or storage before replacing a working computer.', 'Computer Refurbishment Bay', null],
+  ['Printers & Scanners', 'E-waste', 18, 'kg', 'Keep cartridges separate and use an authorised e-waste collection point.', 'Replace ink or toner before discarding a working printer.', 'E-waste Collection Bay', null],
+  ['Wi-Fi Routers & Modems', 'E-waste', 35, 'kg', 'Reset network settings and remove personal configuration before handover.', 'Reuse working routers as access points where supported.', 'Small Electronics Bay', null],
+  ['Computer Cables & Power Cords', 'E-waste', 90, 'kg', 'Bundle cables and keep them separate from mixed electronic scrap.', 'Store and reuse compatible chargers and cables.', 'Cable Recovery Bay', null],
+  ['UPS Units (Batteries Removed)', 'E-waste', 35, 'kg', 'Remove batteries only if safe and permitted; send batteries to an authorised collection point.', 'Replace a failed battery to extend the life of a working UPS.', 'E-waste Collection Bay', 'Do not open swollen, leaking, or damaged batteries.'],
 
   // Metal
   ['Copper Wires & Cable', 'Metal', 650, 'kg', 'Strip PVC insulation where permitted; clean bright copper brings top rate.', 'Maintain appliances and cords away from heat.', 'Copper Scrap Bay', null],
@@ -36,6 +41,11 @@ const defaultMaterials = [
   ['Tin Cans & Food Containers', 'Metal', 20, 'kg', 'Rinse residue thoroughly; tin-plated steel can be re-smelted infinitely.', 'Buy larger cans for cooking staples.', 'Tinplate Bins', null],
   ['Stainless Steel Scrap', 'Metal', 48, 'kg', 'Non-magnetic stainless (grade 304/316) holds premier industrial value.', 'Choose stainless steel for kitchenware longevity.', 'Stainless Steel Bin', null],
   ['Bronze & Gunmetal Scrap', 'Metal', 480, 'kg', 'Store separately from brass; high copper-tin composition demands clean sorting.', 'Service pump impellers and marine bushings.', 'Bronze Scrap Bay', null],
+  ['Steel Utensils & Kitchen Scrap', 'Metal', 35, 'kg', 'Separate stainless steel from aluminium and keep the metal dry.', 'Repair loose handles and reuse sturdy utensils.', 'Ferrous Metal Bay', null],
+  ['Aluminium Window Frames', 'Metal', 145, 'kg', 'Remove glass, rubber seals, and steel fittings before weighing.', 'Repair frame hardware before replacing a usable window.', 'Aluminium Profile Bay', null],
+  ['Copper Motor Windings', 'Metal', 620, 'kg', 'Keep clean copper windings separate from steel motor parts.', 'Repair or rewind working motors before recycling.', 'Copper Scrap Bay', null],
+  ['Iron Household Scrap', 'Metal', 25, 'kg', 'Keep iron separate from stainless steel and aluminium.', 'Reuse serviceable racks, tools, and fixtures.', 'Ferrous Scrap Yard', null],
+  ['Brass Taps & Plumbing Fittings', 'Metal', 420, 'kg', 'Remove attached plastic or rubber parts and keep brass separate.', 'Replace washers to repair a dripping tap.', 'Brass Recovery Crate', null],
 
   // Plastic
   ['PET Bottles (Clear & Blue)', 'Plastic', 28, 'kg', 'Empty, rinse, remove liquid and compress to save storage volume.', 'Carry a durable stainless steel refill bottle.', 'Plastics Stream', null],
@@ -45,6 +55,13 @@ const defaultMaterials = [
   ['Soft Plastic & Film Packaging', 'Plastic', 16, 'pcs', 'Bundle clean plastic wrap and carry bags into specialist collection.', 'Refuse single-use shopping bags.', 'Soft Film Bale', null],
   ['PVC Pipes & Conduits', 'Plastic', 15, 'kg', 'Cut into manageable lengths; route to PVC pipe reclaimers.', 'Repurpose leftover conduit as garden stakes.', 'PVC Pipe Stream', null],
   ['Mixed Household Plastic', 'Plastic', 12, 'kg', 'Clean and segregate by resin identification code (1 to 7).', 'Avoid multi-layer composite packaging.', 'Mixed Plastic Bin', null],
+  ['HDPE Milk & Detergent Bottles', 'Plastic', 25, 'kg', 'Rinse containers, dry them, and keep caps separate if the buyer requests it.', 'Choose refill packs or reuse durable containers where safe.', 'HDPE Rigid Plastics Bay', null],
+  ['PET Water & Soft Drink Bottles', 'Plastic', 28, 'kg', 'Empty, rinse, and flatten bottles; keep them separate from other plastics.', 'Carry a refillable bottle to reduce single-use packaging.', 'PET Bottle Bale', null],
+  ['Plastic Crates & Storage Bins', 'Plastic', 18, 'kg', 'Sort by plastic type and remove metal hinges or labels when practical.', 'Reuse sturdy crates for storage or transport.', 'Rigid Plastics Bay', null],
+  ['PP Chairs, Buckets & Household Items', 'Plastic', 16, 'kg', 'Keep polypropylene items clean and separate from mixed plastic.', 'Repair cracks where safe and continue using durable items.', 'Polypropylene Bay', null],
+  ['LDPE Stretch Wrap & Clean Film', 'Plastic', 10, 'kg', 'Bundle clean, dry film; exclude multilayer snack wrappers and dirty film.', 'Reuse shipping wrap for packing and storage.', 'Flexible Film Bale', null],
+  ['HDPE Jerrycans & Large Containers', 'Plastic', 22, 'kg', 'Only submit empty, clean containers; never reuse chemical containers for food or water.', 'Choose returnable containers when available.', 'HDPE Rigid Plastics Bay', null],
+  ['Plastic Woven Sacks (PP)', 'Plastic', 12, 'kg', 'Shake out residue, keep sacks dry, and bundle them together.', 'Reuse intact sacks for storage or transport.', 'Polypropylene Bale', null],
 
   // Paper
   ['Cardboard Packaging Boxes', 'Paper', 12, 'kg', 'Keep dry, remove packaging tape, and flatten boxes.', 'Choose refillable or bulk packs.', 'Cardboard Bay', null],
@@ -52,6 +69,14 @@ const defaultMaterials = [
   ['Newspaper & Periodicals', 'Paper', 14, 'kg', 'Bundle clean, dry newspapers and newsprint separately.', 'Read digitally when practical.', 'Newsprint Bundle', null],
   ['Books & Bound Paper', 'Paper', 13, 'kg', 'Donate readable books to libraries or schools; recycle degraded copies.', 'Borrow, rent or share study material.', 'Book Donation/Pulp', null],
   ['Kraft Paper Packaging', 'Paper', 11, 'kg', 'Flatten and keep separate from waxed or plastic-coated paper.', 'Reuse bags for grocery and parcels.', 'Kraft Paper Stream', null],
+  ['Corrugated Cardboard Cartons', 'Paper', 12, 'kg', 'Flatten clean cartons and keep them dry; remove plastic strapping and excess tape.', 'Reuse sturdy cartons for moving or shipping.', 'Corrugated Cardboard Bale', null],
+  ['Mixed Newspaper & Magazines', 'Paper', 12, 'kg', 'Bundle dry paper and remove plastic covers or non-paper inserts.', 'Pass readable magazines along before recycling.', 'Newsprint Bundle', null],
+  ['Paper Shopping & Grocery Bags', 'Paper', 8, 'kg', 'Keep bags dry and remove handles or laminated parts if required by the buyer.', 'Reuse clean bags for shopping and storage.', 'Mixed Paper Bale', null],
+  ['Paper Egg Trays & Cartons', 'Paper', 6, 'kg', 'Keep dry and free from food, oil, and plastic liners.', 'Reuse clean trays for storage or gardening.', 'Moulded Pulp Stream', null],
+  ['Paperboard Boxes & Cereal Cartons', 'Paper', 8, 'kg', 'Flatten clean boxes and separate any plastic windows or liners.', 'Reuse small boxes for organising household items.', 'Mixed Paper Bale', null],
+  ['Shredded Office Paper', 'Paper', 7, 'kg', 'Keep shredded paper dry in a closed bag so it is easier for a recycler to handle.', 'Use secure digital documents when suitable.', 'Office Paper Stream', null],
+  ['School Books & Notebooks', 'Paper', 10, 'kg', 'Donate usable books; remove plastic covers and separate non-paper bindings if requested.', 'Share or donate books before recycling them.', 'Book Reuse & Paper Bay', null],
+  ['Paper Packaging Offcuts', 'Paper', 7, 'kg', 'Keep clean paper offcuts separate from laminated or wax-coated sheets.', 'Use clean offcuts for notes and packing.', 'Mixed Paper Bale', null],
 
   // Other
   ['Glass Bottles & Jars', 'Other', 2, 'pcs', 'Rinse glass bottles and jars; 100% recyclable without loss in quality.', 'Reuse clean glass jars for spices, nuts and pantry goods.', 'Glass Reclaim Bay', 'CUT INJURY RISK: Wrap cracked glass in newspaper before handling.'],
@@ -87,6 +112,19 @@ const $ = id => document.getElementById(id);
 let category = 'All', supabase = null, user = null, isAdmin = false;
 const config = window.ECOLOOP_SUPABASE || {};
 const configured = Boolean(config.url && config.publishableKey);
+const isLocalBackendHost = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(window.location.hostname.toLowerCase());
+
+async function readApiJson(response, operation) {
+  const body = await response.text();
+  if (!body.trim()) {
+    throw new Error(`${operation} returned an empty response (HTTP ${response.status}).`);
+  }
+  try {
+    return JSON.parse(body);
+  } catch {
+    throw new Error(`${operation} returned invalid JSON (HTTP ${response.status}).`);
+  }
+}
 
 const normalized = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -351,7 +389,7 @@ function svgToDataUrl(svgString) {
 let cameraStream = null;
 let currentFacingMode = 'environment';
 let selectedScanUrl = '';
-let selectedScanName = '';
+let selectedDemoKey = '';
 let currentAiResult = null;
 let isAnalysing = false;
 
@@ -441,7 +479,7 @@ function captureCameraFrame() {
   const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
 
   stopCamera();
-  setScanImage(dataUrl, `camera-frame-${Date.now()}.jpg`);
+  setScanImage(dataUrl);
   analyseImage();
 }
 
@@ -453,9 +491,9 @@ function switchCamera() {
 /* ==========================================================================
    Image Preview & Selection
    ========================================================================== */
-function setScanImage(url, name = 'scan-item.jpg') {
+function setScanImage(url, demoKey = '') {
   selectedScanUrl = url;
-  selectedScanName = name;
+  selectedDemoKey = demoKey;
   const preview = $('scanPreview');
   const prompt = $('scannerPrompt');
   const clearBtn = $('clearScanBtn');
@@ -475,7 +513,7 @@ function setScanImage(url, name = 'scan-item.jpg') {
 function clearScan() {
   stopCamera();
   selectedScanUrl = '';
-  selectedScanName = '';
+  selectedDemoKey = '';
   currentAiResult = null;
   const preview = $('scanPreview');
   const prompt = $('scannerPrompt');
@@ -500,8 +538,8 @@ function clearScan() {
       <div class="ai-result-empty">
         <span class="result-orb-icon">✦</span>
         <div>
-          <b>AI Vision Engine Ready</b>
-          <p>Upload an image, snap a photo with your camera, or pick a sample above to identify waste items and see actionable recycling steps.</p>
+          <b>Catalog matcher ready</b>
+          <p>Upload or capture an item to check for a supported match in the EcoLoop catalog. Uncertain or unrelated images won’t be assigned a material.</p>
         </div>
       </div>
     `;
@@ -562,75 +600,6 @@ async function getTransformersModel() {
   return transformersLoadingPromise;
 }
 
-// Rapid canvas pixel color & edge analysis for sub-50ms instant classification
-function analyzeCanvasPixels(imgElement, fileName = '') {
-  const canvas = document.createElement('canvas');
-  canvas.width = 128;
-  canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-  try {
-    ctx.drawImage(imgElement, 0, 0, 128, 128);
-    const imgData = ctx.getImageData(0, 0, 128, 128).data;
-    let greenCount = 0, yellowGoldCount = 0, copperRedCount = 0;
-    let darkCount = 0, whitePaperCount = 0, clearCyanCount = 0, silverGreyCount = 0;
-    const totalPixels = 128 * 128;
-
-    for (let i = 0; i < imgData.length; i += 4) {
-      const r = imgData[i], g = imgData[i + 1], b = imgData[i + 2];
-      // PCB Green
-      if (g > 60 && g > r * 1.25 && g > b * 1.15) greenCount++;
-      // Copper Reddish-orange
-      else if (r > 150 && g > 65 && g < 135 && b < 80) copperRedCount++;
-      // Gold / Brass Yellow
-      else if (r > 180 && g > 150 && b < 100) yellowGoldCount++;
-      // Battery / Tyre / Dark E-waste
-      else if (r < 55 && g < 55 && b < 65) darkCount++;
-      // White paper
-      else if (r > 225 && g > 225 && b > 225) whitePaperCount++;
-      // Aluminium silver
-      else if (Math.abs(r - g) < 15 && Math.abs(g - b) < 15 && r > 140 && r < 215) silverGreyCount++;
-      // PET Plastic Bottle / Blue
-      else if (b > 140 && b > r * 1.2) clearCyanCount++;
-    }
-
-    const n = normalized(fileName);
-    if (n.includes('pcb') || n.includes('circuit') || n.includes('board') || (greenCount / totalPixels) > 0.18) {
-      return { key: 'pcb', confidence: 98.4 };
-    }
-    if (n.includes('copper') || n.includes('wire') || n.includes('cable') || (copperRedCount / totalPixels) > 0.12) {
-      return { key: 'copper', confidence: 99.1 };
-    }
-    if (n.includes('battery') || n.includes('cell') || n.includes('inverter') || (darkCount / totalPixels) > 0.45) {
-      return { key: 'battery', confidence: 97.9 };
-    }
-    if (n.includes('can') || n.includes('alu') || n.includes('soda') || (silverGreyCount / totalPixels) > 0.22) {
-      return { key: 'alucan', confidence: 96.8 };
-    }
-    if (n.includes('bottle') || n.includes('plastic') || n.includes('pet') || (clearCyanCount / totalPixels) > 0.15) {
-      return { key: 'bottle', confidence: 97.2 };
-    }
-    if (n.includes('cardboard') || n.includes('box')) {
-      return { key: 'cardboard', confidence: 96.0 };
-    }
-    if (n.includes('paper') || (whitePaperCount / totalPixels) > 0.35) {
-      return { key: 'paper', confidence: 95.8 };
-    }
-    if (n.includes('phone') || n.includes('laptop') || n.includes('screen')) {
-      return { key: 'smartphone', confidence: 96.5 };
-    }
-  } catch (_) {}
-
-  // Fallback heuristic based on filename or closest category
-  const n = normalized(fileName);
-  if (n.includes('pcb')) return { key: 'pcb', confidence: 98.4 };
-  if (n.includes('copper')) return { key: 'copper', confidence: 99.1 };
-  if (n.includes('battery')) return { key: 'battery', confidence: 97.9 };
-  if (n.includes('can')) return { key: 'alucan', confidence: 96.8 };
-  if (n.includes('bottle')) return { key: 'bottle', confidence: 97.2 };
-
-  return { key: 'pcb', confidence: 95.2 };
-}
-
 async function analyseImage() {
   if (isAnalysing) return;
   if (!selectedScanUrl) {
@@ -643,7 +612,7 @@ async function analyseImage() {
   const laser = $('scanLaser');
   if (analyseBtn) {
     analyseBtn.disabled = true;
-    analyseBtn.textContent = 'Scanning with AI…';
+    analyseBtn.textContent = 'Checking catalog…';
   }
   if (laser) laser.style.display = 'block';
 
@@ -654,31 +623,24 @@ async function analyseImage() {
     try { await preview.decode(); } catch (_) {}
   }
 
-  // Check demo sample exact match first
-  for (const [key, demo] of Object.entries(DEMO_SAMPLES)) {
-    if (selectedScanName.toLowerCase().includes(key)) {
-      renderAiResult({
-        name: demo.name,
-        category: demo.category,
-        rate: demo.rate,
-        unit: demo.unit,
-        stream: demo.stream,
-        confidence: demo.confidence,
-        prevent: demo.prevent,
-        recycle: demo.recycle,
-        hazard: demo.hazard
-      });
-      finalizeAnalysis();
-      return;
-    }
+  // Only built-in sample buttons can bypass model inference; uploaded filenames are not evidence.
+  const demo = DEMO_SAMPLES[selectedDemoKey];
+  if (demo) {
+    renderAiResult({
+      name: demo.name,
+      category: demo.category,
+      rate: demo.rate,
+      unit: demo.unit,
+      stream: demo.stream,
+      confidence: demo.confidence,
+      prevent: demo.prevent,
+      recycle: demo.recycle,
+      hazard: demo.hazard
+    });
+    finalizeAnalysis();
+    return;
   }
 
-  // 1. Run immediate high-accuracy canvas heuristics
-  const heuristicCandidate = analyzeCanvasPixels(preview, selectedScanName);
-  let resolvedKey = heuristicCandidate.key;
-  let resolvedConfidence = heuristicCandidate.confidence;
-
-  // 2. Race or complement with Transformers.js zero-shot pipeline
   const zeroShotPrompts = [
     'a photo of a green printed circuit board with electronic chips, connectors and microchips',
     'a photo of stripped bare copper electrical wire, cables or copper scrap',
@@ -687,7 +649,11 @@ async function analyseImage() {
     'a photo of a clear plastic beverage bottle or PET plastic bottle',
     'a photo of corrugated brown cardboard packaging boxes',
     'a photo of an electronic laptop, smartphone or computer e-waste',
-    'a photo of clean white office paper or printed documents'
+    'a photo of clean white office paper or printed documents',
+    'a photo of food, a meal, fruit or vegetables',
+    'a photo of a person, animal or plant',
+    'a photo of furniture, clothing or a household scene',
+    'a photo of scenery, a building or a landscape'
   ];
 
   const promptKeyMap = {
@@ -698,28 +664,55 @@ async function analyseImage() {
     [zeroShotPrompts[4]]: 'bottle',
     [zeroShotPrompts[5]]: 'cardboard',
     [zeroShotPrompts[6]]: 'smartphone',
-    [zeroShotPrompts[7]]: 'paper'
+    [zeroShotPrompts[7]]: 'paper',
+    [zeroShotPrompts[8]]: '',
+    [zeroShotPrompts[9]]: '',
+    [zeroShotPrompts[10]]: '',
+    [zeroShotPrompts[11]]: ''
   };
 
+  let predictions;
   try {
-    // Attempt zero-shot with 3.5s timeout so user never waits forever
+    updateProgress('Checking the image against catalog materials…', 25);
     const modelPromise = getTransformersModel().then(async pipe => {
       updateProgress('Evaluating categories against zero-shot embeddings…', 75);
-      const res = await pipe(selectedScanUrl, zeroShotPrompts);
-      if (Array.isArray(res) && res.length && res[0].label) {
-        const top = res[0];
-        const key = promptKeyMap[top.label];
-        if (key) {
-          resolvedKey = key;
-          resolvedConfidence = Math.max(88, Math.min(99.6, Math.round(Number(top.score) * 1000) / 10));
-        }
-      }
+      return pipe(selectedScanUrl, zeroShotPrompts);
     });
 
-    const timeoutPromise = new Promise(resolve => setTimeout(resolve, 3200));
-    await Promise.race([modelPromise, timeoutPromise]);
+    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve(null), 60000));
+    predictions = await Promise.race([modelPromise, timeoutPromise]);
+    if (!predictions) {
+      renderAiNoMatch(
+        'Could not verify this image',
+        'The catalog check took too long. Please try again when the AI model has finished loading.'
+      );
+      finalizeAnalysis('Catalog check timed out.');
+      return;
+    }
   } catch (err) {
-    console.info('Using high-performance local vision parser (Transformers.js offline or delayed).');
+    console.error('AI catalog check failed:', err);
+    renderAiNoMatch(
+      'Could not check this image right now',
+      'The AI catalog check is unavailable. Check your connection and try again.'
+    );
+    finalizeAnalysis('Catalog check unavailable.');
+    return;
+  }
+
+  const rankedPredictions = Array.isArray(predictions)
+    ? [...predictions].sort((a, b) => Number(b.score) - Number(a.score))
+    : [];
+  const topPrediction = rankedPredictions[0];
+  const resolvedKey = topPrediction ? promptKeyMap[topPrediction.label] : '';
+  const resolvedConfidence = topPrediction ? Number(topPrediction.score) : 0;
+
+  if (!resolvedKey || !Number.isFinite(resolvedConfidence) || resolvedConfidence < 0.3) {
+    renderAiNoMatch(
+      'No supported catalog match found',
+      'This image may be unrelated to EcoLoop’s supported materials, or the item is not clear enough to identify. Try a closer, well-lit photo of one item at a time.'
+    );
+    finalizeAnalysis('No supported catalog match found.');
+    return;
   }
 
   // Map resolved key to material data
@@ -806,22 +799,65 @@ async function analyseImage() {
     }
   };
 
-  const chosen = materialMap[resolvedKey] || materialMap.pcb;
-  chosen.confidence = resolvedConfidence;
+  const chosen = materialMap[resolvedKey];
+  const catalogItem = materials.find(item => {
+    const itemName = Array.isArray(item) ? item[0] : item.name;
+    return normalized(itemName) === normalized(chosen?.name);
+  });
+  if (!chosen || !catalogItem) {
+    renderAiNoMatch(
+      'No supported catalog match found',
+      'The image did not match a material currently available in the EcoLoop catalog.'
+    );
+    finalizeAnalysis('No supported catalog match found.');
+    return;
+  }
+  if (Array.isArray(catalogItem)) {
+    chosen.name = catalogItem[0];
+    chosen.category = catalogItem[1];
+    chosen.rate = catalogItem[2];
+    chosen.unit = catalogItem[3];
+    chosen.recycle = catalogItem[4];
+    chosen.prevent = catalogItem[5];
+    chosen.stream = catalogItem[6];
+    chosen.hazard = catalogItem[7];
+  } else {
+    Object.assign(chosen, catalogItem);
+  }
+  chosen.confidence = Math.round(resolvedConfidence * 1000) / 10;
   renderAiResult(chosen);
   finalizeAnalysis();
 }
 
-function finalizeAnalysis() {
+function finalizeAnalysis(status = 'AI catalog check complete.') {
   isAnalysing = false;
   const analyseBtn = $('analyseImageBtn');
   const laser = $('scanLaser');
   if (analyseBtn) {
     analyseBtn.disabled = false;
-    analyseBtn.textContent = '✦ Re-Analyse Image';
+    analyseBtn.textContent = '✦ Check Again';
   }
   if (laser) laser.style.display = 'none';
-  updateProgress('AI Classification complete.', 100);
+  updateProgress(status, 100);
+}
+
+function renderAiNoMatch(title, message) {
+  currentAiResult = null;
+  const card = $('aiResultCard');
+  if (!card) return;
+
+  card.innerHTML = `
+    <div class="ai-result-unmatched" role="status">
+      <span class="unmatched-icon" aria-hidden="true">?</span>
+      <div>
+        <b>${escapeHtml(title)}</b>
+        <p>${escapeHtml(message)}</p>
+        <button type="button" class="button button-quiet" id="aiScanNewBtn">Scan Another Item</button>
+      </div>
+    </div>
+  `;
+  const scanNewBtn = $('aiScanNewBtn');
+  if (scanNewBtn) scanNewBtn.onclick = clearScan;
 }
 
 function renderAiResult(result) {
@@ -1091,7 +1127,7 @@ function initAiScannerEvents() {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = e => {
-        setScanImage(e.target.result, file.name);
+        setScanImage(e.target.result);
         analyseImage();
       };
       reader.readAsDataURL(file);
@@ -1164,7 +1200,7 @@ function initAiScannerEvents() {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = evt => {
-        setScanImage(evt.target.result, file.name);
+        setScanImage(evt.target.result);
         analyseImage();
       };
       reader.readAsDataURL(file);
@@ -1179,7 +1215,7 @@ function initAiScannerEvents() {
       const demo = DEMO_SAMPLES[demoKey];
       if (!demo) return;
       const dataUrl = svgToDataUrl(demo.svg);
-      setScanImage(dataUrl, `demo-${demoKey}.svg`);
+      setScanImage(dataUrl, demoKey);
       analyseImage();
     });
   });
@@ -1558,9 +1594,9 @@ function renderVideoCards(data, allowDelete = false) {
 
 async function loadVideos() {
   try {
-    const res = await fetch('/api/videos');
+    const res = await window.ecoloopApiFetch('/api/videos');
     if (res.ok) {
-      const data = await res.json();
+      const data = await readApiJson(res, 'Video catalog request');
       if (Array.isArray(data?.videos) && data.videos.length) {
         videosList = data.videos;
         renderVideoCards(videosList, true);
@@ -1630,16 +1666,21 @@ function initDialogsAndAuth() {
       const signup = authForm.dataset.mode === 'signup';
       const name = $('displayName')?.value?.trim() || '';
 
+      if (!isLocalBackendHost && !supabase) {
+        message('authMessage', 'You are viewing the GitHub Pages demo. Sign-in and admin data are stored on your PC; run `npm start` and open http://localhost:4173 to use them.', true);
+        return;
+      }
+
       message('authMessage', 'Authenticating...');
 
       try {
         const endpoint = signup ? '/api/auth/register' : '/api/auth/login';
-        const res = await fetch(endpoint, {
+        const res = await window.ecoloopApiFetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(signup ? { email, password, name } : { email, password })
         });
-        const data = await res.json();
+        const data = await readApiJson(res, 'Sign-in request');
         if (!res.ok) {
           message('authMessage', data.error || 'Authentication failed', true);
           return;
@@ -1682,7 +1723,7 @@ function initDialogsAndAuth() {
   if ($('signOutButton')) {
     $('signOutButton').onclick = async () => {
       try {
-        await fetch('/api/auth/logout', { method: 'POST' });
+        await window.ecoloopApiFetch('/api/auth/logout', { method: 'POST' });
       } catch (_) {}
       await supabase?.auth.signOut();
       setUser(null);
@@ -1784,22 +1825,20 @@ function startMemberBrand() {
    ========================================================================== */
 function initDealersDirectory() {
   const filterBtns = document.querySelectorAll('.dealer-filter-btn');
-  const cards = document.querySelectorAll('.dealer-card');
   if (!filterBtns.length) return;
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      const filterType = btn.dataset.dealerFilter || btn.dataset.type || 'All';
-      cards.forEach(card => {
-        const cardType = card.dataset.type;
-        const show = filterType === 'All' || cardType === filterType;
-        card.classList.toggle('hidden-by-filter', !show);
-        card.style.display = show ? '' : 'none';
-      });
+      applyDealerFilter(btn.dataset.dealerFilter || 'All');
     });
+  });
+}
+
+function applyDealerFilter(filterType = 'All') {
+  document.querySelectorAll('.dealer-card').forEach(card => {
+    card.classList.toggle('hidden-by-filter', filterType !== 'All' && card.dataset.type !== filterType);
   });
 }
 
@@ -2027,11 +2066,23 @@ function renderBhopalCalculator() {
 /* ==========================================================================
    Admin Control Center & Data Management
    ========================================================================== */
+const ADMIN_DELETION_EMAIL = 'udit3539@gmail.com';
+
+function confirmAdminDeletion(action) {
+  const email = prompt(`To ${action}, type ${ADMIN_DELETION_EMAIL}:`);
+  if (email === null) return false;
+  if (email.trim().toLowerCase() !== ADMIN_DELETION_EMAIL) {
+    showToast('Email did not match. No data was deleted.', false);
+    return false;
+  }
+  return true;
+}
+
 async function loadAdminData() {
   try {
-    const statsRes = await fetch('/api/admin/stats');
+    const statsRes = await window.ecoloopApiFetch('/api/admin/stats');
     if (statsRes.ok) {
-      const stats = await statsRes.json();
+      const stats = await readApiJson(statsRes, 'Admin stats request');
       if ($('statTotalUsers')) $('statTotalUsers').textContent = stats.totalUsers || '0';
       if ($('adminUserCount')) $('adminUserCount').textContent = stats.totalUsers || '0';
     }
@@ -2046,9 +2097,9 @@ async function loadAdminData() {
   if ($('adminVidTableCount')) $('adminVidTableCount').textContent = videosList.length;
 
   try {
-    const usersRes = await fetch('/api/admin/accounts');
+    const usersRes = await window.ecoloopApiFetch('/api/admin/accounts');
     if (usersRes.ok) {
-      const { accounts } = await usersRes.json();
+      const { accounts } = await readApiJson(usersRes, 'Admin accounts request');
       renderAdminUsers(accounts || []);
     }
   } catch (_) {}
@@ -2096,18 +2147,21 @@ function renderAdminUsers(accounts) {
   tbody.querySelectorAll('[data-admin-del-user]').forEach(btn => {
     btn.onclick = async () => {
       const userId = btn.dataset.adminDelUser;
-      if (!confirm('Are you sure you want to delete this user?')) return;
+      if (!confirmAdminDeletion('delete this user')) return;
       try {
-        const res = await fetch(`/api/admin/accounts/${userId}`, { method: 'DELETE' });
+        const res = await window.ecoloopApiFetch(`/api/admin/accounts/${userId}`, {
+          method: 'DELETE',
+          headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+        });
         if (res.ok) {
           showToast('User deleted successfully', true);
           loadAdminData();
         } else {
-          const err = await res.json();
-          alert(err.error || 'Could not delete user');
+          const err = await readApiJson(res, 'User deletion');
+          alert(err.error || 'Could not delete user.');
         }
       } catch (e) {
-        alert(e.message);
+        alert(`Could not delete user: ${e.message}`);
       }
     };
   });
@@ -2135,10 +2189,21 @@ function renderAdminMaterials() {
   tbody.querySelectorAll('[data-admin-del-mat]').forEach(btn => {
     btn.onclick = async () => {
       const matId = btn.dataset.adminDelMat;
-      if (!confirm('Delete this custom material from the website catalog?')) return;
+      if (!confirmAdminDeletion('delete this custom material')) return;
       try {
-        await fetch(`/api/admin/materials/${matId}`, { method: 'DELETE' });
-      } catch (_) {}
+        const res = await window.ecoloopApiFetch(`/api/admin/materials/${matId}`, {
+          method: 'DELETE',
+          headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+        });
+        if (!res.ok) {
+          const err = await readApiJson(res, 'Material deletion');
+          alert(err.error || 'Could not delete material.');
+          return;
+        }
+      } catch (e) {
+        alert(`Could not delete material: ${e.message}`);
+        return;
+      }
       
       const custom = getCustomMaterials().filter(m => m.id !== matId);
       saveCustomMaterials(custom);
@@ -2304,21 +2369,15 @@ function renderLiveDealersGrid() {
     `;
   }).join('');
 
-  // Re-bind filter buttons if active filter exists
   const activeBtn = document.querySelector('.dealer-filter-btn.active');
-  if (activeBtn) {
-    const filter = activeBtn.dataset.filter;
-    grid.querySelectorAll('.dealer-card').forEach(card => {
-      card.style.display = (filter === 'all' || card.dataset.type === filter) ? 'flex' : 'none';
-    });
-  }
+  applyDealerFilter(activeBtn?.dataset.dealerFilter || 'All');
 }
 
 async function loadDealers() {
   try {
-    const res = await fetch('/api/dealers');
+    const res = await window.ecoloopApiFetch('/api/dealers');
     if (res.ok) {
-      const data = await res.json();
+      const data = await readApiJson(res, 'Dealer directory request');
       if (Array.isArray(data?.dealers) && data.dealers.length) {
         dealersList = data.dealers;
         renderLiveDealersGrid();
@@ -2362,10 +2421,21 @@ function renderAdminDealers() {
 }
 
 window.adminDeleteDealer = async function(dealerId) {
-  if (!confirm('Are you sure you want to delete this dealer from the Bhopal Hub directory?')) return;
+  if (!confirmAdminDeletion('delete this dealer from the Bhopal Hub directory')) return;
   try {
-    await fetch(`/api/admin/dealers/${dealerId}`, { method: 'DELETE' });
-  } catch (_) {}
+    const res = await window.ecoloopApiFetch(`/api/admin/dealers/${dealerId}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+    });
+    if (!res.ok) {
+      const err = await readApiJson(res, 'Dealer deletion');
+      alert(err.error || 'Could not delete dealer.');
+      return;
+    }
+  } catch (e) {
+    alert(`Could not delete dealer: ${e.message}`);
+    return;
+  }
   dealersList = dealersList.filter(d => d.id !== dealerId);
   renderLiveDealersGrid();
   renderAdminDealers();
@@ -2399,10 +2469,21 @@ function renderAdminVideos() {
 }
 
 window.adminDeleteVideo = async function(videoId) {
-  if (!confirm('Are you sure you want to delete this video tutorial?')) return;
+  if (!confirmAdminDeletion('delete this video tutorial')) return;
   try {
-    await fetch(`/api/admin/videos/${videoId}`, { method: 'DELETE' });
-  } catch (_) {}
+    const res = await window.ecoloopApiFetch(`/api/admin/videos/${videoId}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+    });
+    if (!res.ok) {
+      const err = await readApiJson(res, 'Video deletion');
+      alert(err.error || 'Could not delete video.');
+      return;
+    }
+  } catch (e) {
+    alert(`Could not delete video: ${e.message}`);
+    return;
+  }
   videosList = videosList.filter(v => v.id !== videoId);
   renderVideoCards(videosList, true);
   renderAdminVideos();
@@ -2426,17 +2507,21 @@ function initAdminPanel() {
   const delAllUsersBtn = $('adminDeleteAllUsersBtn');
   if (delAllUsersBtn) {
     delAllUsersBtn.onclick = async () => {
-      if (!confirm('Are you sure you want to delete ALL non-admin registered users?')) return;
+      if (!confirmAdminDeletion('delete all non-admin registered users')) return;
       try {
-        const res = await fetch('/api/admin/accounts', { method: 'DELETE' });
+        const res = await window.ecoloopApiFetch('/api/admin/accounts', {
+          method: 'DELETE',
+          headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+        });
         if (res.ok) {
           showToast('All non-admin users erased', true);
           loadAdminData();
         } else {
-          alert('Could not erase accounts');
+          const err = await readApiJson(res, 'Bulk account deletion');
+          alert(err.error || 'Could not erase accounts.');
         }
       } catch (e) {
-        alert(e.message);
+        alert(`Could not erase accounts: ${e.message}`);
       }
     };
   }
@@ -2444,10 +2529,21 @@ function initAdminPanel() {
   const delAllMatBtn = $('adminDeleteAllMaterialsBtn');
   if (delAllMatBtn) {
     delAllMatBtn.onclick = async () => {
-      if (!confirm('Erase all custom materials from the website?')) return;
+      if (!confirmAdminDeletion('erase all custom materials from the website')) return;
       try {
-        await fetch('/api/admin/materials', { method: 'DELETE' });
-      } catch (_) {}
+        const res = await window.ecoloopApiFetch('/api/admin/materials', {
+          method: 'DELETE',
+          headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+        });
+        if (!res.ok) {
+          const err = await readApiJson(res, 'Bulk material deletion');
+          alert(err.error || 'Could not erase custom materials.');
+          return;
+        }
+      } catch (e) {
+        alert(`Could not erase custom materials: ${e.message}`);
+        return;
+      }
       saveCustomMaterials([]);
       materials = [...defaultMaterials];
       renderRates();
@@ -2480,7 +2576,7 @@ function initAdminPanel() {
       };
 
       try {
-        await fetch('/api/admin/materials', {
+        await window.ecoloopApiFetch('/api/admin/materials', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newMat)
@@ -2516,7 +2612,7 @@ function initAdminPanel() {
       };
 
       try {
-        await fetch('/api/admin/videos', {
+        await window.ecoloopApiFetch('/api/admin/videos', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newVid)
@@ -2563,7 +2659,7 @@ function initAdminPanel() {
       };
 
       try {
-        await fetch('/api/admin/dealers', {
+        await window.ecoloopApiFetch('/api/admin/dealers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newDlr)
@@ -2583,7 +2679,7 @@ function initAdminPanel() {
   const wipePlansBtn = $('adminWipePlansBtn');
   if (wipePlansBtn) {
     wipePlansBtn.onclick = () => {
-      if (!confirm('Clear all saved collection plans from local storage?')) return;
+      if (!confirmAdminDeletion('clear all saved collection plans')) return;
       savePlans([]);
       renderPlanList();
       showToast('All saved collection plans wiped.', true);
@@ -2594,14 +2690,21 @@ function initAdminPanel() {
   const masterResetBtn = $('adminMasterResetBtn');
   if (masterResetBtn) {
     masterResetBtn.onclick = async () => {
-      const confirmText = prompt('Type ERASE to confirm wiping all user accounts, custom materials, plans, and cache:');
-      if (confirmText !== 'ERASE') {
-        alert('Master reset cancelled.');
+      if (!confirmAdminDeletion('erase all non-admin accounts, custom materials, dealers, videos, saved plans, and cache')) return;
+      try {
+        const res = await window.ecoloopApiFetch('/api/admin/reset-all', {
+          method: 'POST',
+          headers: { 'X-Admin-Confirmation-Email': ADMIN_DELETION_EMAIL }
+        });
+        if (!res.ok) {
+          const err = await readApiJson(res, 'Website data reset');
+          alert(err.error || 'Could not reset website data.');
+          return;
+        }
+      } catch (e) {
+        alert(`Could not reset website data: ${e.message}`);
         return;
       }
-      try {
-        await fetch('/api/admin/reset-all', { method: 'POST' });
-      } catch (_) {}
 
       localStorage.removeItem(CUSTOM_MATERIALS_KEY);
       localStorage.removeItem(planStorageKey);
@@ -2614,9 +2717,9 @@ function initAdminPanel() {
 
 async function checkAuthSession() {
   try {
-    const res = await fetch('/api/auth/session');
+    const res = await window.ecoloopApiFetch('/api/auth/session');
     if (res.ok) {
-      const data = await res.json();
+      const data = await readApiJson(res, 'Session check');
       if (data?.user) {
         setUser(data.user);
       }

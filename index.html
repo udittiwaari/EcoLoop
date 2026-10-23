@@ -10,13 +10,142 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/mobile.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="assets/supabase-config.js"></script>
+  <script src="assets/api-client.js"></script>
   <script src="assets/video-library.js"></script>
   <script defer src="assets/video-crafts.js"></script>
   <script type="module" src="app.js"></script>
-  <script type="module" src="assets/local-auth.js"></script>
+  <style id="hero-graphic-styles">
+    /* Hero Visual Card & Infinity Mark Showcase */
+    .hero-visual {
+      min-height: 480px !important;
+      border-radius: 36px !important;
+      background: radial-gradient(circle at 24% 20%, #8fd6e4, transparent 28%),
+                  radial-gradient(circle at 83% 74%, #f6a979, transparent 34%),
+                  linear-gradient(135deg, #202a59, #354f92 55%, #375f8c) !important;
+      position: relative !important;
+      overflow: hidden !important;
+      box-shadow: 0 24px 50px rgba(22, 29, 78, 0.35) !important;
+      opacity: 1 !important;
+      transform: none !important;
+      display: block !important;
+    }
+    .hero-visual .loop-mark {
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      position: absolute !important;
+      inset: 95px 0 auto !important;
+      text-align: center !important;
+      font-size: 240px !important;
+      line-height: 0.7 !important;
+      color: #ffcf70 !important;
+      opacity: 0.9 !important;
+      transform: rotate(-12deg) !important;
+      user-select: none !important;
+      pointer-events: none !important;
+      text-shadow: 0 10px 30px rgba(255, 207, 112, 0.3) !important;
+    }
+    .hero-visual .orbit {
+      position: absolute !important;
+      border: 1px solid rgba(255, 255, 255, 0.23) !important;
+      border-radius: 50% !important;
+      pointer-events: none !important;
+    }
+    .hero-visual .orbit-a {
+      width: 510px !important;
+      height: 510px !important;
+      left: -70px !important;
+      top: -50px !important;
+    }
+    .hero-visual .orbit-b {
+      width: 420px !important;
+      height: 420px !important;
+      right: -110px !important;
+      bottom: -120px !important;
+    }
+    .hero-visual .material-card {
+      position: absolute !important;
+      z-index: 2 !important;
+      width: 155px !important;
+      padding: 13px 15px !important;
+      border-radius: 18px !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(8px) !important;
+      box-shadow: 0 18px 32px rgba(22, 29, 78, 0.35) !important;
+      display: grid !important;
+      grid-template-columns: 36px 1fr !important;
+      gap: 1px 10px !important;
+      align-items: center !important;
+      animation: heroCardFloat 4s ease-in-out infinite !important;
+    }
+    .hero-visual .material-card i {
+      grid-row: span 2 !important;
+      width: 36px !important;
+      height: 36px !important;
+      display: grid !important;
+      place-items: center !important;
+      border-radius: 12px !important;
+      font-style: normal !important;
+      background: #e9f2ff !important;
+      color: #355d9a !important;
+      font-size: 18px !important;
+    }
+    .hero-visual .material-card span {
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      color: #18213c !important;
+      line-height: 1.2 !important;
+    }
+    .hero-visual .material-card b {
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      color: #2e6888 !important;
+      line-height: 1.2 !important;
+    }
+    .hero-visual .card-paper {
+      top: 66px !important;
+      left: 45px !important;
+      animation-delay: 0s !important;
+    }
+    .hero-visual .card-plastic {
+      right: 30px !important;
+      top: 195px !important;
+      animation-delay: -1.7s !important;
+    }
+    .hero-visual .card-metal {
+      left: 70px !important;
+      bottom: 75px !important;
+      animation-delay: -3s !important;
+    }
+    .hero-visual > p {
+      position: absolute !important;
+      left: 42px !important;
+      bottom: 30px !important;
+      color: #e5f4dd !important;
+      font-size: 17px !important;
+      font-weight: 700 !important;
+      line-height: 1.35 !important;
+      margin: 0 !important;
+      z-index: 2 !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    }
+    @keyframes heroCardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @media (max-width: 850px) {
+      .hero-visual { min-height: 400px !important; }
+    }
+    @media (max-width: 520px) {
+      .hero-visual { min-height: 340px !important; border-radius: 26px !important; }
+      .hero-visual .loop-mark { font-size: 180px !important; inset: 75px 0 auto !important; }
+      .hero-visual .card-paper { left: 18px !important; top: 32px !important; }
+      .hero-visual .card-plastic { right: 14px !important; top: 145px !important; }
+      .hero-visual .card-metal { left: 24px !important; bottom: 30px !important; }
+    }
+  </style>
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -25,24 +154,24 @@
       <svg class="header-logo-svg" viewBox="0 0 460 110" width="155" height="38" xmlns="http://www.w3.org/2000/svg" style="display:block;">
         <defs>
           <linearGradient id="navLoopG1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#064E3B" />
-            <stop offset="100%" stop-color="#059669" />
+            <stop offset="0%" stop-color="#0F2C59" />
+            <stop offset="100%" stop-color="#1E40AF" />
           </linearGradient>
           <linearGradient id="navLoopG2" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#059669" />
-            <stop offset="100%" stop-color="#34D399" />
+            <stop offset="0%" stop-color="#0284C7" />
+            <stop offset="100%" stop-color="#38BDF8" />
           </linearGradient>
         </defs>
         <g transform="translate(10, 8)">
           <path d="M 55 50 C 35 20, 5 20, 5 50 C 5 80, 35 80, 55 50 C 75 20, 105 20, 105 50" fill="none" stroke="url(#navLoopG1)" stroke-width="14" stroke-linecap="round" />
           <path d="M 105 50 C 105 80, 75 80, 55 50 L 44 35" fill="none" stroke="url(#navLoopG2)" stroke-width="14" stroke-linecap="round" />
-          <polygon points="33,38 42,18 58,31" fill="#10B981" />
-          <path d="M 98 22 C 112 10, 125 18, 114 34 C 106 28, 102 26, 98 22 Z" fill="#10B981" />
-          <circle cx="30" cy="50" r="4" fill="#D1FAE5" />
+          <polygon points="33,38 42,18 58,31" fill="#0EA5E9" />
+          <path d="M 98 22 C 112 10, 125 18, 114 34 C 106 28, 102 26, 98 22 Z" fill="#38BDF8" />
+          <circle cx="30" cy="50" r="4" fill="#E0F2FE" />
         </g>
         <g transform="translate(148, 70)">
           <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="62" font-weight="800" letter-spacing="-1">
-            <tspan fill="#064E3B">Eco</tspan><tspan fill="#059669" font-weight="600">Loop</tspan>
+            <tspan fill="#0F2C59">Eco</tspan><tspan fill="#0284C7" font-weight="600">Loop</tspan>
           </text>
         </g>
       </svg>
@@ -84,8 +213,8 @@
         <div class="orbit orbit-a"></div>
         <div class="orbit orbit-b"></div>
         <div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div>
-        <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹28/kg</b></div>
-        <div class="material-card card-metal"><i>◈</i><span>Copper</span><b>₹650/kg</b></div>
+        <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹12/kg</b></div>
+        <div class="material-card card-metal"><i>◈</i><span>Metal</span><b>₹25/kg</b></div>
         <div class="loop-mark">∞</div>
         <p>Small choices<br>move materials forward.</p>
       </div>
@@ -95,9 +224,9 @@
     <section class="guide-section" id="guide">
       <div class="section-intro reveal">
         <p class="eyebrow">01 / SMART MATERIAL GUIDE &amp; AI VISION</p>
-        <h2>Identify any material.<br>By AI camera or text.</h2>
-        <p>Point your camera or upload a photo to identify e-waste, metals, circuit boards, batteries, and plastics with AI vision—or search by name.</p>
-        
+        <h2>Scan an item.<br>Get a clear match.</h2>
+        <p>Use the camera or upload a photo to check an item against supported materials in the EcoLoop catalog. If it is not a confident match, we’ll say so instead of guessing.</p>
+
         <div class="guide-mode-pills" role="tablist" aria-label="Material identification mode">
           <button type="button" class="mode-pill active" id="modeVisionBtn" data-tab="visionHub" role="tab" aria-selected="true">
             <span class="mode-icon">📷</span> AI Camera &amp; Vision
@@ -167,7 +296,7 @@
                 <span class="orb-icon">📷</span>
               </div>
               <strong id="dropzonePromptTitle">Drag &amp; drop an image here, or use live camera</strong>
-              <p>Supports JPG, PNG, WEBP. AI identifies Printed Circuit Boards, Batteries, Copper, Aluminium Cans, Plastics &amp; more.</p>
+              <p>Supports JPG, PNG, WEBP. The AI checks for supported e-waste, metal, plastic, and paper matches—and flags uncertain or unrelated items.</p>
               
               <div class="scanner-direct-btns" style="display:flex; gap:10px; margin-top:14px; justify-content:center; flex-wrap:wrap;">
                 <button type="button" class="button button-primary" id="openCameraBtn" style="font-size:12px; padding:9px 18px;">
@@ -207,20 +336,10 @@
             </div>
           </div>
 
-                 <div class="hero-visual reveal delay">
-         <div class="orbit orbit-a"></div>
-         <div class="orbit orbit-b"></div>
-         <div class="material-card card-paper"><i>▤</i><span>Paper</span><b>₹20/kg</b></div>
-         <div class="material-card card-plastic"><i>♻</i><span>Plastic</span><b>₹12/kg</b></div>
-         <div class="material-card card-metal"><i>◈</i><span>Metal</span><b>₹25/kg</b></div>
-         <div class="loop-mark">∞</div>
-         <p>Small choices<br>move materials forward.</p>
-       </div>
-      
           <!-- Action Buttons Row -->
           <div class="scanner-actions-row">
             <button type="button" class="button button-primary" id="analyseImageBtn" disabled>
-              ✦ Analyse with AI
+              ✦ Check Catalog Match
             </button>
             <button type="button" class="button button-quiet" id="clearScanBtn" style="display:none;">
               Clear / Start Over
@@ -232,8 +351,8 @@
             <div class="ai-result-empty">
               <span class="result-orb-icon">✦</span>
               <div>
-                <b>AI Vision Engine Ready</b>
-                <p>Upload an image, snap a photo with your camera, or pick a sample above to identify waste items and see actionable recycling steps.</p>
+                <b>Catalog matcher ready</b>
+                <p>Upload or capture an item to check for a supported match in the EcoLoop catalog. Uncertain or unrelated images won’t be assigned a material.</p>
               </div>
             </div>
           </div>
@@ -716,7 +835,6 @@
       <div class="bhopal-pane-card">
         <div class="bhopal-calc-header">
           <div>
-            <h3>Wholesale Scrap Valuation Calculator</h3>
             <p>Select scrap categories, adjust weights with (+/-) steppers, and instantly calculate estimated payout at Bhopal benchmark rates.</p>
           </div>
           <button type="button" class="calc-reset-btn" id="bhopalCalcResetBtn">
@@ -1214,6 +1332,7 @@
         <button class="active" data-mode="login">Sign in</button>
         <button data-mode="signup">Create account</button>
       </div>
+      <p class="local-admin-hint" id="localAdminHint" hidden>Local admin login: <strong>udit3539@gmail.com</strong> · Password: <strong>12345678</strong></p>
       <form id="authForm">
         <label id="nameField" hidden>Display name
           <input id="displayName" maxlength="60" autocomplete="name">
@@ -1616,8 +1735,8 @@
         </div>
 
         <div>
-          <label for="new-craft-url" class="block text-xs font-bold text-slate-700 mb-1">YouTube Tutorial URL *</label>
-          <input type="url" id="new-craft-url" required placeholder="https://www.youtube.com/watch?v=..." class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]" />
+          <label for="new-craft-url" class="block text-xs font-bold text-slate-700 mb-1">Video Tutorial URL *</label>
+          <input type="url" id="new-craft-url" required placeholder="https://www.youtube.com/watch?v=... or a shared video link" class="w-full text-sm border border-slate-200 rounded-xl px-3.5 py-2 focus:outline-none focus:border-[#2563eb]" />
         </div>
 
         <div>
